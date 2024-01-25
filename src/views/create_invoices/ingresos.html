@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>INGRESOS</title>
+
+    <link rel="stylesheet" href="crear_factura.css" />
+
+    <script defer src="ingresos.js"></script>
+  </head>
+
+  <body>
+  <div class="horizontal_div">
+    <div id="vertical_div">
+      <label >Provedor</label>
+      <select id="proveedor_selector"></select>
+      <button id="nuevo_provedor_btn">Nuevo provedor</button>
+    </div>
+    
+    <div id="vertical_div">
+      <label >Seleccione la fecha</label>
+      <input id="fecha_input" type="date"></input>
+    </div> 
+  </div>
+  
+  <div class="horizontal_div">
+    <div id="vertical_div">
+      <label >Cliente</label>
+      <select id="cliente_selector"></select>
+      <button id="nuevo_cliente_btn">Nuevo cliente</button>
+    </div>
+    
+    <div id="vertical_div">
+        <label>Seleccione la letra</label>
+       <select id="letra_selector"></select>
+    </div> 
+  </div>
+  
+  <div class="vertical_div">
+    <div class="horizontal_div">
+      <button id="remove_unidad_btn">-</button>
+      <button id="add_unidad_btn">+</button>
+    </div>
+    <ol id="unidades_container">
+      <li class="unidades">
+        <input type="number" placeholder="cantidad">
+        <input type="text" placeholder="tipo">
+        <input type="number" placeholder="precio unidad">
+        <input type="number" placeholder="iva">
+      </li>
+    </ol>
+  </div>
+  
+  <div class="horizontal_div">
+    <div class="act_irpf_div">
+      <label>Actividad</label>
+      <input id="actividad" type="text"></input>
+      <label>IRPF</lavel>
+      <input id="irpf" type="number"></input>
+    </div>
+    <div class="vertical_div">
+      <label>Datos extras</label>
+      <input id="datos_extras" type="text"></input>
+    </div>
+  </div>
+  
+  <div class="horizontal_div">
+    <button id="atras_btn">Atras</button>
+    <button id="guardar_btn">Guardar</button>
+  </div>
+  </body>
+</html>
