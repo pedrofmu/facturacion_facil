@@ -38,32 +38,46 @@
   
   <div class="vertical_div">
     <div class="horizontal_div">
-      <button id="remove_unidad_btn">-</button>
-      <button id="add_unidad_btn">+</button>
+      <button id="descuento_unidad_btn">Descuentos por unidad</button>
+      <div>
+        <button id="remove_unidad_btn">-</button>
+        <button id="add_unidad_btn">+</button>
+      </div>
     </div>
     <ol id="unidades_container">
-      <li class="unidades">
-        <input type="number" placeholder="cantidad">
-        <input type="text" placeholder="tipo">
-        <input type="number" placeholder="precio unidad">
-        <input type="number" placeholder="iva">
-      </li>
+      
     </ol>
+  </div>
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+       <label>Descuento al total total</label>
+       <input id="descuento_al_total" type="text">
+    </div>
+  </div>
+  <div class="horizontal_div">
+      <div class="vertical_div">
+          <label>Forma de pago</label>
+          <input id="forma_de_pago" type="text">
+      </div>
   </div>
   
   <div class="horizontal_div">
-    <div class="act_irpf_div">
-      <label>Forma de pago</label>
-      <input id="forma_de_pago" type="text"></input>
-      <label>IRPF</lavel>
-      <input id="irpf" type="number"></input>
-    </div>
     <div class="vertical_div">
-      <label>Datos extra</label>
-      <input id="datos_extras" type="text"></input>
+       <label>IRPF</label>
+       <input id="irpf" type="number">
     </div>
   </div>
   
+  <div class="horizontal_div">
+      <div class="vertical_div">
+          <label>Datos extra</label>
+          <input id="datos_extras" type="text">
+      </div>
+  </div>
+  
+  </div>
+
   <div class="horizontal_div">
     <button id="atras_btn">Atras</button>
     <button id="guardar_btn">Guardar</button>

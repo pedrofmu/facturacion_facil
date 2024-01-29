@@ -1,1 +1,59 @@
+/* Estilos para los contenedores horizontales */
+.horizontal_div {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se muevan a la siguiente línea si no hay espacio suficiente */
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 
+/* Estilos para los contenedores verticales */
+#vertical_div {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+/* Estilos para los botones de agregar y eliminar unidades */
+.horizontal_div .add_remove_btn {
+  display: flex;
+  flex-direction: row;
+  margin-right: 5px;
+}
+
+/* Estilos para la lista de unidades */
+#unidades_container {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.unidades {
+  margin-bottom: 5px;
+}
+
+.unidades input {
+  margin-right: 5px;
+}
+
+/* Estilos para los botones al final */
+.horizontal_div #atras_btn,
+.horizontal_div #guardar_btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.horizontal_div #atras_btn {
+  background-color: #e74c3c;
+}
+
+.oculto {
+  display: none;
+}

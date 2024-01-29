@@ -18,9 +18,11 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, irpf,
       const cantidad = element.cantidad;
       const precioUnidad = element.precioUnidad;
       const iva = element.iva;
+      const descuento = element.descuento;
 
-      baseImponible += cantidad * precioUnidad;
-      ivaAdd += cantidad * precioUnidad * (iva / 100);
+      bi = cantidad * precioUnidad - (cantidad * precioUnidad * (descuento / 100));
+      baseImponible += bi;
+      ivaAdd += bi * (iva / 100);
     });
 
     //Calcular el importe total
