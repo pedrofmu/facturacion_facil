@@ -6,7 +6,7 @@ const { ipcRenderer } = require('electron');
 // Obtener elementos del DOM
 const fechaInput = document.getElementById("fecha_input");
 const letterSelector = document.getElementById("letra_selector");
-const actividadInput = document.getElementById("actividad");
+const formaDePago = document.getElementById("forma_de_pago");
 const irpfInput = document.getElementById("irpf");
 const detallesInput = document.getElementById("datos_extras");
 const proveedorSelector = document.getElementById("proveedor_selector"); 
@@ -14,12 +14,12 @@ const clienteSelector = document.getElementById("cliente_selector");
 
 //Manejar el click de crear un cliente nuevo
 document.getElementById("nuevo_cliente_btn").addEventListener("click", () => {
-   ipcRenderer.send('open-new-window', "cliente");
+   ipcRenderer.send('open-new-window', "receptor");
 });
 
 //Maneje el click de crear un proveedor nuevo
 document.getElementById("nuevo_provedor_btn").addEventListener("click", () => {
-  ipcRenderer.send('open-new-window', "proveedor");});
+  ipcRenderer.send('open-new-window', "emisor");});
 
 // Manejar clic en el botón de guardar factura
 document.getElementById("guardar_btn").addEventListener("click", () => {
@@ -45,7 +45,7 @@ document.getElementById("guardar_btn").addEventListener("click", () => {
   });
 
   // Llamar a la función para crear una nueva factura
-  saveInvoice("ingresos", letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, irpfInput.value, detallesInput.value, actividadInput.value);
+  saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, irpfInput.value, detallesInput.value, formaDePago.value);
 });
 
 // Manejar clic en el botón de añadir nueva unidad
@@ -92,7 +92,7 @@ async function loadPersons() {
   let existingOptions = Array.from(clienteSelector.options).map(option => option.value);
 
   // Cargar clientes
-  let clientsList = await getPersonas("clientes");
+  let clientsList = await getPersonas("receptor");
   clientsList.forEach((row) => {
     if (!existingOptions.includes(row)) {
       var option = document.createElement("option");
@@ -107,7 +107,7 @@ async function loadPersons() {
   existingOptions = Array.from(proveedorSelector.options).map(option => option.value);
 
   // Cargar proveedores
-  let providersList = await getPersonas("proveedores");
+  let providersList = await getPersonas("emisor");
   providersList.forEach((row) => {
     if (!existingOptions.includes(row)) {
       var option = document.createElement("option");

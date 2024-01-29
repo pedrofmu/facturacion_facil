@@ -13,7 +13,7 @@ conexion = sqlite3.connect("main.db")
 cursor = conexion.cursor()
 
 #ingresos
-cursor.execute('''CREATE TABLE IF NOT EXISTS ingresos (
+cursor.execute('''CREATE TABLE IF NOT EXISTS facturas (
                     numero TEXT,
                     cliente TEXT,
                     proveedor TEXT,
@@ -22,24 +22,11 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS ingresos (
                     importeTotal REAL,
                     irpf INTEGER,
                     detalles TEXT,
-                    actividad TEXT
-                  )''')
-
-#gastos
-cursor.execute('''CREATE TABLE IF NOT EXISTS gastos (
-                    numero TEXT,
-                    cliente TEXT,                         
-                    proveedor TEXT,
-                    fecha DATE,
-                    unidades TEXT,
-                    importeTotal REAL,
-                    irpf INTEGER,
-                    detalles TEXT,
-                    actividad TEXT
+                    formaDePago TEXT
                   )''')
 
 #clientes
-cursor.execute('''CREATE TABLE IF NOT EXISTS clientes (
+cursor.execute('''CREATE TABLE IF NOT EXISTS receptor (
                     nombre TEXT,
                     id TEXT,
                     direccion TEXT,
@@ -47,7 +34,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS clientes (
                   )''')
 
 #proveedores
-cursor.execute('''CREATE TABLE IF NOT EXISTS proveedores (
+cursor.execute('''CREATE TABLE IF NOT EXISTS emisor (
                     nombre TEXT,
                     id TEXT,
                     direccion TEXT,

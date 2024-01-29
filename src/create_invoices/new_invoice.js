@@ -1,13 +1,11 @@
 const { addInvoice, getInvoiceID  } = require("./connect_db");
-const { dialog } = require('electron');
 
 //Guardar la factura
-async function saveInvoice(tabla, letra, cliente, proveedor, fecha, unidadesList, irpf, datosExtra, actividad) {
-  try {
-    if(cliente.length === 0 || proveedor.length === 0 || fecha.length === 0 || unidadesList.length === 0 || actividad.length === 0){
+async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, irpf, datosExtra, formaDePago) {
+    if(cliente.length === 0 || proveedor.length === 0 || fecha.length === 0 || unidadesList.length === 0 || formaDePago.length === 0){
       throw "faltan valores";
     }
-    const nextNumber = await getInvoiceID(tabla, letra);
+    const nextNumber = await getInvoiceID(letra);
     const numero = letra + nextNumber;
 
     //Valores del pago
@@ -32,10 +30,7 @@ async function saveInvoice(tabla, letra, cliente, proveedor, fecha, unidadesList
       importeTotal = baseImponible + ivaAdd;
     }
 
-    addInvoice(tabla, numero, cliente, proveedor, fecha, JSON.stringify(unidadesList), importeTotal, irpf, datosExtra, actividad);
-  } catch (error) {
-    window.alert(`Error: ${error}`);
-  }
-}
+    addInvoice(numero, cliente, proveedor, fecha, JSON.stringify(unidadesList), importeTotal, irpf, datosExtra, formaDePago);
+  } 
 
 module.exports = { saveInvoice };

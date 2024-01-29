@@ -57,5 +57,5 @@ ipcMain.on('open-new-window', (event, valor) => {
     }
   });
 
-  nuevaVentana.loadFile(path.join(__dirname, `/views/crear_persona/${valor}.html`));
+  nuevaVentana.loadFile(path.join(__dirname, `/views/create_subject/${valor}.html`));
 });

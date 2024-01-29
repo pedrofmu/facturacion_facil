@@ -1,13 +1,8 @@
 const sqlite3 = require("sqlite3").verbose();
 
 //Obtener el numero para la siguiente letra "A1" "A2" "A3"
-function getInvoiceID(table, letter) {
+function getInvoiceID(letter) {
   return new Promise((resolve, reject) => {
-    if (table !== "ingresos" && table !== "gastos"){
-      console.error('Tabla invalida para obtener id de la factura');
-      reject();
-    }
-
     //Abrir la db
     const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
@@ -19,7 +14,7 @@ function getInvoiceID(table, letter) {
     });
 
     //Ejecutar la querry
-    db.all(`SELECT * FROM ${table} WHERE numero LIKE '%${letter}%'`, [], (err, rows) => {
+    db.all(`SELECT * FROM facturas WHERE numero LIKE '%${letter}%'`, [], (err, rows) => {
       if (err) {
         console.error("Error leyendo letras: ", letter);
         reject(err);
@@ -55,7 +50,7 @@ function getInvoiceID(table, letter) {
 //Obtener una persona (cliente, proveedor)
 function getPersonas(table) {
   return new Promise((resolve, reject) => {
-    if (table !== "proveedores" && table !== "clientes"){
+    if (table !== "receptor" && table !== "emisor"){
       console.error('Tabla invalida para obtener una persona');
       reject();
     }
@@ -97,13 +92,8 @@ function getPersonas(table) {
 
 //Funcion para añadir una factura a la base de datos
                                    //Valores de la tabla
-function addInvoice(table, numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, actividad) {
+function addInvoice(numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, formaDePago) {
   //Comporbar si la tabla es valida
-  if (table !== "ingresos" && table !== "gastos"){
-    console.error(`Tabla invalida para agregar una factura`);
-    return;
-  }
-
   //Abrir la base de datos
   const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
@@ -115,9 +105,9 @@ function addInvoice(table, numero, cliente, proveedor, fecha, unidades, importeT
   });
 
   //Insertar los valores
-  const valuesToInsert = [numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, actividad];
+  const valuesToInsert = [numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, formaDePago];
 
-  db.run(`INSERT INTO ${table} (numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, actividad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function (err) {
+  db.run(`INSERT INTO facturas (numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function (err) {
     if (err) {
       console.error(`Error al insertar valores: ${err.message}`);
     } else {

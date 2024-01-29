@@ -6,10 +6,7 @@ const direccion = document.getElementById("direccion_input");
 const contacto = document.getElementById("contacto_input");
 
 document.getElementById("save_btn").addEventListener("click", () => {
-    console.log("a");
-   createPerson("proveedores", nombre.value, id.value, direccion.value, contacto.value).then((err) => {
+   createPerson("emisor", nombre.value, id.value, direccion.value, contacto.value).then((err) => {
         console.log("funciona");
     }); 
 });
-
-console.log("b");
