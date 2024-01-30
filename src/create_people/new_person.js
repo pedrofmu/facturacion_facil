@@ -1,12 +1,12 @@
 const sqlite3 = require("sqlite3").verbose();
 
 function createPerson(table, nombre, id, direccion, contacto) {
-  return new Promise ((resolve, reject) => {
-    if (table !== "proveedores" && table !== "clientes"){
+  return new Promise((resolve, reject) => {
+    if (table !== "proveedores" && table !== "clientes") {
       console.log("table invalida para crear una persona");
       reject();
     }
-    
+
     const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
@@ -37,4 +37,4 @@ function createPerson(table, nombre, id, direccion, contacto) {
   });
 }
 
-module.exports = {createPerson};
+module.exports = { createPerson };

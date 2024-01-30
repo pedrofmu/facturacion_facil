@@ -9,19 +9,20 @@ const letterSelector = document.getElementById("letra_selector");
 const formaDePago = document.getElementById("forma_de_pago");
 const irpfInput = document.getElementById("irpf");
 const detallesInput = document.getElementById("datos_extras");
-const proveedorSelector = document.getElementById("proveedor_selector"); 
+const proveedorSelector = document.getElementById("proveedor_selector");
 const clienteSelector = document.getElementById("cliente_selector");
 
 var discountPerProduct = false;
 
 //Manejar el click de crear un cliente nuevo
 document.getElementById("nuevo_cliente_btn").addEventListener("click", () => {
-   ipcRenderer.send('open-new-window', "receptor");
+  ipcRenderer.send('open-new-window', "receptor");
 });
 
 //Maneje el click de crear un proveedor nuevo
 document.getElementById("nuevo_provedor_btn").addEventListener("click", () => {
-  ipcRenderer.send('open-new-window', "emisor");});
+  ipcRenderer.send('open-new-window', "emisor");
+});
 
 // Manejar clic en el botón de guardar factura
 document.getElementById("guardar_btn").addEventListener("click", () => {
@@ -35,10 +36,10 @@ document.getElementById("guardar_btn").addEventListener("click", () => {
     var precioUnidad = element.querySelector('input:nth-child(3)').value;
     var iva = element.querySelector('input:nth-child(4)').value;
     var descuento = 0;
-    if (discountPerProduct){
+    if (discountPerProduct) {
       descuento = element.querySelector('input:nth-child(5)').value;
-    }else{
-      descuento = document.getElementById("descuento_al_total").value; 
+    } else {
+      descuento = document.getElementById("descuento_al_total").value;
     }
 
     // Crear un objeto con los datos y agregarlo a la lista
@@ -66,7 +67,7 @@ document.getElementById("remove_unidad_btn").addEventListener("click", () => {
   var unitsContainer = document.getElementById("unidades_container");
   var lastProduct = unitsContainer.lastElementChild;
 
-  if (lastProduct){
+  if (lastProduct) {
     unitsContainer.removeChild(lastProduct);
   }
 });
@@ -75,39 +76,39 @@ document.getElementById("descuento_unidad_btn").addEventListener("click", () => 
   changeDiscountPerProduct();
 });
 
-function changeDiscountPerProduct(){
-  discountPerProduct = !discountPerProduct; 
+function changeDiscountPerProduct() {
+  discountPerProduct = !discountPerProduct;
 
-  if (discountPerProduct){
+  if (discountPerProduct) {
     var unitElements = document.querySelectorAll(".unidades");
 
     unitElements.forEach((element) => {
       var newInput = document.createElement("input");
       newInput.type = "number";
-      newInput.placeholder = "descuento"; 
+      newInput.placeholder = "descuento";
       newInput.id = "descuento";
 
       element.appendChild(newInput);
-    });     
+    });
 
     var descuentoTotal = document.getElementById("descuento_al_total");
     descuentoTotal.classList.add("oculto");
-  }else{
+  } else {
     var unitElements = document.querySelectorAll(".unidades");
 
     unitElements.forEach((element) => {
       var descToDelete = element.querySelector("#descuento");
       descToDelete.remove();
-    });     
+    });
 
     var descuentoTotal = document.getElementById("descuento_al_total");
     descuentoTotal.classList.remove("oculto");
   }
-} 
+}
 
 
 //Añade un nuevo producto
-function newProduct(){
+function newProduct() {
   var unitsContainer = document.getElementById("unidades_container");
 
   var newProduct = document.createElement("li");
@@ -122,10 +123,10 @@ function newProduct(){
     newProduct.appendChild(newInput);
   }
 
-  if (discountPerProduct){
+  if (discountPerProduct) {
     var newInput = document.createElement("input");
     newInput.type = "number";
-    newInput.placeholder = "descuento"; 
+    newInput.placeholder = "descuento";
     newInput.id = "descuento";
 
     // Agregar el input al li
