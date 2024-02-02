@@ -11,6 +11,7 @@ const irpfInput = document.getElementById("irpf");
 const detallesInput = document.getElementById("datos_extras");
 const proveedorSelector = document.getElementById("proveedor_selector");
 const clienteSelector = document.getElementById("cliente_selector");
+const conceptoInput = document.getElementById("concepto");
 
 var discountPerProduct = false;
 
@@ -25,37 +26,13 @@ document.getElementById("nuevo_provedor_btn").addEventListener("click", () => {
 });
 
 // Manejar clic en el botón de guardar factura
-document.getElementById("guardar_btn").addEventListener("click", () => {
-  var unitElements = document.querySelectorAll(".unidades");
-  var unitsList = [];
-
-  unitElements.forEach(element => {
-    // Obtener los valores de los inputs dentro de cada li
-    var cantidad = element.querySelector('input:nth-child(1)').value;
-    var tipo = element.querySelector('input:nth-child(2)').value;
-    var precioUnidad = element.querySelector('input:nth-child(3)').value;
-    var iva = element.querySelector('input:nth-child(4)').value;
-    var descuento = 0;
-    if (discountPerProduct) {
-      descuento = element.querySelector('input:nth-child(5)').value;
-    } else {
-      descuento = document.getElementById("descuento_al_total").value;
-    }
-
-    // Crear un objeto con los datos y agregarlo a la lista
-    var unitData = {
-      cantidad: cantidad,
-      tipo: tipo,
-      precioUnidad: precioUnidad,
-      iva: iva,
-      descuento: descuento
-    };
-
-    unitsList.push(unitData);
-  });
-
-  // Llamar a la función para crear una nueva factura
-  saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, irpfInput.value, detallesInput.value, formaDePago.value);
+document.getElementById("guardar_btn").addEventListener("click", async () => {
+  try {
+    await triggerSaveInvoice();
+    alert("Se ha guardado correctamente la factura");
+  }catch (error) {
+    alert(error);
+  }
 });
 
 // Manejar clic en el botón de añadir nueva unidad
@@ -76,6 +53,53 @@ document.getElementById("descuento_unidad_btn").addEventListener("click", () => 
   changeDiscountPerProduct();
 });
 
+document.getElementById("atras_btn").addEventListener("click", () => {
+  window.location.href = "../home/home.html"
+});
+
+async function triggerSaveInvoice() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      var unitElements = document.querySelectorAll(".unidades");
+      var unitsList = [];
+
+      unitElements.forEach(element => {
+        // Obtener los valores de los inputs dentro de cada li
+        var cantidad = element.querySelector('input:nth-child(1)').value;
+        var tipo = element.querySelector('input:nth-child(2)').value;
+        var precioUnidad = element.querySelector('input:nth-child(3)').value;
+        var iva = element.querySelector('input:nth-child(4)').value;
+        var descuento = 0;
+        if (discountPerProduct) {
+          descuento = element.querySelector('input:nth-child(5)').value;
+        } else {
+          descuento = document.getElementById("descuento_al_total").value;
+        }
+
+        // Crear un objeto con los datos y agregarlo a la lista
+        var unitData = {
+          cantidad: cantidad,
+          tipo: tipo,
+          precioUnidad: precioUnidad,
+          iva: iva,
+          descuento: descuento
+        };
+
+        unitsList.push(unitData);
+      });
+
+      // Llamar a la función para crear una nueva factura
+      await saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, formaDePago.value);
+
+      // Resolver la Promesa después de completar la operación
+      resolve();
+    } catch (error) {
+      // Rechazar la Promesa si hay un error
+      reject(error);
+    }
+  });
+}
+
 function changeDiscountPerProduct() {
   discountPerProduct = !discountPerProduct;
 
@@ -93,6 +117,11 @@ function changeDiscountPerProduct() {
 
     var descuentoTotal = document.getElementById("descuento_al_total");
     descuentoTotal.classList.add("oculto");
+
+    var descuentoTotalLabel = document.getElementById("des_lbl");
+    descuentoTotalLabel.classList.add("oculto");
+
+    document.getElementById("descuento_unidad_btn").innerHTML = "Descuento al total";
   } else {
     var unitElements = document.querySelectorAll(".unidades");
 
@@ -103,6 +132,12 @@ function changeDiscountPerProduct() {
 
     var descuentoTotal = document.getElementById("descuento_al_total");
     descuentoTotal.classList.remove("oculto");
+
+    var descuentoTotalLabel = document.getElementById("des_lbl");
+    descuentoTotalLabel.classList.remove("oculto");
+
+
+    document.getElementById("descuento_unidad_btn").innerHTML = "Descuento por unidad";
   }
 }
 

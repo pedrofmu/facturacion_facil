@@ -15,10 +15,11 @@ cursor = conexion.cursor()
 #ingresos
 cursor.execute('''CREATE TABLE IF NOT EXISTS facturas (
                     numero TEXT,
-                    cliente TEXT,
-                    proveedor TEXT,
+                    receptor TEXT,
+                    emisor TEXT,
                     fecha DATE,
                     unidades TEXT,
+                    concepto TEXT, 
                     importeTotal REAL,
                     irpf INTEGER,
                     detalles TEXT,

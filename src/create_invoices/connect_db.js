@@ -8,8 +8,6 @@ function getInvoiceID(letter) {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
         reject(err);
-      } else {
-        console.log(`Conexión a la base de datos establecida`);
       }
     });
 
@@ -40,7 +38,6 @@ function getInvoiceID(letter) {
           console.error(err.message);
           reject(err);
         }
-        console.log('Conexión cerrada');
         resolve(nextNum);
       });
     });
@@ -92,7 +89,7 @@ function getPersonas(table) {
 
 //Funcion para añadir una factura a la base de datos
                                    //Valores de la tabla
-function addInvoice(numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, formaDePago) {
+function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto,importeTotal, irpf, detalles, formaDePago) {
   //Comporbar si la tabla es valida
   //Abrir la base de datos
   const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
@@ -105,9 +102,9 @@ function addInvoice(numero, cliente, proveedor, fecha, unidades, importeTotal, i
   });
 
   //Insertar los valores
-  const valuesToInsert = [numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, formaDePago];
+  const valuesToInsert = [numero, cliente, proveedor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago];
 
-  db.run(`INSERT INTO facturas (numero, cliente, proveedor, fecha, unidades, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function (err) {
+  db.run(`INSERT INTO facturas (numero, receptor, emisor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function (err) {
     if (err) {
       console.error(`Error al insertar valores: ${err.message}`);
     } else {

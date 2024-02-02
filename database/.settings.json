@@ -1,3 +1,6 @@
 {
-  "current_database": "main",
+    "current_database": "main",
+    "possible_db": [
+        "main"
+    ]
 }
