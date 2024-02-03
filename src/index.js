@@ -1,7 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { createConfigFolder, initialiceDB } = require('./manage_env/initialice_env');
 
+let mainWindow;
 function startRender(){
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (require('electron-squirrel-startup')) {
@@ -10,7 +11,7 @@ function startRender(){
   
   const createWindow = () => {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
       webPreferences: {
@@ -57,6 +58,22 @@ function startRender(){
     });
   
     nuevaVentana.loadFile(path.join(__dirname, `/views/create_subject/${valor}.html`));
+  });
+
+  ipcMain.on('open-file-dialog', (event) => {
+    dialog
+      .showSaveDialog(mainWindow, {
+        title: 'Guardar PDF',
+        defaultPath: 'output.pdf',
+        filters: [{ name: 'Archivos PDF', extensions: ['pdf'] }],
+      })
+      .then((result) => {
+        event.sender.send('selected-file', result.filePath);
+      })
+      .catch((err) => {
+        console.log(err);
+        event.sender.send('selected-file', null);
+      });
   });
 }
 

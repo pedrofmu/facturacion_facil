@@ -33,6 +33,7 @@ function  getFacturas(){
   });
 }
 
+//Obtener el NIF de la persona
 function getNIF(table ,name){
   return new Promise(async (resolve, reject) => {
     if (table !== "receptor" && table !== "emisor"){
@@ -104,6 +105,7 @@ function getUnidadesInfo(facturas) {
     }
   });
 };
+
 //Obtener la lista de facturas formateadas para el estandar de hacienda
 function getFacturasStandarInfo() {
   return new Promise(async (resolve, reject) => {
