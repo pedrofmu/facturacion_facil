@@ -1,4 +1,5 @@
 const { getFacturasStandarInfo } = require("../../record_book/getRecordBookInfo.js"); 
+const { saveXLSX } = require("../../record_book/createXLSX.js");
 
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
@@ -32,13 +33,13 @@ async function initialLoad(){
         nif.innerHTML = element.nif;
 
         var bi = document.createElement("td");
-        bi.innerHTML = element.bi;
+        bi.innerHTML = Number(element.bi).toFixed(2) + "€";
 
         var tipo = document.createElement("td");
-        tipo.innerHTML = element.tipo;
+        tipo.innerHTML = element.tipo.join(' ');
 
         var cuota = document.createElement("td");
-        cuota.innerHTML = element.cuota;
+        cuota.innerHTML = Number(element.cuota).toFixed(2) + "€";
         
         newFacturaEntry.appendChild(nSerie);
         newFacturaEntry.appendChild(fecha);
@@ -52,4 +53,5 @@ async function initialLoad(){
     });
 };
 
+saveXLSX();
 initialLoad();

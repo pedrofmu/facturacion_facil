@@ -84,8 +84,8 @@ function getUnidadesInfo(facturas) {
         var iva = unidad.iva;
         var descuento = unidad.descuento;
 
-        if (!ivas.includes(iva)){
-          ivas.push(iva);
+        if (!ivas.includes(iva + "%")){
+          ivas.push(iva + "%");
         }
 
         var bi = cantidad * precioUnidad - (cantidad * precioUnidad * (descuento / 100));

@@ -1,4 +1,4 @@
-const { addInvoice, getInvoiceID  } = require("./connect_db");
+const { addInvoice, getInvoiceID, getPersona  } = require("./connect_db");
 const { createInvoicePDF } = require("./create_pdf");
 
 //Guardar la factura
@@ -36,10 +36,13 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, conce
         importeTotal = baseImponible + ivaAdd;
       }
 
-      //Crear el pdf con la factura
-      await createInvoicePDF();
-      //Guardar la factura en la db
+      const clienteData = await getPersona("receptor", cliente); 
+      const proveedorData = await getPersona("emisor", proveedor);
+
       addInvoice(numero, cliente, proveedor, fecha, JSON.stringify(unidadesList), concepto, importeTotal, irpf, datosExtra, formaDePago);
+
+      //Crear el pdf con la factura
+      await createInvoicePDF(proveedorData, clienteData, numero, fecha, unidadesList, baseImponible, 0, ivaAdd, importeTotal, formaDePago);
 
       resolve(); 
     } catch (error) {

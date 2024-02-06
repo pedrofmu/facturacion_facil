@@ -86,6 +86,44 @@ function getPersonas(table) {
   });
 }
 
+function getPersona(table, personName){
+  return new Promise((resolve, reject) => {
+    if (table !== "receptor" && table !== "emisor"){
+      console.error('Tabla invalida para obtener una persona');
+      reject();
+    }
+    //Abrir la db
+    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+      if (err) {
+        console.error(`Error al abrir la base de datos: ${err.message}`);
+        reject(err);
+      } else {
+        console.log(`Conexión a la base de datos establecida`);
+      }
+
+      let persona;
+      db.get(`SELECT * FROM ${table} WHERE nombre LIKE '${personName}' `, [], (err, row) => {
+        if (err) {
+          console.error("Error leyendo letras: ", letter);
+          reject(err);
+        }
+
+        //Añadir todos los nombres de personas
+        persona = row;
+
+        //Cerrar la db
+        db.close((err) => {
+          if (err) {
+            console.error(err.message);
+            reject(err);
+          }
+          resolve(persona);
+        });
+      });
+    });
+  });
+};
+
 
 //Funcion para añadir una factura a la base de datos
                                    //Valores de la tabla
@@ -122,4 +160,4 @@ function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto,import
   });
 }
 
-module.exports = { addInvoice, getInvoiceID, getPersonas };
+module.exports = { addInvoice, getInvoiceID, getPersonas, getPersona };
