@@ -107,11 +107,9 @@ function getUnidadesInfo(facturas) {
 };
 
 //Obtener la lista de facturas formateadas para el estandar de hacienda
-function getFacturasStandarInfo() {
+function getFacturasStandarInfo(rawList) {
   return new Promise(async (resolve, reject) => {
     try {
-      var rawList = await getFacturas();
-
       // Utilizamos map en lugar de forEach
       var returnInfo = await Promise.all(rawList.map(async (element) => {
         var nSerie = element.numero;
@@ -145,4 +143,83 @@ function getFacturasStandarInfo() {
   });
 }
 
-module.exports = {getFacturasStandarInfo};
+function getFacturasStandarIRPFInfo(rawList) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Utilizamos map en lugar de forEach
+      var returnInfo = await Promise.all(rawList.map(async (element) => {
+        var nSerie = element.numero;
+        var fecha = element.fecha;
+        var nombre = element.receptor;
+        var nif = await getNIF("receptor", nombre);
+
+        var unidadesInfo = await getUnidadesInfo(element.unidades);
+
+        var bi = unidadesInfo.bi;
+        var tipo = unidadesInfo.ivas;
+        var cuota = unidadesInfo.cuota;
+
+        var irpf = bi * element.irpf;
+
+        var facturaElement = {
+          nSerie: nSerie,
+          fecha: fecha,
+          nombre: nombre,
+          nif: nif,
+          bi: bi,
+          tipo: tipo,
+          cuota: cuota,
+          irpf: irpf
+        };
+
+        return facturaElement;
+      }));
+
+      resolve(returnInfo);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+function getFacturasInDefaultDB(rawList) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Utilizamos map en lugar de forEach
+      var returnInfo = await Promise.all(rawList.map(async (element) => {
+        var nSerie = element.numero;
+        var fecha = element.fecha;
+        var nombre = element.receptor;
+
+        var unidadesInfo = await getUnidadesInfo(element.unidades);
+
+        var bi = unidadesInfo.bi;
+        var tipo = unidadesInfo.ivas;
+        var cuota = unidadesInfo.cuota;
+
+        var irpf = unidadesInfo.bi * element.irpf;
+
+        var facturaElement = {
+          nSerie: nSerie,
+          fecha: fecha,
+          nombre: nombre,
+          unidades: element.unidades,
+          concepto: element.concepto,
+          bi: bi,
+          tipo: tipo,
+          cuota: cuota,
+          irpf: irpf,
+          formaPago: element.formaDePago 
+        };
+
+        return facturaElement;
+      }));
+
+      resolve(returnInfo);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+module.exports = {getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas};
