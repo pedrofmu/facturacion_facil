@@ -3,6 +3,21 @@ const { saveXLSX } = require("../../record_book/createXLSX.js");
 
 const formatosSelector = document.getElementById("formatos_selector");
 
+var filtro = {
+  numero1 : -Infinity,
+  numero2 : Infinity,
+  letra : [],
+  cliente : [],
+  fecha1 : -Infinity,
+  fecha2 : Infinity,
+  concepto : [],
+  baseImponible1 : -Infinity,
+  baseImponible2 : Infinity,
+  iva : [],
+  irpf1 : -Infinity,
+  irpf2 : Infinity,
+};
+
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
 });
@@ -16,7 +31,7 @@ async function refreshTable() {
 
   var selection = formatosSelector.value;
 
-  var rawData = await getFacturas();
+  var rawData = await getFacturas(filtro);
   switch (selection) {
     case "standar":
       var formatedData = await getFacturasStandarInfo(rawData);

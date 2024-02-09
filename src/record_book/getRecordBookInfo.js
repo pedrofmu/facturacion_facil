@@ -1,7 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
 
 //Obiene la lista de las facturas como raw information
-function  getFacturas(){
+function getFacturas(filter) {
   return new Promise((resolve, reject) => {
     const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
@@ -21,22 +21,78 @@ function  getFacturas(){
         facturasList.push(row);
       });
 
-      db.close((err) => {
+      db.close(async (err) => {
         if (err) {
           console.error(err.message);
           reject(err);
         }
 
-        resolve(facturasList);
+        const filteredData = await filterData(facturasList, filter);
+        resolve(filteredData);
       });
     });
   });
 }
 
-//Obtener el NIF de la persona
-function getNIF(table ,name){
+async function filterData(rawData, filter) {
   return new Promise(async (resolve, reject) => {
-    if (table !== "receptor" && table !== "emisor"){
+    var filteredData = [];
+
+    for (var factura of rawData) {
+      const numNoLetra = Number(factura.numero.replace(/\D/g, ''));
+      if (!(numNoLetra >= filter.numero1 && numNoLetra <= filter.numero2)) {
+        continue;
+      }
+
+      const numLetra = String(factura.numero.replace(/\d/g, ''));
+
+      if (filter.letra.length > 0) {
+        if (!filter.letra.includes(numLetra)) {
+          continue;
+        }
+      }
+
+      if (filter.cliente.length > 0) {
+        if (!filter.cliente.includes(numLetra)) {
+          continue;
+        }
+      }
+
+      var fecha = new Date(factura.fecha);
+      if (!(fecha.getTime() >= filter.fecha1 && fecha.getTime() <= filter.fecha2)) {
+        continue;
+      }
+
+      if (filter.concepto.length > 0) {
+        if (!filter.concepto.includes(factura.concepto)) {
+          continue;
+        }
+      }
+
+      var unidadesInfo = await getUnidadesInfo(factura.unidades);
+      if (!(unidadesInfo.bi >= filter.baseImponible1 && unidadesInfo.bi <= filter.baseImponible2)) {
+        continue;
+      }
+
+      if (filter.iva.length > 0) {
+        const found = unidadesInfo.ivas.some(elemento => filter.iva.includes(elemento));
+        console.log(unidadesInfo.ivas);
+        if (!found) {
+          continue;
+        }
+      }
+
+      filteredData.push(factura);
+    }
+
+    resolve(filteredData);
+  });
+};
+
+//Obtener el NIF de la persona
+function getNIF(table, name) {
+  return new Promise(async (resolve, reject) => {
+    if (table !== "receptor" && table !== "emisor") {
       reject("tabla invalida al obtener le nif");
     }
 
@@ -45,7 +101,7 @@ function getNIF(table ,name){
         console.error(`Error al abrir la base de datos: ${err.message}`);
       }
     });
-    
+
     var nif = "";
 
     db.get(`SELECT * FROM ${table} WHERE nombre LIKE "${name}"`, [], (err, row) => {
@@ -58,21 +114,21 @@ function getNIF(table ,name){
     });
 
     db.close((err) => {
-        if (err) {
-          console.error(err.message);
-          reject(err);
-        }
+      if (err) {
+        console.error(err.message);
+        reject(err);
+      }
 
-        resolve(nif);
-      });
+      resolve(nif);
+    });
   });
 }
 
 //Calcular la base imponible, el iva y la cuota
 function getUnidadesInfo(facturas) {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      var unidadesList = JSON.parse(facturas);     
+      var unidadesList = JSON.parse(facturas);
 
       var ivas = [];
       var baseImponible = 0;
@@ -84,7 +140,7 @@ function getUnidadesInfo(facturas) {
         var iva = unidad.iva;
         var descuento = unidad.descuento;
 
-        if (!ivas.includes(iva + "%")){
+        if (!ivas.includes(iva + "%")) {
           ivas.push(iva + "%");
         }
 
@@ -100,7 +156,7 @@ function getUnidadesInfo(facturas) {
       };
 
       resolve(returnInfo);
-    }catch (error){
+    } catch (error) {
       reject(error);
     }
   });
@@ -209,7 +265,7 @@ function getFacturasInDefaultDB(rawList) {
           tipo: tipo,
           cuota: cuota,
           irpf: irpf,
-          formaPago: element.formaDePago 
+          formaPago: element.formaDePago
         };
 
         return facturaElement;
@@ -222,4 +278,4 @@ function getFacturasInDefaultDB(rawList) {
   });
 }
 
-module.exports = {getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas};
+module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas };
