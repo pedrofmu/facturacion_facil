@@ -76,8 +76,15 @@ async function filterData(rawData, filter) {
 
       if (filter.iva.length > 0) {
         const found = unidadesInfo.ivas.some(elemento => filter.iva.includes(elemento));
-        console.log(unidadesInfo.ivas);
         if (!found) {
+          continue;
+        }
+      }
+
+
+      console.log(factura.irpf);
+      if (filter.irpf.length > 0) {
+        if (!filter.irpf.includes(String(factura.irpf) + "%")) {
           continue;
         }
       }

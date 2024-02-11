@@ -1,20 +1,57 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
     <title>LIBRO DE REGISTROS</title>
-
     <link rel="stylesheet" href="record_book.css" />
-
     <script defer src="record_book.js"></script>
-  </head>
+    <style>
+         .filtro-container {
+            top: 0;
+            right: 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin-right: 20px; /* Ajuste del margen derecho */
+        }
+    </style>
+</head>
+<body>
+    <h1>Libro de registros</h1>
+    <div class="filtro-container">
+        <h2>Filtros</h2>
+        <form id="filtro-form">
+            <!-- Tu formulario de filtros aquí -->
+            <div class="range_selector">
+                <h5>Numero de facutra:</h5>
+                <label class="range_label">mínimo:</label>
+                <input type="number" id="numero1" name="numero1">
+                <label class="range_label">máximo:</label>
+                <input type="number" id="numero2" name="numero2">
+            </div>
 
- <body>
-     <h1>Libro de registros</h1>
-     <select id="formatos_selector"></select>
-     <table id="tabla_facturas" border="2">
-       <!-- Aqui van las filas con datos -->
-     </table>
-    <button id="atras_btn">Atras</button>
- </body>
-</html>
+            <div class="range_selector">
+                <h5>Fecha:</h5>
+                <label class="range_label">mínimo:</label>
+                <input type="date" id="fecha1" name="fecha1">
+                <label class="range_label">máximo:</label>
+                <input type="date" id="fecha2" name="fecha2">
+            </div>
+
+            <div class="range-selector">
+                <h5>Base imponible</h5>
+                <label class="range_label">mínimo:</label>
+                <input type="number" id="baseImponible1" name="baseImponible1">
+                <label class="range_label">máximo:</label>
+                <input type="number" id="baseImponible2" name="baseImponible2">
+            </div>
+
+            <button type="submit">Aplicar Filtros</button>
+        </form>
+    </div>
+    <select id="formatos_selector"></select>
+    <table id="tabla_facturas" border="2">
+        <!-- Aquí van las filas con datos -->
+    </table>
+    <button id="atras_btn">Atrás</button>
+</body>

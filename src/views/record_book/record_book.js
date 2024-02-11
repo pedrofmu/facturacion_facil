@@ -13,9 +13,9 @@ var filtro = {
   concepto : [],
   baseImponible1 : -Infinity,
   baseImponible2 : Infinity,
+  //IVA y irpf van con el porcentaje "*%"
   iva : [],
-  irpf1 : -Infinity,
-  irpf2 : Infinity,
+  irpf : [] 
 };
 
 document.getElementById("atras_btn").addEventListener("click", () => {
@@ -25,6 +25,44 @@ document.getElementById("atras_btn").addEventListener("click", () => {
 formatosSelector.addEventListener("click", async () => {
   refreshTable();
 });
+
+document.getElementById("filtro-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  filtro = await getFilterData();
+  refreshTable();
+});
+
+function getFilterData(){
+  return new Promise(async (resolve, reject) => {
+    var newFiltro = {
+          numero1: await obtenerValorInfinito(document.getElementById('numero1').value, true),
+          numero2: await obtenerValorInfinito(document.getElementById('numero2').value, false),
+          letra: [],
+          cliente: [],
+          fecha1: await obtenerValorInfinito((new Date(document.getElementById('fecha1').value)).getTime(), true),
+          fecha2: await obtenerValorInfinito((new Date(document.getElementById('fecha2').value)).getTime(), false),
+          concepto: [],
+          baseImponible1: await obtenerValorInfinito(document.getElementById('baseImponible1').value, true),
+          baseImponible2: await obtenerValorInfinito(document.getElementById('baseImponible2').value, false),
+          iva: [],
+          irpf: [] 
+      };
+
+      console.log(filtro);
+    resolve(newFiltro);
+  });
+};
+
+function obtenerValorInfinito(valor, esNumero1) {
+  return new Promise((resolve, reject) => {
+    if (valor === '') {
+        resolve(esNumero1 ? -Infinity : Infinity);
+    } else {
+        var valorParseado = parseFloat(valor);
+        resolve(isNaN(valorParseado) ? (esNumero1 ? -Infinity : Infinity) : valorParseado);
+    }
+  });
+}
 
 async function refreshTable() {
   document.getElementById("tabla_facturas").innerHTML = "";
