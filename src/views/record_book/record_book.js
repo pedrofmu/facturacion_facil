@@ -37,15 +37,15 @@ function getFilterData() {
     var newFiltro = {
       numero1: await obtenerValorInfinito(document.getElementById('numero1').value, true),
       numero2: await obtenerValorInfinito(document.getElementById('numero2').value, false),
-      letra: [],
-      cliente: [],
+      letra: await obtenerValorLista("letra"),
+      cliente: await obtenerValorLista("cliente"),
       fecha1: await obtenerValorInfinito((new Date(document.getElementById('fecha1').value)).getTime(), true),
       fecha2: await obtenerValorInfinito((new Date(document.getElementById('fecha2').value)).getTime(), false),
-      concepto: [],
+      concepto: await obtenerValorLista("concepto"),
       baseImponible1: await obtenerValorInfinito(document.getElementById('baseImponible1').value, true),
       baseImponible2: await obtenerValorInfinito(document.getElementById('baseImponible2').value, false),
-      iva: [],
-      irpf: []
+      iva: await obtenerValorLista("iva"),
+      irpf: await obtenerValorLista("irpf")
     };
 
     console.log(filtro);
@@ -61,6 +61,24 @@ function obtenerValorInfinito(valor, esNumero1) {
       var valorParseado = parseFloat(valor);
       resolve(isNaN(valorParseado) ? (esNumero1 ? -Infinity : Infinity) : valorParseado);
     }
+  });
+}
+
+function obtenerValorLista(valor){
+  return new Promise((resolve, reject) => {
+    const container = document.getElementById(`active_selection_${valor}`)
+    const selections = container.getElementsByTagName("div");
+
+    const selectionsArray = Array.prototype.slice.call(selections);
+
+    var returnData = [];
+    selectionsArray.forEach((element) => {
+      var value = element.getElementsByTagName("label")[0];
+      console.log(value.innerHTML);
+      returnData.push(value.innerHTML);
+    });
+    
+    resolve(returnData);
   });
 }
 
@@ -113,7 +131,8 @@ function createListElements(values, type) {
     label.textContent = value;
     var button = document.createElement("button");
     button.textContent = "✔️";
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
       toggleSelection(div, type);
     });
     div.appendChild(label);
