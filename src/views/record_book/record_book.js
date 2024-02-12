@@ -1,21 +1,21 @@
-const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas } = require("../../record_book/getRecordBookInfo.js");
+const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList } = require("../../record_book/getRecordBookInfo.js");
 const { saveXLSX } = require("../../record_book/createXLSX.js");
 
 const formatosSelector = document.getElementById("formatos_selector");
 
 var filtro = {
-  numero1 : -Infinity,
-  numero2 : Infinity,
-  letra : [],
-  cliente : [],
-  fecha1 : -Infinity,
-  fecha2 : Infinity,
-  concepto : [],
-  baseImponible1 : -Infinity,
-  baseImponible2 : Infinity,
+  numero1: -Infinity,
+  numero2: Infinity,
+  letra: [],
+  cliente: [],
+  fecha1: -Infinity,
+  fecha2: Infinity,
+  concepto: [],
+  baseImponible1: -Infinity,
+  baseImponible2: Infinity,
   //IVA y irpf van con el porcentaje "*%"
-  iva : [],
-  irpf : [] 
+  iva: [],
+  irpf: []
 };
 
 document.getElementById("atras_btn").addEventListener("click", () => {
@@ -32,23 +32,23 @@ document.getElementById("filtro-form").addEventListener("submit", async (event) 
   refreshTable();
 });
 
-function getFilterData(){
+function getFilterData() {
   return new Promise(async (resolve, reject) => {
     var newFiltro = {
-          numero1: await obtenerValorInfinito(document.getElementById('numero1').value, true),
-          numero2: await obtenerValorInfinito(document.getElementById('numero2').value, false),
-          letra: [],
-          cliente: [],
-          fecha1: await obtenerValorInfinito((new Date(document.getElementById('fecha1').value)).getTime(), true),
-          fecha2: await obtenerValorInfinito((new Date(document.getElementById('fecha2').value)).getTime(), false),
-          concepto: [],
-          baseImponible1: await obtenerValorInfinito(document.getElementById('baseImponible1').value, true),
-          baseImponible2: await obtenerValorInfinito(document.getElementById('baseImponible2').value, false),
-          iva: [],
-          irpf: [] 
-      };
+      numero1: await obtenerValorInfinito(document.getElementById('numero1').value, true),
+      numero2: await obtenerValorInfinito(document.getElementById('numero2').value, false),
+      letra: [],
+      cliente: [],
+      fecha1: await obtenerValorInfinito((new Date(document.getElementById('fecha1').value)).getTime(), true),
+      fecha2: await obtenerValorInfinito((new Date(document.getElementById('fecha2').value)).getTime(), false),
+      concepto: [],
+      baseImponible1: await obtenerValorInfinito(document.getElementById('baseImponible1').value, true),
+      baseImponible2: await obtenerValorInfinito(document.getElementById('baseImponible2').value, false),
+      iva: [],
+      irpf: []
+    };
 
-      console.log(filtro);
+    console.log(filtro);
     resolve(newFiltro);
   });
 };
@@ -56,10 +56,10 @@ function getFilterData(){
 function obtenerValorInfinito(valor, esNumero1) {
   return new Promise((resolve, reject) => {
     if (valor === '') {
-        resolve(esNumero1 ? -Infinity : Infinity);
+      resolve(esNumero1 ? -Infinity : Infinity);
     } else {
-        var valorParseado = parseFloat(valor);
-        resolve(isNaN(valorParseado) ? (esNumero1 ? -Infinity : Infinity) : valorParseado);
+      var valorParseado = parseFloat(valor);
+      resolve(isNaN(valorParseado) ? (esNumero1 ? -Infinity : Infinity) : valorParseado);
     }
   });
 }
@@ -84,6 +84,61 @@ async function refreshTable() {
       loadDataInDefaultDB(formatedData);
       break;
   }
+}
+
+function toggleSelection(div, type) {
+  var parent = div.parentNode;
+  var inactiveDIV = document.getElementById(`inactive_selection_${type}`);
+  var activeDIV = document.getElementById(`active_selection_${type}`);
+
+  // Cambiar de contenedor
+  if (parent.classList.contains("active_selection")) {
+    inactiveDIV.appendChild(div);
+    div.getElementsByTagName("button")[0].innerHTML = "✔️";
+  } else {
+    activeDIV.appendChild(div);
+    div.getElementsByTagName("button")[0].innerHTML = "✖️";
+  }
+}
+
+function createListElements(values, type) {
+  const container = document.getElementById(`inactive_selection_${type}`);
+  // Limpiar el contenedor de elementos inactivos
+  container.innerHTML = "";
+
+  // Crear elementos inactivos con los valores proporcionados
+  values.forEach(function(value) {
+    var div = document.createElement("div");
+    var label = document.createElement("label");
+    label.textContent = value;
+    var button = document.createElement("button");
+    button.textContent = "✔️";
+    button.addEventListener("click", () => {
+      toggleSelection(div, type);
+    });
+    div.appendChild(label);
+    div.appendChild(button);
+    container.appendChild(div);
+  });
+}
+
+async function loadListFilter(){
+  var data = await getDataForFilterList(); 
+  console.log(data);
+  //Inicializar letra
+  createListElements(data.letras, "letra");
+
+  //Inicializa cliente
+  createListElements(data.clientes, "cliente");
+
+  //Inicializar concepto 
+  createListElements(data.conceptos, "concepto");
+  
+  //Inicializar iva
+  createListElements(data.ivas, "iva");
+
+  //Inicializar irpf
+  createListElements(data.irpfs, "irpf");
 }
 
 function loadOptions() {
@@ -300,3 +355,4 @@ async function loadDataInStandarMode(invoicesList) {
 
 loadOptions();
 refreshTable();
+loadListFilter();

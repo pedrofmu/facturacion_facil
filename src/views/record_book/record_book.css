@@ -1,0 +1,42 @@
+.list_selector {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.active_selection,
+.inactive_selection {
+  display: flex;
+  grid-auto-flow: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.active_selection > div,
+.inactive_selection > div {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 5px;
+  align-items: center;
+  background-color: #f0f0f0; 
+  padding: 5px;
+  width: 50px;
+}
+.active_selection > div {
+  background-color: #55ACEE;
+}
+
+.active_selection button,
+.inactive_selection button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.filtro-container {
+    top: 0;
+    right: 0;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-right: 20px; /* Ajuste del margen derecho */
+}

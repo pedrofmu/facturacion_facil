@@ -1,7 +1,105 @@
 const sqlite3 = require("sqlite3").verbose();
 
+function getDistintData(columnName) {
+  return new Promise((resolve, reject) => {
+    // Conectarse a la base de datos
+    const db = new sqlite3.Database('./database/main.db');
+
+    // Consulta SQL para obtener los valores únicos en la columna especificada
+    const sql = `SELECT DISTINCT ${columnName} FROM facturas`;
+
+    // Ejecutar la consulta
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      // Procesar los resultados
+      const values = rows.map(row => row[columnName]);
+      resolve(values);
+    });
+
+    // Cerrar la conexión con la base de datos cuando hayas terminado
+    db.close();
+  });
+}
+
+function getLeterFromIDFacturaList() {
+  return new Promise((resolve, reject) => {
+    // Conectarse a la base de datos
+    const db = new sqlite3.Database('./database/main.db');
+
+    // Consulta SQL para obtener todos los valores en la columna 'numero'
+    const sql = 'SELECT numero FROM facturas';
+
+    // Ejecutar la consulta
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      // Procesar los resultados para obtener las letras únicas
+      const uniqueLetters = new Set();
+      rows.forEach(row => {
+        const letter = row.numero.charAt(0); // Obtener la primera letra de cada valor en 'numero'
+        uniqueLetters.add(letter); // Agregar la letra al conjunto de letras únicas
+      });
+      resolve(Array.from(uniqueLetters)); // Convertir el conjunto a un array y resolver la promesa
+    });
+
+    // Cerrar la conexión con la base de datos cuando hayas terminado
+    db.close();
+  });
+}
+
+function getDataForFilterList() {
+  return new Promise(async (resolve, reject) => {
+    const rawFacturas = await getFacturas();
+    var ivasSet = new Set(); 
+    rawFacturas.forEach(async (factura) => {
+      const unidadesInfo = await getUnidadesInfo(factura.unidades);
+      for (const iva of unidadesInfo.ivas){
+        ivasSet.add(iva);
+      }
+    });
+
+    var letras = await getLeterFromIDFacturaList();
+    var clientes = await getDistintData("receptor");
+    var conceptos = await getDistintData("concepto");
+    var rawIRPFS = await getDistintData("irpf");
+
+    var irpfs = [];
+    for (const irpf of rawIRPFS){
+      irpfs.push(`${irpf}%`);
+    }
+    var ivas = Array.from(ivasSet);
+   
+    var data = {
+      letras : letras,
+      clientes: clientes,
+      conceptos: conceptos,
+      ivas: ivas,
+      irpfs: irpfs
+    };
+
+    resolve(data);
+  });
+}
+
+
 //Obiene la lista de las facturas como raw information
-function getFacturas(filter) {
+function getFacturas(filter = {
+  numero1: -Infinity,
+  numero2: Infinity,
+  letra: [],
+  cliente: [],
+  fecha1: -Infinity,
+  fecha2: Infinity,
+  concepto: [],
+  baseImponible1: -Infinity,
+  baseImponible2: Infinity,
+  //IVA y irpf van con el porcentaje "*%"
+  iva: [],
+  irpf: []
+}) {
   return new Promise((resolve, reject) => {
     const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
@@ -80,7 +178,6 @@ async function filterData(rawData, filter) {
           continue;
         }
       }
-
 
       console.log(factura.irpf);
       if (filter.irpf.length > 0) {
@@ -285,4 +382,4 @@ function getFacturasInDefaultDB(rawList) {
   });
 }
 
-module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas };
+module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList };
