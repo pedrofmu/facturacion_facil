@@ -64,6 +64,7 @@ function obtenerValorInfinito(valor, esNumero1) {
   });
 }
 
+<<<<<<< HEAD
 function obtenerValorLista(valor) {
   return new Promise((resolve, reject) => {
     const container = document.getElementById(`active_selection_${valor}`);
@@ -76,6 +77,20 @@ function obtenerValorLista(valor) {
     selectionsArray.forEach((element) => {
       var value = element.getElementsByTagName("label")[0].innerHTML;
       returnData.push(value);
+=======
+function obtenerValorLista(valor){
+  return new Promise((resolve, reject) => {
+    const container = document.getElementById(`active_selection_${valor}`)
+    const selections = container.getElementsByTagName("div");
+
+    const selectionsArray = Array.prototype.slice.call(selections);
+
+    var returnData = [];
+    selectionsArray.forEach((element) => {
+      var value = element.getElementsByTagName("label")[0];
+      console.log(value.innerHTML);
+      returnData.push(value.innerHTML);
+>>>>>>> 6a8c5fbea2793305027b2d16725cd488e0e6965f
     });
     
     resolve(returnData);
