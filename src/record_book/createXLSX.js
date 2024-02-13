@@ -1,12 +1,21 @@
 const XLSX = require('xlsx');
 const fs = require('fs');
 
-function saveXLSX() {
+function saveXLSX(thElements, tableData) {
   const workbook = XLSX.utils.book_new();
-  const sheetData = [['Nombre', 'Edad'], ['John Doe', 30], ['Jane Doe', 25]];
+
+  // Crear matriz de datos para la hoja de cálculo
+  const sheetData = [thElements];
+  tableData.forEach(row => {
+    const rowData = thElements.map(header => row[thElements.indexOf(header)]);
+    sheetData.push(rowData);
+  });
+
+  // Convertir matriz de datos en hoja de cálculo
   const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Hoja1');
 
+  // Escribir hoja de cálculo en un archivo
   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
   const filePath = './prueba.xlsx';
 

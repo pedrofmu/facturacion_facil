@@ -26,6 +26,10 @@ formatosSelector.addEventListener("click", async () => {
   refreshTable();
 });
 
+document.getElementById("guardar_btn").addEventListener("click", () => {
+  saveTable();
+});
+
 document.getElementById("filtro-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   filtro = await getFilterData();
@@ -100,6 +104,59 @@ async function refreshTable() {
     case "defaultDB":
       var formatedData = await getFacturasInDefaultDB(rawData);
       loadDataInDefaultDB(formatedData);
+      break;
+  }
+}
+
+//
+//const tableData = [
+//  [1, "2024-02-13", "John Doe", "123456789A", 100.00, "Normal", 21.00, 5.00],
+//  [2, "2024-02-14", "Jane Doe", "987654321B", 150.00, "Reducido", 10.00, 0.00],
+//  // Agrega más filas según sea necesario
+//];
+
+async function saveTable(){
+  const thElements = [];
+  var tabla = document.getElementById("tabla_facturas");
+  var filas = tabla.rows;
+
+  // Iterar sobre la primera fila (encabezados) y agregarlos a la lista
+  var encabezados = filas[0].cells;
+  for (var i = 0; i < encabezados.length; i++) {
+    var valorEncabezado = encabezados[i].textContent;
+    thElements.push(valorEncabezado);
+  }
+  
+  var selection = formatosSelector.value;
+
+  var rawData = await getFacturas(filtro);
+  switch (selection) {
+    case "standar":
+      var formatedData = await getFacturasStandarInfo(rawData);
+      var data = [];
+      formatedData.forEach((element) => {
+        const arrayElement = Object.values(element);
+        data.push(arrayElement);
+      });
+      saveXLSX(thElements, data);
+      break;
+    case "standarIRPF":
+      var formatedData = await getFacturasStandarIRPFInfo(rawData);
+      var data = [];
+      formatedData.forEach((element) => {
+        const arrayElement = Object.values(element);
+        data.push(arrayElement);
+      });
+      saveXLSX(thElements, data);
+      break;
+    case "defaultDB":
+      var formatedData = await getFacturasInDefaultDB(rawData);
+      var data = [];
+      formatedData.forEach((element) => {
+        const arrayElement = Object.values(element);
+        data.push(arrayElement);
+      });
+      saveXLSX(thElements, data);
       break;
   }
 }
@@ -371,6 +428,8 @@ async function loadDataInStandarMode(invoicesList) {
     tabla.appendChild(newFacturaEntry);
   });
 }
+
+
 
 loadOptions();
 refreshTable();
