@@ -5,8 +5,11 @@ const id = document.getElementById("id_input");
 const direccion = document.getElementById("direccion_input");
 const contacto = document.getElementById("contacto_input");
 
-document.getElementById("save_btn").addEventListener("click", () => {
-    createPerson("receptor", nombre.value, id.value, direccion.value, contacto.value).then((err) => {
-        console.log("funciona");
-    });
+document.getElementById("save_btn").addEventListener("click", async () => {
+  try {
+    await createPerson("receptor", nombre.value, id.value, direccion.value, contacto.value);
+    alert("Se ha guardado correctamente el receptor");
+  }catch (error) {
+    alert(error);
+  }
 });

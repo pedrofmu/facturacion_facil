@@ -50,7 +50,7 @@ function startRender(){
     const nuevaVentana = new BrowserWindow({
       width: 400,
       height: 300,
-      show: true,
+      show:  true, 
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false
