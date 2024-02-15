@@ -319,7 +319,7 @@ function getFacturasStandarIRPFInfo(rawList) {
         var tipo = unidadesInfo.ivas;
         var cuota = unidadesInfo.cuota;
 
-        var irpf = bi * element.irpf;
+        var irpf = bi * element.irpf / 100;
 
         var facturaElement = {
           nSerie: nSerie,
@@ -357,7 +357,7 @@ function getFacturasInDefaultDB(rawList) {
         var tipo = unidadesInfo.ivas;
         var cuota = unidadesInfo.cuota;
 
-        var irpf = unidadesInfo.bi * element.irpf;
+        var irpf = unidadesInfo.bi * element.irpf / 100;
 
         var facturaElement = {
           nSerie: nSerie,

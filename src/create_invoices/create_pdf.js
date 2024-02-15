@@ -38,8 +38,7 @@ return new Promise((resolve, reject) => {
 });
 }
 
-
-function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseImonible, retenidoIRPF, ivaAdd, importeTotal, formaDePago, detalles){
+function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseImonible, retenidoIRPF, ivaAdd, cuotaIVA, importeTotal, formaDePago, detalles){
 return new Promise(async (resolve, reject) => {
 try {
 const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
@@ -91,16 +90,16 @@ const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
           <div class="pago_total">
               <h5>Total Base Imponible: ${Number(baseImonible).toFixed(2)}€</h5>
               <h5>Retenido IRPF: ${Number(retenidoIRPF).toFixed(2)}€</h5>
-              <h5>Añadido por IVA: ${Number(ivaAdd).toFixed(2)}€</h5>
+              <h5>Añadido por IVA (${cuotaIVA}): ${Number(ivaAdd).toFixed(2)}€</h5>
               <h5>Importe total: ${Number(importeTotal).toFixed(2)}€</h5>
           </div>
           <div class="forma_pago">
-              <h4>Forma de pago: <>
+              <h4>Forma de pago: </h4>
               <h5>${formaDePago}</h5>
           </div>
       </div>
       <div class="detalles_extra">
-         <p>${detalles}</p> 
+         ${detalles ? `<p>${detalles}</p>` : ''}
       </div>
   </body>
   </html>
@@ -111,7 +110,7 @@ const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
     base: 'file://' + path.join(__dirname), 
   };
 
-  ipcRenderer.send('open-file-dialog');
+  ipcRenderer.send('open-file-dialog', 'pdf', numero);
 
   ipcRenderer.on('selected-file', (event, filePath) => {
     if (filePath) {
@@ -119,14 +118,16 @@ const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
       pdf.create(htmlRendering, pdfOptions).toFile(filePath, (err, res) => {
         if (err) reject(err);
         console.log(res); // Información sobre el archivo generado
+
+        resolve(true);
       });
     } else {
-      resolve(); 
+      resolve(false); 
     }
   });
-}catch(error){
-    reject(error);
-}
+  }catch(error){
+      reject(error);
+  }
 });
 };
 

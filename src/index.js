@@ -60,12 +60,28 @@ function startRender(){
     nuevaVentana.loadFile(path.join(__dirname, `/views/create_subject/${valor}.html`));
   });
 
-  ipcMain.on('open-file-dialog', (event) => {
+  ipcMain.on('open-file-dialog', (event, fileType, fileName) => {
+    let filters;
+    switch (fileType) {
+      case 'pdf':
+        filters = [{ name: 'Archivos PDF', extensions: ['pdf'] }];
+        break;
+      case 'txt':
+        filters = [{ name: 'Archivos de texto', extensions: ['txt'] }];
+        break;
+      case 'xlsx':
+        filters = [{ name: 'Archivos de Excel', extensions: ['xlsx'] }];
+        break;
+      // Agrega más casos según los tipos de archivo que deseas permitir
+      default:
+        filters = [];
+    }
+  
     dialog
       .showSaveDialog(mainWindow, {
-        title: 'Guardar PDF',
-        defaultPath: 'output.pdf',
-        filters: [{ name: 'Archivos PDF', extensions: ['pdf'] }],
+        title: `Guardar ${fileName}.${fileType.toUpperCase()}`,
+        defaultPath: `${fileName}.${fileType}`,
+        filters: filters,
       })
       .then((result) => {
         event.sender.send('selected-file', result.filePath);

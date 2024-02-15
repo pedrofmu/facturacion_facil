@@ -16,11 +16,15 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, conce
       let importeTotal = 0;
       let baseImponible = 0;
       let ivaAdd = 0;
+      let ivas = [];
 
       // Calcular el importe total
       unidadesList.forEach((element) => {
         const cantidad = element.cantidad;
         const precioUnidad = element.precioUnidad;
+        if (!ivas.includes(`${element.iva}%`)){
+          ivas.push(`${element.iva}%`);
+        } 
         const iva = element.iva;
         const descuento = element.descuento;
 
@@ -39,12 +43,16 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, conce
       const clienteData = await getPersona("receptor", cliente); 
       const proveedorData = await getPersona("emisor", proveedor);
 
-      addInvoice(numero, cliente, proveedor, fecha, JSON.stringify(unidadesList), concepto, importeTotal, irpf, datosExtra, formaDePago);
 
       //Crear el pdf con la factura
-      await createInvoicePDF(proveedorData, clienteData, numero, fecha, unidadesList, baseImponible, 0, ivaAdd, importeTotal, formaDePago);
+      let save = await createInvoicePDF(proveedorData, clienteData, numero, fecha, unidadesList, baseImponible, baseImponible * irpf / 100, ivaAdd, ivas, importeTotal, formaDePago, datosExtra);
 
-      resolve(); 
+      if (save === true){
+        addInvoice(numero, cliente, proveedor, fecha, JSON.stringify(unidadesList), concepto, importeTotal, irpf, datosExtra, formaDePago);
+        resolve(); 
+      }else{
+        reject("Selecciono la ubicacion correcta para guardar");
+      }
     } catch (error) {
       reject(error); 
     }

@@ -1,5 +1,6 @@
 const XLSX = require('xlsx');
 const fs = require('fs');
+const { ipcRenderer } = require('electron');
 
 function saveXLSX(thElements, tableData) {
   const workbook = XLSX.utils.book_new();
@@ -17,13 +18,20 @@ function saveXLSX(thElements, tableData) {
 
   // Escribir hoja de cálculo en un archivo
   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-  const filePath = './prueba.xlsx';
+  ipcRenderer.send('open-file-dialog', 'xlsx', 'libro-de-registro');
 
-  fs.writeFile(filePath, excelBuffer, (err) => {
-    if (err) {
-      console.error(err);
+  ipcRenderer.on('selected-file', (event, filePath) => {
+    if (filePath) {
+      // Convierte HTML a PDF y guarda el archivo en la ubicación seleccionada
+      fs.writeFile(filePath, excelBuffer, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log('Archivo xlsx creado y guardado correctamente.');
+        }
+      });    
     } else {
-      console.log('Archivo xlsx creado y guardado correctamente.');
+      resolve(); 
     }
   });
 }
