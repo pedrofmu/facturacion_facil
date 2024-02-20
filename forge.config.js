@@ -6,7 +6,10 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        authors: 'Pedro Fernández Muñoz',
+        description: 'Aplicacion para hacer la facturacion'
+      },
     },
     {
       name: '@electron-forge/maker-zip',

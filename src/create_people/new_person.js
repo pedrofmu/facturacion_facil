@@ -1,4 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
+const { getDBPath } = require("../manage_env/getPath");
+
+const dbPath = getDBPath();
 
 function createPerson(table, nombre, id, direccion, contacto) {
   return new Promise((resolve, reject) => {
@@ -12,7 +15,7 @@ function createPerson(table, nombre, id, direccion, contacto) {
       return; // Importante retornar para evitar que continúe el proceso
     } 
 
-    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+    const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         reject(err);
         return; // Importante retornar para evitar que continúe el proceso
@@ -39,4 +42,4 @@ function createPerson(table, nombre, id, direccion, contacto) {
   });
 }
 
-module.exports = { createPerson };
+module.exports = {createPerson};

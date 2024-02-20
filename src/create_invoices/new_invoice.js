@@ -1,4 +1,4 @@
-const { addInvoice, getInvoiceID, getPersona  } = require("./connect_db");
+const { addInvoice, getInvoiceID, getPersona } = require("./connect_db");
 const { createInvoicePDF } = require("./create_pdf");
 
 //Guardar la factura
@@ -59,4 +59,4 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, conce
   });
 }
 
-module.exports = { saveInvoice };
+module.exports = {saveInvoice};

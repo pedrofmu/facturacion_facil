@@ -1,4 +1,4 @@
-const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList } = require("../../record_book/getRecordBookInfo.js");
+const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList } = require( "../../record_book/getRecordBookInfo.js");
 const { saveXLSX } = require("../../record_book/createXLSX.js");
 
 const formatosSelector = document.getElementById("formatos_selector");

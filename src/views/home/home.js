@@ -7,8 +7,6 @@ const toRecordBookBtn = document.getElementById("to_record_book_btn");
 async function loadDbInSelector(){
   var possibleDB = await loadPossibleDB();
 
-  console.log(possibleDB);
-
   possibleDB.forEach(element => {
     var opt = document.createElement("option");
     opt.value = element;
@@ -17,7 +15,7 @@ async function loadDbInSelector(){
     // then append it to the select element
     db_selector.appendChild(opt);
   });
-}
+ }
 
 toIngresosBtn.addEventListener("click", () => {
   window.location.href = "../invoices/invoices.html";

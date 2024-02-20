@@ -1,9 +1,9 @@
-const XLSX = require('xlsx');
-const fs = require('fs');
+const { utils, write } = require('xlsx');
+const { writeFile } = require('fs');
 const { ipcRenderer } = require('electron');
 
 function saveXLSX(thElements, tableData) {
-  const workbook = XLSX.utils.book_new();
+  const workbook = utils.book_new();
 
   // Crear matriz de datos para la hoja de cálculo
   const sheetData = [thElements];
@@ -13,17 +13,17 @@ function saveXLSX(thElements, tableData) {
   });
 
   // Convertir matriz de datos en hoja de cálculo
-  const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Hoja1');
+  const worksheet = utils.aoa_to_sheet(sheetData);
+  utils.book_append_sheet(workbook, worksheet, 'Hoja1');
 
   // Escribir hoja de cálculo en un archivo
-  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+  const excelBuffer = write(workbook, { bookType: 'xlsx', type: 'buffer' });
   ipcRenderer.send('open-file-dialog', 'xlsx', 'libro-de-registro');
 
   ipcRenderer.on('selected-file', (event, filePath) => {
     if (filePath) {
       // Convierte HTML a PDF y guarda el archivo en la ubicación seleccionada
-      fs.writeFile(filePath, excelBuffer, (err) => {
+      writeFile(filePath, excelBuffer, (err) => {
         if (err) {
           console.error(err);
         } else {

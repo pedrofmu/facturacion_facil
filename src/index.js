@@ -1,14 +1,16 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const { createConfigFolder, initialiceDB } = require('./manage_env/initialice_env');
+const { createConfigFolder } = require('./manage_env/initialice_env');
+const { setupIPCMainListeners } = require('./setupIPCListeners');
 
 let mainWindow;
-function startRender(){
+
+function startRender() {
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (require('electron-squirrel-startup')) {
     app.quit();
   }
-  
+
   const createWindow = () => {
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -19,80 +21,29 @@ function startRender(){
         contextIsolation: false,
       },
     });
-  
+
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, '/views/home/home.html'));
   };
-  
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
-  
-  // Quit when all windows are closed, except on macOS. There, it's common
-  // for applications and their menu bar to stay active until the user quits
-  // explicitly with Cmd + Q.
+
+  app.on('ready', () => {
+    createWindow();
+    setupIPCMainListeners(mainWindow);
+  });
+
   app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
       app.quit();
     }
   });
-  
+
   app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
   });
-  
-  ipcMain.on('open-new-window', (event, valor) => {
-    const nuevaVentana = new BrowserWindow({
-      width: 400,
-      height: 300,
-      show:  true, 
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false
-      }
-    });
-  
-    nuevaVentana.loadFile(path.join(__dirname, `/views/create_subject/${valor}.html`));
-  });
-
-  ipcMain.on('open-file-dialog', (event, fileType, fileName) => {
-    let filters;
-    switch (fileType) {
-      case 'pdf':
-        filters = [{ name: 'Archivos PDF', extensions: ['pdf'] }];
-        break;
-      case 'txt':
-        filters = [{ name: 'Archivos de texto', extensions: ['txt'] }];
-        break;
-      case 'xlsx':
-        filters = [{ name: 'Archivos de Excel', extensions: ['xlsx'] }];
-        break;
-      // Agrega más casos según los tipos de archivo que deseas permitir
-      default:
-        filters = [];
-    }
-  
-    dialog
-      .showSaveDialog(mainWindow, {
-        title: `Guardar ${fileName}.${fileType.toUpperCase()}`,
-        defaultPath: `${fileName}.${fileType}`,
-        filters: filters,
-      })
-      .then((result) => {
-        event.sender.send('selected-file', result.filePath);
-      })
-      .catch((err) => {
-        console.log(err);
-        event.sender.send('selected-file', null);
-      });
-  });
 }
 
 createConfigFolder();
-initialiceDB();
 startRender();

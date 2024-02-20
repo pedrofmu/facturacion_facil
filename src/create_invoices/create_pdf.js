@@ -1,24 +1,23 @@
 const { ipcRenderer } = require('electron');
-const path = require('path');
-const pdf = require('html-pdf');
-const fs = require('fs');
-const util = require('util');
-const readFileAsync = util.promisify(fs.readFile);
+const { readFile } = require('fs');
+const { promisify } = require('util');
+const readFileAsync = promisify(readFile);
+const { getCSSPath, getImagePathAsync } = require("../manage_env/getPath");
 
-function createHTMLfromPDF(unidadesList){
-return new Promise((resolve, reject) => {
+function createHTMLfromPDF(unidadesList) {
+  return new Promise((resolve, reject) => {
     var htmlString = "";
-    try{
-        unidadesList.forEach((element) => {
-            const cantidad = element.cantidad;
-            const precioUnidad = element.precioUnidad;
-            const iva = element.iva;
+    try {
+      unidadesList.forEach((element) => {
+        const cantidad = element.cantidad;
+        const precioUnidad = element.precioUnidad;
+        const iva = element.iva;
 
-            const descuento = cantidad * precioUnidad * (element.descuento / 100);
-            const bi = (cantidad * precioUnidad) - descuento;
+        const descuento = cantidad * precioUnidad * (element.descuento / 100);
+        const bi = (cantidad * precioUnidad) - descuento;
 
-            const ivaAdd = bi * (iva / 100);
-            htmlString += `
+        const ivaAdd = bi * (iva / 100);
+        htmlString += `
                 <tr>
                   <td>${element.tipo}</th>
                   <td>${Number(precioUnidad).toFixed(2)}€</th>
@@ -29,21 +28,28 @@ return new Promise((resolve, reject) => {
                   <td>${Number(bi + ivaAdd).toFixed(2)}€</th>
                 </tr>`;
 
-    });
+      });
 
-    resolve(htmlString);
-    }catch(error){
-        reject(error);
+      resolve(htmlString);
+    } catch (error) {
+      reject(error);
     }
-});
+  });
 }
 
-function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseImonible, retenidoIRPF, ivaAdd, cuotaIVA, importeTotal, formaDePago, detalles){
-return new Promise(async (resolve, reject) => {
-try {
-const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
-  const productsHTML = await createHTMLfromPDF(unidadesList);  
-  const htmlRendering = `
+function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseImonible, retenidoIRPF, ivaAdd, cuotaIVA, importeTotal, formaDePago, detalles) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const cssRendering = await readFileAsync(getCSSPath(), 'utf-8');
+      const productsHTML = await createHTMLfromPDF(unidadesList);
+      const direccionIMG = await getImagePathAsync();
+
+      const imageData = await readFileAsync(direccionIMG);
+      const imageB64 = imageData.toString('base64');
+
+      console.log(imageB64);
+
+      const htmlRendering = `
   <!DOCTYPE html>
   <html lang="es">
   <head>
@@ -60,7 +66,7 @@ const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
               <h5>${proveedor.direccion}</h5>
               <h5>${proveedor.contacto}</h5>
           </div>
-          <img src="">
+          <img src="data:image/png;base64,${imageB64}">
       </div>
       <div class="datos1">
           <div class="comprador">
@@ -105,30 +111,20 @@ const cssRendering = await readFileAsync('./database/style.css', 'utf-8');
   </html>
   `;
 
-  const pdfOptions = {
-    format: 'Letter', 
-    base: 'file://' + path.join(__dirname), 
-  };
+      ipcRenderer.send('open-file-dialog', 'pdf', numero);
 
-  ipcRenderer.send('open-file-dialog', 'pdf', numero);
-
-  ipcRenderer.on('selected-file', (event, filePath) => {
-    if (filePath) {
-      // Convierte HTML a PDF y guarda el archivo en la ubicación seleccionada
-      pdf.create(htmlRendering, pdfOptions).toFile(filePath, (err, res) => {
-        if (err) reject(err);
-        console.log(res); // Información sobre el archivo generado
-
-        resolve(true);
+      ipcRenderer.on('selected-file', (event, filePath) => {
+        if (filePath) {
+          ipcRenderer.send('create-pdf', htmlRendering, filePath);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       });
-    } else {
-      resolve(false); 
+    } catch (error) {
+      reject(error);
     }
   });
-  }catch(error){
-      reject(error);
-  }
-});
 };
 
-module.exports = { createInvoicePDF };
+module.exports = {createInvoicePDF};

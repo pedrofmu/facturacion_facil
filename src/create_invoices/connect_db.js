@@ -1,10 +1,13 @@
 const sqlite3 = require("sqlite3").verbose();
+const { getDBPath } = require("../manage_env/getPath");
+
+const folderPath = getDBPath();
 
 //Obtener el numero para la siguiente letra "A1" "A2" "A3"
 function getInvoiceID(letter) {
   return new Promise((resolve, reject) => {
     //Abrir la db
-    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+    const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
         reject(err);
@@ -37,8 +40,9 @@ function getInvoiceID(letter) {
         if (err) {
           console.error(err.message);
           reject(err);
+        }else{
+          resolve(nextNum);
         }
-        resolve(nextNum);
       });
     });
   });
@@ -52,7 +56,7 @@ function getPersonas(table) {
       reject();
     }
     //Abrir la db
-    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+    const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
         reject(err);
@@ -93,7 +97,7 @@ function getPersona(table, personName){
       reject();
     }
     //Abrir la db
-    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+    const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
         reject(err);
@@ -130,7 +134,7 @@ function getPersona(table, personName){
 function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto,importeTotal, irpf, detalles, formaDePago) {
   //Comporbar si la tabla es valida
   //Abrir la base de datos
-  const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+  const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
       console.error(`Error al abrir la base de datos: ${err.message}`);
       return;

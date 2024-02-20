@@ -1,9 +1,12 @@
+const { getDBPath } = require("../manage_env/getPath");
 const sqlite3 = require("sqlite3").verbose();
+
+const dbPath = getDBPath();
 
 function getDistintData(columnName) {
   return new Promise((resolve, reject) => {
     // Conectarse a la base de datos
-    const db = new sqlite3.Database('./database/main.db');
+    const db = new sqlite3.Database(dbPath);
 
     // Consulta SQL para obtener los valores únicos en la columna especificada
     const sql = `SELECT DISTINCT ${columnName} FROM facturas`;
@@ -26,7 +29,7 @@ function getDistintData(columnName) {
 function getLeterFromIDFacturaList() {
   return new Promise((resolve, reject) => {
     // Conectarse a la base de datos
-    const db = new sqlite3.Database('./database/main.db');
+    const db = new sqlite3.Database(dbPath);
 
     // Consulta SQL para obtener todos los valores en la columna 'numero'
     const sql = 'SELECT numero FROM facturas';
@@ -101,7 +104,7 @@ function getFacturas(filter = {
   irpf: []
 }) {
   return new Promise((resolve, reject) => {
-    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+    const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
       }
@@ -200,7 +203,7 @@ function getNIF(table, name) {
       reject("tabla invalida al obtener le nif");
     }
 
-    const db = new sqlite3.Database('./database/main.db', sqlite3.OPEN_READWRITE, (err) => {
+    const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
       }
@@ -382,4 +385,4 @@ function getFacturasInDefaultDB(rawList) {
   });
 }
 
-module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList };
+module.exports = {getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList};
