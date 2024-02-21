@@ -35,42 +35,40 @@ function getImagePathAsync() {
   });
 }
 
-function getChromeBinaryPath() {
-  return new Promise((resolve, reject) => {
+function getBrowserBinaryPath() {
+  return new Promise(async (resolve, reject) => {
     if (os.platform() === 'win32') {
-      // Comando para buscar el ejecutable de Chrome en el registro de Windows
-      const command = 'reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe" /ve';
-
-      exec(command, (error, stdout) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-
-        // Analizar la salida para extraer la ubicación del ejecutable
-        const match = stdout.match(/REG_SZ\s*(.*)/);
-        if (match && match[1]) {
-          resolve(match[1]);
-        } else {
-          reject(new Error('No se encontró el ejecutable de Chrome en el registro.'));
-        }
-      });
+      const edgePaths = await import('edge-paths');
+      const edgePath = edgePaths.getEdgePath();
+      resolve(edgePath);
     } else if (os.platform() == 'linux') {
       exec('which google-chrome', (error, stdout) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-
-        const path = stdout.trim();
-        if (path) {
-          resolve(path);
+        if (!error && stdout.trim()) {
+          const path = stdout.trim();
+          if (path) {
+            resolve(path);
+          }
         } else {
-          reject(new Error('No se encontró el ejecutable de Chrome usando el comando which.'));
+          exec('which firefox', (error, stdout) => {
+            if (!error && stdout.trim()) {
+              const path = stdout.trim();
+              if (path) {
+                resolve(path);
+              }
+            } else {
+              exec('which brave-browser', (error, stdout) => {
+                if (!error && stdout.trim()) {
+                  resolve(stdout.trim());
+                } else {
+                  reject(new Error('No se encontró el ejecutable de un navegador'));
+                }
+              });
+            }
+          });
         }
       });
     }
   });
 }
 
-module.exports = { getDBPath, getCSSPath, getSettingsPathAsync, getImagePathAsync, getChromeBinaryPath };
+module.exports = { getDBPath, getCSSPath, getSettingsPathAsync, getImagePathAsync, getBrowserBinaryPath };

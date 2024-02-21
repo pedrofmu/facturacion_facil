@@ -116,7 +116,14 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
       ipcRenderer.on('selected-file', (event, filePath) => {
         if (filePath) {
           ipcRenderer.send('create-pdf', htmlRendering, filePath);
-          resolve(true);
+
+          ipcRenderer.on('created-pdf', (event, result) => {
+            if (result === 'guardado') {
+              resolve(true);
+            } else {
+              reject(result);
+            }
+          });
         } else {
           resolve(false);
         }
@@ -127,4 +134,4 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
   });
 };
 
-module.exports = {createInvoicePDF};
+module.exports = { createInvoicePDF };

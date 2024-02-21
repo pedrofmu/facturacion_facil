@@ -1,7 +1,7 @@
 const { ipcMain, BrowserWindow, dialog } = require('electron');
 const { join } = require('path');
-const puppeteer   = require('puppeteer');
-const { getChromeBinaryPath } = require('./manage_env/getPath');
+const puppeteer = require('puppeteer');
+const { getBrowserBinaryPath } = require('./manage_env/getPath');
 
 function setupIPCMainListeners(mainWindow) {
   ipcMain.on('open-new-window', (event, valor) => {
@@ -19,23 +19,26 @@ function setupIPCMainListeners(mainWindow) {
   });
 
   ipcMain.on('create-pdf', async (event, content, path) => {
-    const chromePath = await getChromeBinaryPath();
+    try {
+      const chromePath = await getBrowserBinaryPath();
 
-    const browser = await puppeteer.launch({executablePath: chromePath});
-    const page = await browser.newPage();
-  
-    await page.setContent(content);
-    await page.emulateMediaType('screen');
-    await page.pdf({
-      path: path,
-      format: 'A4',
-      printBackground: true
-    });
-  
-    await browser.close();
-    chrome.kill(); // Cierra el proceso de Chrome lanzado
-  
-    console.log(`Guardado en ${path}`);
+      const browser = await puppeteer.launch({ executablePath: chromePath });
+      const page = await browser.newPage();
+
+      await page.setContent(content);
+      await page.emulateMediaType('screen');
+      await page.pdf({
+        path: path,
+        format: 'A4',
+        printBackground: true
+      });
+
+      await browser.close();
+      event.sender.send('created-pdf', 'guardado'); 
+
+    } catch (e) {
+      event.sender.send('created-pdf', e); 
+    }
   });
 
   ipcMain.on('open-file-dialog', (event, fileType, fileName) => {
@@ -70,4 +73,4 @@ function setupIPCMainListeners(mainWindow) {
   });
 }
 
-module.exports = {setupIPCMainListeners};
+module.exports = { setupIPCMainListeners };
