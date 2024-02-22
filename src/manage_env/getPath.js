@@ -49,20 +49,11 @@ function getBrowserBinaryPath() {
             resolve(path);
           }
         } else {
-          exec('which firefox', (error, stdout) => {
+          exec('which brave-browser', (error, stdout) => {
             if (!error && stdout.trim()) {
-              const path = stdout.trim();
-              if (path) {
-                resolve(path);
-              }
+              resolve(stdout.trim());
             } else {
-              exec('which brave-browser', (error, stdout) => {
-                if (!error && stdout.trim()) {
-                  resolve(stdout.trim());
-                } else {
-                  reject(new Error('No se encontró el ejecutable de un navegador'));
-                }
-              });
+              reject(new Error('No se encontró el ejecutable de un navegador basado en chromium'));
             }
           });
         }
