@@ -1,4 +1,4 @@
-const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList } = require( "../../record_book/getRecordBookInfo.js");
+const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList } = require("../../record_book/getRecordBookInfo.js");
 const { saveXLSX } = require("../../record_book/createXLSX.js");
 
 const formatosSelector = document.getElementById("formatos_selector");
@@ -26,8 +26,13 @@ formatosSelector.addEventListener("click", async () => {
   refreshTable();
 });
 
-document.getElementById("guardar_btn").addEventListener("click", () => {
-  saveTable();
+document.getElementById("guardar_btn").addEventListener("click", async () => {
+  try {
+    await saveTable();
+    alert("Se ha guardado correctamente el xlsx");
+  } catch (error) {
+    alert(error);
+  }
 });
 
 document.getElementById("filtro-form").addEventListener("submit", async (event) => {
@@ -81,7 +86,7 @@ function obtenerValorLista(valor) {
       var value = element.getElementsByTagName("label")[0].innerHTML;
       returnData.push(value);
     });
-    
+
     resolve(returnData);
   });
 }
@@ -115,50 +120,58 @@ async function refreshTable() {
 //  // Agrega más filas según sea necesario
 //];
 
-async function saveTable(){
-  const thElements = [];
-  var tabla = document.getElementById("tabla_facturas");
-  var filas = tabla.rows;
+async function saveTable() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const thElements = [];
+      var tabla = document.getElementById("tabla_facturas");
+      var filas = tabla.rows;
 
-  // Iterar sobre la primera fila (encabezados) y agregarlos a la lista
-  var encabezados = filas[0].cells;
-  for (var i = 0; i < encabezados.length; i++) {
-    var valorEncabezado = encabezados[i].textContent;
-    thElements.push(valorEncabezado);
-  }
-  
-  var selection = formatosSelector.value;
+      // Iterar sobre la primera fila (encabezados) y agregarlos a la lista
+      var encabezados = filas[0].cells;
+      for (var i = 0; i < encabezados.length; i++) {
+        var valorEncabezado = encabezados[i].textContent;
+        thElements.push(valorEncabezado);
+      }
 
-  var rawData = await getFacturas(filtro);
-  switch (selection) {
-    case "standar":
-      var formatedData = await getFacturasStandarInfo(rawData);
-      var data = [];
-      formatedData.forEach((element) => {
-        const arrayElement = Object.values(element);
-        data.push(arrayElement);
-      });
-      saveXLSX(thElements, data);
-      break;
-    case "standarIRPF":
-      var formatedData = await getFacturasStandarIRPFInfo(rawData);
-      var data = [];
-      formatedData.forEach((element) => {
-        const arrayElement = Object.values(element);
-        data.push(arrayElement);
-      });
-      saveXLSX(thElements, data);
-      break;
-    case "defaultDB":
-      var formatedData = await getFacturasInDefaultDB(rawData);
-      var data = [];
-      formatedData.forEach((element) => {
-        const arrayElement = Object.values(element);
-        data.push(arrayElement);
-      });
-      saveXLSX(thElements, data);
-      break;
-  }
+      var selection = formatosSelector.value;
+
+      var rawData = await getFacturas(filtro);
+      switch (selection) {
+        case "standar":
+          var formatedData = await getFacturasStandarInfo(rawData);
+          var data = [];
+          formatedData.forEach((element) => {
+            const arrayElement = Object.values(element);
+            data.push(arrayElement);
+          });
+          await saveXLSX(thElements, data);
+          break;
+        case "standarIRPF":
+          var formatedData = await getFacturasStandarIRPFInfo(rawData);
+          var data = [];
+          formatedData.forEach((element) => {
+            const arrayElement = Object.values(element);
+            data.push(arrayElement);
+          });
+          await saveXLSX(thElements, data);
+          break;
+        case "defaultDB":
+          var formatedData = await getFacturasInDefaultDB(rawData);
+          var data = [];
+          formatedData.forEach((element) => {
+            const arrayElement = Object.values(element);
+            data.push(arrayElement);
+          });
+          await saveXLSX(thElements, data);
+          break;
+      }
+
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 function toggleSelection(div, type) {
@@ -198,8 +211,8 @@ function createListElements(values, type) {
   });
 }
 
-async function loadListFilter(){
-  var data = await getDataForFilterList(); 
+async function loadListFilter() {
+  var data = await getDataForFilterList();
   console.log(data);
   //Inicializar letra
   createListElements(data.letras, "letra");
@@ -209,7 +222,7 @@ async function loadListFilter(){
 
   //Inicializar concepto 
   createListElements(data.conceptos, "concepto");
-  
+
   //Inicializar iva
   createListElements(data.ivas, "iva");
 
