@@ -1,6 +1,34 @@
 #!/bin/bash
 
-# Instala las dependencias específicas utilizando npm
+# Comprobar la versión de Node.js
+NODE_VERSION=$(node -v)
+REQUIRED_NODE_VERSION="v16.4.0"
+
+# Función para comparar versiones de Node.js
+compare_versions() {
+    REQUIRED_VERSION=$(echo -e "$REQUIRED_NODE_VERSION\n$NODE_VERSION" | sort -V | head -n1)
+    if [[ "$REQUIRED_VERSION" != "$REQUIRED_NODE_VERSION" ]]; then
+        echo "Error: La versión de Node.js $NODE_VERSION no cumple con los requisitos mínimos ($REQUIRED_NODE_VERSION)"
+        exit 1
+    fi
+}
+
+# Comprobar si node está instalado
+if ! command -v node &> /dev/null; then
+    echo "Error: Node.js no está instalado"
+    exit 1
+fi
+
+# Comprobar si npm está instalado
+if ! command -v npm &> /dev/null; then
+    echo "Error: npm no está instalado"
+    exit 1
+fi
+
+# Comprobar la versión de Node.js
+compare_versions
+
+# Instalar las dependencias específicas utilizando npm
 npm install @electron-forge/cli@7.2.0 \
             @electron-forge/maker-deb@7.2.0 \
             @electron-forge/maker-rpm@7.2.0 \
@@ -13,4 +41,4 @@ npm install @electron-forge/cli@7.2.0 \
             puppeteer@22.1.0 \
             sqlite3@5.1.7 \
             xlsx@0.18.5 \
-	    edge-paths@3.0.5
+            edge-paths@3.0.5
