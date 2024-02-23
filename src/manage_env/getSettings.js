@@ -79,4 +79,52 @@ function changeCurrentDB(database) {
   });
 }
 
-module.exports = { loadPossibleDB, loadCurrectDB, changeCurrentDB };
+function changeCurrentDB(database) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const settingPath = await getSettingsPathAsync();
+      const data = await fs.readFile(settingPath, "utf8");
+      const settings = JSON.parse(data);
+
+      // Actualiza el valor de current_database en el objeto settings
+      settings.current_database = database;
+
+      // Convierte el objeto settings actualizado de nuevo a JSON
+      const updatedData = JSON.stringify(settings, null, 2);
+
+      // Escribe los datos actualizados de vuelta al archivo
+      await fs.writeFile(settingPath, updatedData, "utf8");
+
+      // Indica que la operación se ha completado exitosamente
+      resolve("Datos actualizados correctamente en el archivo .json");
+    } catch (error) {
+      // Rechaza la promesa con el mensaje de error
+      reject(error.message);
+    }
+  });
+}
+
+async function addPossibleDB(newDB) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const settingPath = await getSettingsPathAsync();
+      const data = await fs.readFile(settingPath, "utf8");
+      const settings = JSON.parse(data);
+
+      // Verifica si la nueva base de datos ya existe en la lista
+      if (!settings.possible_db.includes(newDB)) {
+        settings.possible_db.push(newDB);
+      } else {
+        resolve("La base de datos ya existe en la lista de posibles bases de datos.");
+        return;
+      }
+
+      await fs.writeFile(settingPath, JSON.stringify(settings, null, 2));
+      resolve();
+    } catch (error) {
+      reject(error); 
+    }
+  });
+}
+
+module.exports = { loadPossibleDB, loadCurrectDB, changeCurrentDB, addPossibleDB };

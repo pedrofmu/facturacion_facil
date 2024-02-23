@@ -1,6 +1,7 @@
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const { getHomeFolderPath } = require('./getPath');
+const { addPossibleDB } = require('./getSettings');
 
 const fs = require('fs').promises;
 
@@ -67,6 +68,7 @@ function createDB(nombre) {
         contacto TEXT
     )`);
 
+      await addPossibleDB(nombre);
       // Cerrar la conexión a la base de datos después de asegurarse de que se hayan creado las tablas
       db.close((err) => {
         if (err) {
