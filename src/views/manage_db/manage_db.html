@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>INGRESOS</title>
+
+  <link rel="stylesheet" href="manage_db.css" />
+
+  <script defer src="manage_db.js"></script>
+</head>
+
+<body>
+
+  <h1>Gestionar espacios de guardado</h1>
+
+  <h3>Crear espacio de guardado</h3>
+  <input id="nueva_db_name" type="text" value="">
+  <button id="crear_db_bt" type="button">Crear</button>
+
+  <h3>Borrar espacio de guardado</h3>
+  <select class="possible_db" id="db_to_delete"></select>
+  <button id="borrar_db_btn" type="button">Borrar</button>
+
+  <h3>Fusionar clientes y proveedores</h3>
+  <select id="merge_modes">
+    <option value="añadir">añadir</option>
+    <option value="sobreescribir">sobreescribir</option>
+  </select>
+  <h5>Copiar:</h5>
+  <select class="possible_db" id="copy_from_db"></select>
+  <h5>En:</h5>
+  <select class="possible_db" id="copy_to_db"></select>
+
+  <button id="merge_db" type="button">Fusionar</button>
+
+  <div class="horizontal_div">
+    <button id="atras_btn">Atras</button>
+  </div>
+
+</body>
+
+</html>

@@ -26,6 +26,15 @@ formatosSelector.addEventListener("click", async () => {
   refreshTable();
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+  const toggleFiltersBtn = document.getElementById("toggleFiltersBtn");
+  const filtroContainer = document.querySelector(".filtro-container");
+
+  toggleFiltersBtn.addEventListener("click", function() {
+    filtroContainer.classList.toggle("hidden");
+  });
+});
+
 document.getElementById("guardar_btn").addEventListener("click", async () => {
   try {
     await saveTable();

@@ -6,10 +6,20 @@
   <title>LIBRO DE REGISTROS</title>
   <link rel="stylesheet" href="record_book.css" />
   <script defer src="record_book.js"></script>
+  <style>
+    .filtro-container {
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
   <h1>Libro de registros</h1>
+  <button id="toggleFiltersBtn">Mostrar/Ocultar Filtros</button>
   <div class="filtro-container">
     <h2>Filtros</h2>
     <form id="filtro-form">
@@ -86,12 +96,14 @@
   <div class="table-container">
     <div class="scrollable-table">
       <table id="tabla_facturas" border="2">
-          <!-- Añade aquí el resto de filas -->
+        <!-- Añade aquí el resto de filas -->
       </table>
     </div>
   </div>
 
-
   <button id="atras_btn">Atrás</button>
-  <button id="guardar_btn">Guardad</button>
+  <button id="guardar_btn">Guardar</button>
+
 </body>
+
+</html>

@@ -1,11 +1,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const { getDBPath } = require("../manage_env/getPath");
 
-const folderPath = getDBPath();
-
 //Obtener el numero para la siguiente letra "A1" "A2" "A3"
-function getInvoiceID(letter) {
-  return new Promise((resolve, reject) => {
+async function getInvoiceID(letter) {
+  return new Promise(async (resolve, reject) => {
+    const folderPath = await getDBPath();
     //Abrir la db
     const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
@@ -40,7 +39,7 @@ function getInvoiceID(letter) {
         if (err) {
           console.error(err.message);
           reject(err);
-        }else{
+        } else {
           resolve(nextNum);
         }
       });
@@ -50,8 +49,9 @@ function getInvoiceID(letter) {
 
 //Obtener una persona (cliente, proveedor)
 function getPersonas(table) {
-  return new Promise((resolve, reject) => {
-    if (table !== "receptor" && table !== "emisor"){
+  return new Promise(async (resolve, reject) => {
+    const folderPath = await getDBPath();
+    if (table !== "receptor" && table !== "emisor") {
       console.error('Tabla invalida para obtener una persona');
       reject();
     }
@@ -90,9 +90,10 @@ function getPersonas(table) {
   });
 }
 
-function getPersona(table, personName){
-  return new Promise((resolve, reject) => {
-    if (table !== "receptor" && table !== "emisor"){
+function getPersona(table, personName) {
+  return new Promise(async (resolve, reject) => {
+    const folderPath = await getDBPath();
+    if (table !== "receptor" && table !== "emisor") {
       console.error('Tabla invalida para obtener una persona');
       reject();
     }
@@ -130,10 +131,11 @@ function getPersona(table, personName){
 
 
 //Funcion para añadir una factura a la base de datos
-                                   //Valores de la tabla
-function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto,importeTotal, irpf, detalles, formaDePago) {
+//Valores de la tabla
+async function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago) {
   //Comporbar si la tabla es valida
   //Abrir la base de datos
+  const folderPath = await getDBPath();
   const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
       console.error(`Error al abrir la base de datos: ${err.message}`);
@@ -146,7 +148,7 @@ function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto,import
   //Insertar los valores
   const valuesToInsert = [numero, cliente, proveedor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago];
 
-  db.run(`INSERT INTO facturas (numero, receptor, emisor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function (err) {
+  db.run(`INSERT INTO facturas (numero, receptor, emisor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function(err) {
     if (err) {
       console.error(`Error al insertar valores: ${err.message}`);
     } else {

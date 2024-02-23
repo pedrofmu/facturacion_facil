@@ -1,9 +1,8 @@
 const sqlite3 = require("sqlite3").verbose();
 const { getDBPath } = require("../manage_env/getPath");
 
-const dbPath = getDBPath();
-
-function createPerson(table, nombre, id, direccion, contacto) {
+async function createPerson(table, nombre, id, direccion, contacto) {
+  const dbPath = await getDBPath();
   return new Promise((resolve, reject) => {
     if (table !== "emisor" && table !== "receptor") {
       reject("Faltan valores o la tabla es incorrecta");

@@ -1,10 +1,9 @@
 const { getDBPath } = require("../manage_env/getPath");
 const sqlite3 = require("sqlite3").verbose();
 
-const dbPath = getDBPath();
-
 function getDistintData(columnName) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const dbPath = await getDBPath();
     // Conectarse a la base de datos
     const db = new sqlite3.Database(dbPath);
 
@@ -27,7 +26,8 @@ function getDistintData(columnName) {
 }
 
 function getLeterFromIDFacturaList() {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const dbPath = await getDBPath();
     // Conectarse a la base de datos
     const db = new sqlite3.Database(dbPath);
 
@@ -56,10 +56,10 @@ function getLeterFromIDFacturaList() {
 function getDataForFilterList() {
   return new Promise(async (resolve, reject) => {
     const rawFacturas = await getFacturas();
-    var ivasSet = new Set(); 
+    var ivasSet = new Set();
     rawFacturas.forEach(async (factura) => {
       const unidadesInfo = await getUnidadesInfo(factura.unidades);
-      for (const iva of unidadesInfo.ivas){
+      for (const iva of unidadesInfo.ivas) {
         ivasSet.add(iva);
       }
     });
@@ -70,13 +70,13 @@ function getDataForFilterList() {
     var rawIRPFS = await getDistintData("irpf");
 
     var irpfs = [];
-    for (const irpf of rawIRPFS){
+    for (const irpf of rawIRPFS) {
       irpfs.push(`${irpf}%`);
     }
     var ivas = Array.from(ivasSet);
-   
+
     var data = {
-      letras : letras,
+      letras: letras,
       clientes: clientes,
       conceptos: conceptos,
       ivas: ivas,
@@ -103,7 +103,8 @@ function getFacturas(filter = {
   iva: [],
   irpf: []
 }) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const dbPath = await getDBPath();
     const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
         console.error(`Error al abrir la base de datos: ${err.message}`);
@@ -199,6 +200,8 @@ async function filterData(rawData, filter) {
 //Obtener el NIF de la persona
 function getNIF(table, name) {
   return new Promise(async (resolve, reject) => {
+    const dbPath = await getDBPath();
+
     if (table !== "receptor" && table !== "emisor") {
       reject("tabla invalida al obtener le nif");
     }
@@ -385,4 +388,4 @@ function getFacturasInDefaultDB(rawList) {
   });
 }
 
-module.exports = {getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList};
+module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList };

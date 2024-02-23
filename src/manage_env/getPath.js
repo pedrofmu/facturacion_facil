@@ -2,12 +2,24 @@ const { join } = require('path');
 const { homedir } = require('os');
 const { exec } = require('child_process');
 const os = require('os');
+const { loadCurrectDB } = require('./getSettings');
+
+function getHomeFolderPath() {
+  return new Promise((resolve, reject) => {
+    const homeDir = homedir();
+    const folderPath = join(homeDir, ".facturacionfacil/");
+    resolve(folderPath);
+  });
+}
 
 function getDBPath() {
-  const homeDir = homedir();
-  const folderPath = join(homeDir, ".facturacionfacil/");
-  const dbPath = join(folderPath, "main.db");
-  return dbPath;
+  return new Promise(async (resolve, reject) => {
+    const homeDir = homedir();
+    const folderPath = join(homeDir, ".facturacionfacil/");
+    const currentDB = await loadCurrectDB();
+    const dbPath = join(folderPath, `${currentDB}.db`);
+    resolve(dbPath);
+  });
 }
 
 function getCSSPath() {
@@ -62,4 +74,4 @@ function getBrowserBinaryPath() {
   });
 }
 
-module.exports = { getDBPath, getCSSPath, getSettingsPathAsync, getImagePathAsync, getBrowserBinaryPath };
+module.exports = { getHomeFolderPath, getDBPath, getCSSPath, getSettingsPathAsync, getImagePathAsync, getBrowserBinaryPath };

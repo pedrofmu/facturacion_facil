@@ -1,8 +1,9 @@
 const { join } = require('path');
 const { homedir } = require('os');
 const fs = require('fs').promises;
-const sqlite3 = require('sqlite3').verbose();
+
 const { image } = require("./image");
+const { createDB } = require('./manageDB');
 
 async function createConfigFolder() {
   return new Promise(async (resolve, reject) => {
@@ -20,7 +21,8 @@ async function createConfigFolder() {
     }
 
     // Inicializar la base de datos
-    initialiceDB(folderPath);
+    createDB("ingresos");
+    createDB("gastos");
 
     // Inicializar otros aspectos, como CSS
     initialiceCSS(folderPath);
@@ -28,59 +30,6 @@ async function createConfigFolder() {
     initializeBase64Image(folderPath);
 
     resolve();
-  });
-}
-
-async function initialiceDB(folderPath) {
-  const dbPath = join(folderPath, "main.db");
-  try {
-    // Verificar si el archivo de base de datos ya existe
-    await fs.access(dbPath);
-    console.log(`El archivo de base de datos '${dbPath}' ya existe.`);
-  } catch (error) {
-    // Si no existe, crear el archivo vacío
-    await fs.writeFile(dbPath, '');
-    console.log(`Archivo de base de datos '${dbPath}' creado.`);
-  }
-
-  // Conexión a la base de datos
-  const db = new sqlite3.Database(dbPath);
-
-  // Crear las tablas si no existen
-  db.run(`CREATE TABLE IF NOT EXISTS facturas (
-        numero TEXT,
-        receptor TEXT,
-        emisor TEXT,
-        fecha DATE,
-        unidades TEXT,
-        concepto TEXT, 
-        importeTotal REAL,
-        irpf INTEGER,
-        detalles TEXT,
-        formaDePago TEXT
-    )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS receptor (
-        nombre TEXT,
-        id TEXT,
-        direccion TEXT,
-        contacto TEXT
-    )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS emisor (
-        nombre TEXT,
-        id TEXT,
-        direccion TEXT,
-        contacto TEXT
-    )`);
-
-  // Cerrar la conexión a la base de datos después de asegurarse de que se hayan creado las tablas
-  db.close((err) => {
-    if (err) {
-      console.error(err.message);
-    } else {
-      console.log('Conexión cerrada exitosamente');
-    }
   });
 }
 
@@ -182,9 +131,10 @@ async function initializeSettings(folderPath) {
 
   // Si el archivo no tiene contenido, lo escribimos
   const settingsContent = `{
-    "current_database": "main",
+    "current_database": "ingresos",
     "possible_db": [
-      "main"
+      "ingresos", 
+      "gastos"
     ]
   }`;
 
