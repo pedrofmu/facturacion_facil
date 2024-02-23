@@ -1,20 +1,24 @@
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const { getHomeFolderPath } = require('./getPath');
-const { addPossibleDB } = require('./getSettings');
+const { addPossibleDB, removePossibleDB } = require('./getSettings');
 
 const fs = require('fs').promises;
 
 function deleteDB(nombre) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       // Eliminar el archivo
-      fs.unlink(archivoAEliminar, (error) => {
+      const homePath = await getHomeFolderPath();
+      const dbPath = path.join(homePath, `${nombre}.db`)
+      fs.unlink(dbPath, async (error) => {
         if (error) {
           reject(error);
         }
-        resolve("Se ha borrado exitosamente la db");
       });
+
+      await removePossibleDB(nombre);
+      resolve("Se ha borrado exitosamente el espacio de guardado");
     } catch (error) {
       reject(error);
     }
@@ -26,7 +30,7 @@ function createDB(nombre) {
     try {
       //path a el home
       const homePath = await getHomeFolderPath();
-      const dbPath = path.join(homePath, `${nombre}.db` );
+      const dbPath = path.join(homePath, `${nombre}.db`);
       console.log(dbPath);
       try {
         // Verificar si el archivo de base de datos ya existe

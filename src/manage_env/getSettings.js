@@ -127,4 +127,27 @@ async function addPossibleDB(newDB) {
   });
 }
 
-module.exports = { loadPossibleDB, loadCurrectDB, changeCurrentDB, addPossibleDB };
+async function removePossibleDB(dbToRemove) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const settingPath = await getSettingsPathAsync();
+      const data = await fs.readFile(settingPath, "utf8");
+      const settings = JSON.parse(data);
+
+      const index = settings.possible_db.indexOf(dbToRemove);
+      if (index !== -1) {
+        settings.possible_db.splice(index, 1);
+      } else {
+        resolve("La base de datos no existe en la lista de posibles bases de datos.");
+        return;
+      }
+
+      await fs.writeFile(settingPath, JSON.stringify(settings, null, 2));
+      resolve();
+    } catch (error) {
+      reject(error); 
+    }
+  });
+}
+
+module.exports = { loadPossibleDB, loadCurrectDB, changeCurrentDB, addPossibleDB, removePossibleDB };

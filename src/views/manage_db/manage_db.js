@@ -1,5 +1,5 @@
 const { loadPossibleDB } = require("../../manage_env/getSettings");
-const { createDB } = require("../../manage_env/manageDB");
+const { createDB, deleteDB } = require("../../manage_env/manageDB");
 
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
@@ -11,6 +11,19 @@ document.getElementById("crear_db_btn").addEventListener("click", async () => {
     await createDB(newDBvalue);
     alert("Correctamente creado el nuevo espacio de almacenamiento");
     loadDbInSelector();
+  } catch (error) {
+    alert(error);
+  }
+});
+
+document.getElementById("borrar_db_btn").addEventListener("click", async () => {
+  try {
+    if (confirm("¿Estás seguro de que quieres eliminar el espacio de almacenamiento?") === true) {
+      const dbToDelete = document.getElementById("db_to_delete").value;
+      await deleteDB(dbToDelete);
+      alert("Correctamente eliminado el espacio de almacenamiento");
+      loadDbInSelector();
+    }
   } catch (error) {
     alert(error);
   }
