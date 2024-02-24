@@ -39,7 +39,9 @@ document.getElementById("merge_db").addEventListener("click", async () => {
       const db1Path = await getDBPath(db1Name);
       const db2Path = await getDBPath(db2Name);
 
-      await fusionarTablas(db1Path, db2Path, true);
+      const mode = document.getElementById("merge_modes").value === "sobreescribir";
+
+      await fusionarTablas(db1Path, db2Path, mode);
 
       alert("Correctamente fusionado el espacio");
     }
