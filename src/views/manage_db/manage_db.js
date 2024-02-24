@@ -1,5 +1,6 @@
+const { getDBPath } = require("../../manage_env/getPath");
 const { loadPossibleDB } = require("../../manage_env/getSettings");
-const { createDB, deleteDB } = require("../../manage_env/manageDB");
+const { createDB, deleteDB, fusionarTablas } = require("../../manage_env/manageDB");
 
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
@@ -23,6 +24,24 @@ document.getElementById("borrar_db_btn").addEventListener("click", async () => {
       await deleteDB(dbToDelete);
       alert("Correctamente eliminado el espacio de almacenamiento");
       loadDbInSelector();
+    }
+  } catch (error) {
+    alert(error);
+  }
+});
+
+document.getElementById("merge_db").addEventListener("click", async () => {
+  try {
+    if (confirm("¿Estás seguro de que quieres fusionar las tablas?") === true) {
+      const db1Name = document.getElementById("copy_from_db").value;
+      const db2Name = document.getElementById("copy_to_db").value;
+
+      const db1Path = await getDBPath(db1Name);
+      const db2Path = await getDBPath(db2Name);
+
+      await fusionarTablas(db1Path, db2Path, true);
+
+      alert("Correctamente fusionado el espacio");
     }
   } catch (error) {
     alert(error);

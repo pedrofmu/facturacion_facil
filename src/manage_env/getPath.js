@@ -12,12 +12,19 @@ function getHomeFolderPath() {
   });
 }
 
-function getDBPath() {
+function getDBPath(name = 'current') {
   return new Promise(async (resolve, reject) => {
     const homeDir = homedir();
     const folderPath = join(homeDir, ".facturacionfacil/");
-    const currentDB = await loadCurrectDB();
-    const dbPath = join(folderPath, `${currentDB}.db`);
+    let dbPath = '';
+
+    if (name === 'current') {
+      const currentDB = await loadCurrectDB();
+      dbPath = join(folderPath, `${currentDB}.db`);
+    } else {
+      dbPath = join(folderPath, `${name}.db`);
+    }
+
     resolve(dbPath);
   });
 }
