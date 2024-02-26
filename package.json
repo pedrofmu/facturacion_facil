@@ -18,9 +18,11 @@
     "chrome-launcher": "^1.1.0",
     "edge-paths": "^3.0.5",
     "electron-squirrel-startup": "^1.0.0",
+    "exceljs": "^4.4.0",
     "puppeteer": "^22.1.0",
     "sqlite3": "^5.1.7",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",

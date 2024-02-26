@@ -47,21 +47,19 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
       const imageData = await readFileAsync(direccionIMG);
       const imageB64 = imageData.toString('base64');
 
-      console.log(imageB64);
-
       const htmlRendering = `
   <!DOCTYPE html>
   <html lang="es">
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Título de tu factura</title>
+      <title>factura</title>
       <style>${cssRendering}</style>
   </head>
   <body>
       <div class="header">
           <div class="remitente">
-              <h2>${proveedor.nombre}</h2>
+              <h4><b>${proveedor.nombre}</b></h4>
               <h5>${proveedor.id}</h5>
               <h5>${proveedor.direccion}</h5>
               <h5>${proveedor.contacto}</h5>
@@ -70,17 +68,17 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
       </div>
       <div class="datos1">
           <div class="comprador">
-              <h2>${cliente.nombre}</h2>
+              <h4><b>${cliente.nombre}</b></h4>
               <h5>${cliente.id}</h5>
               <h5>${cliente.direccion}</h5>
               <h5>${cliente.contacto}</h5>
           </div>
           <div class="datos_id_factura">
-              <h2>${numero}</h2>
-              <h5>${fecha}</h5>
+              <h5><b>factura: </b> ${numero}</h5>
+              <h5><b>fecha: </b>${fecha}</h5>
           </div>
       </div>
-      <table id="productos" border="2">
+      <table id="productos">
           <tr>
               <th>Concepto</th>
               <th>Precio unitario</th>

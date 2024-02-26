@@ -51,63 +51,68 @@ async function initialiceCSS(folderPath) {
 
   // Si el archivo no tiene contenido, lo escribimos
   const cssContent = `.body {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    
-    .header {
-        line-height: 5%;
-        overflow: hidden;
-    }
-    
-    .header img {
-        float: right;
-        width: 300px;
-        height: 100px;
-    }
-    
-    .remitente {
-        float: left;
-    }
-    
-    .datos1 {
-        overflow: hidden;
-        line-height: 5%;
-        padding-top: 15px;
-    }
-    
-    .comprador {
-        float: left;
-    }
-    
-    .datos_id_factura {
-        float: right;
-        padding-right: 240px;
-    }
-    
-    .productos {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-    
-    .productos th,
-    .productos td {
-        border: 1px solid #000;
-        padding: 5px;
-        text-align: center;
-    }
-    
-    .pago_total {
-        line-height: 5%;
-    }
-    
-    .datos2 {
-        padding-top: 20px;
-    }
-    
-    .forma_pago {
-        padding-top: 15px;
-    }`;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+}
+
+.header {
+  line-height: 5%;
+  overflow: hidden;
+}
+
+.header img {
+  float: right;
+  width: 300px;
+  height: 100px;
+}
+
+.remitente {
+  float: left;
+}
+
+.datos1 {
+  overflow: hidden;
+  line-height: 5%;
+  padding-top: 15px;
+}
+
+.comprador {
+  float: left;
+}
+
+.datos_id_factura {
+  float: right;
+}
+
+#productos {
+  width: 100%;
+  border-collapse: collapse;   
+  margin-top: 20px;
+}
+
+#productos td {
+  border: 1px solid #000;
+  padding: 5px;
+  text-align: center;
+}
+
+#productos th {
+   padding: 5px;
+   background-color: black;
+   color: white;
+}
+
+.pago_total {
+  line-height: 5%;
+}
+
+.datos2 {
+  padding-top: 20px;
+}
+
+.forma_pago {
+  padding-top: 15px;
+}`;
 
   await fs.writeFile(filePath, cssContent);
   console.log(`Archivo CSS '${filePath}' creado.`);
@@ -143,33 +148,33 @@ async function initializeSettings(folderPath) {
 }
 
 async function saveBase64ImageToFile(base64String, outputPath) {
-    try {
-        // Convertir la cadena base64 a datos binarios
-        const imageBuffer = Buffer.from(base64String, 'base64');
+  try {
+    // Convertir la cadena base64 a datos binarios
+    const imageBuffer = Buffer.from(base64String, 'base64');
 
-        // Escribir los datos del buffer en un archivo
-        await fs.writeFile(outputPath, imageBuffer);
-        
-        console.log('Imagen guardada en:', outputPath);
-    } catch (error) {
-        console.error('Error al guardar la imagen:', error);
-    }
+    // Escribir los datos del buffer en un archivo
+    await fs.writeFile(outputPath, imageBuffer);
+
+    console.log('Imagen guardada en:', outputPath);
+  } catch (error) {
+    console.error('Error al guardar la imagen:', error);
+  }
 }
 
-async function initializeBase64Image(folderPath ) {
-    const outputPath = join(folderPath, 'logo.png');
+async function initializeBase64Image(folderPath) {
+  const outputPath = join(folderPath, 'logo.png');
 
-    try {
-        // Verificar si el archivo ya existe
-        await fs.access(outputPath, fs.constants.F_OK);
+  try {
+    // Verificar si el archivo ya existe
+    await fs.access(outputPath, fs.constants.F_OK);
 
-        // Si el archivo ya existe, no hacemos nada
-        console.log(`El archivo '${outputPath}' ya existe.`);
-    } catch (error) {
-        // Si hay un error al verificar la existencia del archivo, continuamos y lo creamos
-        // Si el archivo no existe, lo escribimos
-        await saveBase64ImageToFile(image.replace(/^data:image\/\w+;base64,/, ''), outputPath);
-    }
+    // Si el archivo ya existe, no hacemos nada
+    console.log(`El archivo '${outputPath}' ya existe.`);
+  } catch (error) {
+    // Si hay un error al verificar la existencia del archivo, continuamos y lo creamos
+    // Si el archivo no existe, lo escribimos
+    await saveBase64ImageToFile(image.replace(/^data:image\/\w+;base64,/, ''), outputPath);
+  }
 }
 
-module.exports = {createConfigFolder};
+module.exports = { createConfigFolder };
