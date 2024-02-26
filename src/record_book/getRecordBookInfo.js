@@ -348,6 +348,19 @@ function getFacturasStandarIRPFInfo(rawList) {
   });
 }
 
+function convertJSONUnidades(json) {
+  return new Promise((resolve, reject) => {
+    let resultado = "";
+
+    json.forEach(item => {
+      const { cantidad, tipo} = item;
+      resultado += `• ${tipo} * ${cantidad}<br>`;
+    });
+
+    resolve(resultado.trim());
+  });
+}
+
 function getFacturasInDefaultDB(rawList) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -369,7 +382,7 @@ function getFacturasInDefaultDB(rawList) {
           nSerie: nSerie,
           fecha: fecha,
           nombre: nombre,
-          unidades: element.unidades,
+          unidades: await convertJSONUnidades(JSON.parse(element.unidades)),
           concepto: element.concepto,
           bi: bi,
           tipo: tipo,

@@ -122,7 +122,6 @@ async function refreshTable() {
   }
 }
 
-//
 //const tableData = [
 //  [1, "2024-02-13", "John Doe", "123456789A", 100.00, "Normal", 21.00, 5.00],
 //  [2, "2024-02-14", "Jane Doe", "987654321B", 150.00, "Reducido", 10.00, 0.00],
@@ -279,9 +278,10 @@ async function loadDataInDefaultDB(invoicesList) {
     th.textContent = text;
     trHeader.appendChild(th);
   });
+
   tabla.appendChild(trHeader);
 
-  invoicesList.forEach((element) => {
+  invoicesList.forEach(async (element) => {
     var newFacturaEntry = document.createElement("tr");
 
     var nSerie = document.createElement("td");
