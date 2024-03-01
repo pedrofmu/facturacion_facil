@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const toggleFiltersBtn = document.getElementById("toggleFiltersBtn");
   const filtroContainer = document.querySelector(".filtro-container");
 
+  filtroContainer.classList.toggle("hidden");
+
   toggleFiltersBtn.addEventListener("click", function() {
     filtroContainer.classList.toggle("hidden");
   });
@@ -66,7 +68,6 @@ function getFilterData() {
       irpf: await obtenerValorLista("irpf")
     };
 
-    console.log(filtro);
     resolve(newFiltro);
   });
 };
@@ -221,7 +222,6 @@ function createListElements(values, type) {
 
 async function loadListFilter() {
   var data = await getDataForFilterList();
-  console.log(data);
   //Inicializar letra
   createListElements(data.letras, "letra");
 
@@ -450,8 +450,6 @@ async function loadDataInStandarMode(invoicesList) {
     tabla.appendChild(newFacturaEntry);
   });
 }
-
-
 
 loadOptions();
 refreshTable();

@@ -31,7 +31,6 @@ function createDB(nombre) {
       //path a el home
       const homePath = await getHomeFolderPath();
       const dbPath = path.join(homePath, `${nombre}.db`);
-      console.log(dbPath);
       try {
         // Verificar si el archivo de base de datos ya existe
         await fs.access(dbPath);

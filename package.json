@@ -20,9 +20,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "exceljs": "^4.4.0",
     "puppeteer": "^22.1.0",
-    "sqlite3": "^5.1.7",
-    "xlsx": "^0.18.5",
-    "xlsx-style": "^0.8.13"
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
@@ -31,6 +29,6 @@
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
-    "electron": "^28.1.0"
+    "electron": "^28.2.3"
   }
 }

@@ -40,5 +40,5 @@ npm install @electron-forge/cli@7.2.0 \
             electron@28.2.3 \
             puppeteer@22.1.0 \
             sqlite3@5.1.7 \
-            xlsx@0.18.5 \
-            edge-paths@3.0.5
+            edge-paths@3.0.5 \
+	    exceljs@4.4.0

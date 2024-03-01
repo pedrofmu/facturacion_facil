@@ -59,6 +59,7 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
   <body>
       <div class="header">
           <div class="remitente">
+              <h5><i>proveedor</i></h5>
               <h4><b>${proveedor.nombre}</b></h4>
               <h5>${proveedor.id}</h5>
               <h5>${proveedor.direccion}</h5>
@@ -68,6 +69,7 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
       </div>
       <div class="datos1">
           <div class="comprador">
+              <h5><i>cliente</i></h5>
               <h4><b>${cliente.nombre}</b></h4>
               <h5>${cliente.id}</h5>
               <h5>${cliente.direccion}</h5>

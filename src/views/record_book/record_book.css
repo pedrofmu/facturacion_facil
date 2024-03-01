@@ -1,72 +1,69 @@
-  .list_selector {
-    display: grid;
-    grid-template-columns: auto 1fr;
-  }
+.list_selector {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
 
-  .active_selection,
-  .inactive_selection {
-    display: flex;
-    grid-auto-flow: column;
-    gap: 10px;
-    align-items: center;
-  }
+.active_selection,
+.inactive_selection {
+  display: flex;
+  grid-auto-flow: column;
+  gap: 10px;
+  align-items: center;
+}
 
-  .active_selection>div,
-  .inactive_selection>div {
-    display: grid;
-    grid-auto-flow: column;
-    gap: 5px;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding: 5px;
-    width: 50px;
-  }
+.active_selection>div,
+.inactive_selection>div {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 5px;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 5px;
+  width: auto;
+}
 
-  .active_selection>div {
-    background-color: #55ACEE;
-  }
+.active_selection>div {
+  background-color: #55ACEE;
+}
 
-  .active_selection button,
-  .inactive_selection button {
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
+.active_selection button,
+.inactive_selection button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
 
-  .filtro-container {
-    top: 0;
-    right: 0;
-    padding: 5px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    margin-right: 20px;
-    /* Ajuste del margen derecho */
-    width: 100%;
-    overflow-x: auto;
-  }
+.filtro-container {
+  top: 0;
+  right: 0;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  margin-right: 20px;
+  /* Ajuste del margen derecho */
+  width: 100%;
+  overflow-x: auto;
+}
 
-  .table-container {
-    width: 100%;
-    overflow-x: auto;
-  }
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
 
-  .scrollable-table {
-    max-height: 200px;
-    /* Altura máxima de la tabla */
-    overflow-y: auto;
-    width: 100%;
-  }
+.scrollable-table {
+  max-height: 80vh;
+  /* Altura máxima de la tabla */
+  overflow-y: auto;
+  width: 100%;
+}
 
-  .scrollable-table tbody {
-    display: block;
-    overflow-y: auto;
-    max-height: calc(100% - 20px);
-    /* Ajusta según el tamaño del encabezado */
-  }
+.scrollable-table tbody {
+  display: block;
+  overflow-y: auto;
+  max-height: calc(100% - 20px);
+  /* Ajusta según el tamaño del encabezado */
+}
 
-  .scrollable-table thead,
-  .scrollable-table tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-  }
+th, td {
+  width: 100vh;
+}

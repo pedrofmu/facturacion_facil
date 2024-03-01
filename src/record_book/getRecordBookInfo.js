@@ -183,7 +183,6 @@ async function filterData(rawData, filter) {
         }
       }
 
-      console.log(factura.irpf);
       if (filter.irpf.length > 0) {
         if (!filter.irpf.includes(String(factura.irpf) + "%")) {
           continue;
@@ -352,9 +351,18 @@ function convertJSONUnidades(json) {
   return new Promise((resolve, reject) => {
     let resultado = "";
 
+    console.log(json);
+
     json.forEach(item => {
-      const { cantidad, tipo} = item;
-      resultado += `• ${tipo} * ${cantidad}<br>`;
+      const cantidad = item.cantidad;
+      const precioUnidad = item.precioUnidad;
+      const iva = item.iva;
+      const descuento = item.descuento;
+
+      const bi = cantidad * precioUnidad - (cantidad * precioUnidad * (descuento / 100));
+      const ivaAdd = bi * (iva / 100);
+
+      resultado += `• ${item.tipo} * ${cantidad} (${Number(bi + ivaAdd).toFixed(2)}€)<br>`;
     });
 
     resolve(resultado.trim());

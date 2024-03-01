@@ -72,7 +72,13 @@ function getBrowserBinaryPath() {
             if (!error && stdout.trim()) {
               resolve(stdout.trim());
             } else {
-              reject(new Error('No se encontró el ejecutable de un navegador basado en chromium'));
+              exec('which chromium', (error, stdout) => {
+                if (!error && stdout.trim()) {
+                  resolve(stdout.trim());
+                } else {
+                  reject(new Error('No se encontró el ejecutable de un navegador basado en chromium'));
+                }
+              });
             }
           });
         }

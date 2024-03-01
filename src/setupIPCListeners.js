@@ -25,8 +25,6 @@ function setupIPCMainListeners(mainWindow) {
       const browser = await puppeteer.launch({ executablePath: chromePath });
       const page = await browser.newPage();
 
-      console.log(content);
-
       await page.setContent(content);
       await page.emulateMediaType('screen');
       await page.pdf({
@@ -34,6 +32,8 @@ function setupIPCMainListeners(mainWindow) {
         format: 'A4',
         printBackground: true
       });
+
+      console.log(content);
 
       await browser.close();
       event.sender.send('created-pdf', 'guardado'); 
