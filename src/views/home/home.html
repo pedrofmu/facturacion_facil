@@ -3,23 +3,29 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Hello World!</title>
+  <title>facturacon facil - home</title>
 
+  <link rel="stylesheet" href="../common_styles.css" />
   <link rel="stylesheet" href="home.css" />
 
   <script defer src="home.js"></script>
 </head>
 
 <body>
-  <h1>HOME</h1>
-  <label>Espacio de guardado: </label>
-  <select id="db_selector"></select>
-  <br>
-  <button type="button" id="to_ingresos_btn">Crear factura</button>
-  <br>
-  <button type="button" id="to_record_book_btn">Libro de registors</button>
-  <br>
-  <button type="button" id="to_manage_db">Gestionar espacios de guardado</button>
+  <h1>Facturación facil</h1>
+  <div class="db_selector_div">
+    <label id="db_selector_txt">Espacio de guardado: </label>
+    <select class="select" id="db_selector"></select>
+  </div>
+  <div class="to_manage_div btn_div">
+    <button type="button" id="to_manage_db">Gestionar espacios de guardado</button>
+  </div>
+  <div class="to_ingresos_div btn_div">
+    <button type="button" id="to_ingresos_btn">Crear factura</button>
+  </div>
+  <div class="to_record_book_div btn_div">
+    <button type="button" id="to_record_book_btn">Libro de registors</button>
+  </div>
 </body>
 
 </html>
