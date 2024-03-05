@@ -1,0 +1,37 @@
+body {
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: auto;
+  padding-left: 10vh;
+  padding-left: 50px;
+}
+
+.select_db_merge {
+  margin-top: 15px;
+  display: flex;
+}
+
+.copy_to_db_div {
+  margin-left: 35px;
+}
+
+.merge_mode {
+  display: flex;
+  align-items: center;
+}
+
+#merge_modes {
+  margin-left: 10px;
+}
+
+#borrar_db_btn {
+  margin-top: 10px;
+}
+
+.labels{
+  margin-bottom: 10px;
+}
+
+#merge_db {
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
