@@ -17,22 +17,20 @@
       display: none;
     }
   </style>
-
 </head>
 
 <body>
   <h1>Libro de registros</h1>
-  <button id="toggleFiltersBtn">Mostrar/Ocultar Filtros</button>
+  <button id="toggleFiltersBtn">Mostrar filtros</button>
+  <button id="aplicar-filtros-btn" type="submit">Aplicar Filtros</button>
   <div class="filtro-container">
-    <h2>Filtros</h2>
     <form id="filtro-form">
-      <!-- Tu formulario de filtros aquí -->
       <div class="range_selector">
         <h5>Numero de facutra:</h5>
         <label class="range_label">mínimo:</label>
-        <input type="number" id="numero1" name="numero1">
+        <input class="input" type="number" id="numero1" name="numero1">
         <label class="range_label">máximo:</label>
-        <input type="number" id="numero2" name="numero2">
+        <input class="input" type="number" id="numero2" name="numero2">
       </div>
 
       <div class="list_selector">
@@ -54,9 +52,9 @@
       <div class="range_selector">
         <h5>Fecha:</h5>
         <label class="range_label">mínimo:</label>
-        <input type="date" id="fecha1" name="fecha1">
+        <input class="input" type="date" id="fecha1" name="fecha1">
         <label class="range_label">máximo:</label>
-        <input type="date" id="fecha2" name="fecha2">
+        <input class="input" type="date" id="fecha2" name="fecha2">
       </div>
 
       <div class="list_selector">
@@ -70,9 +68,9 @@
       <div class="range-selector">
         <h5>Base imponible</h5>
         <label class="range_label">mínimo:</label>
-        <input type="number" id="baseImponible1" name="baseImponible1">
+        <input class="input" type="number" id="baseImponible1" name="baseImponible1">
         <label class="range_label">máximo:</label>
-        <input type="number" id="baseImponible2" name="baseImponible2">
+        <input class="input" type="number" id="baseImponible2" name="baseImponible2">
       </div>
 
       <div class="list_selector">
@@ -90,11 +88,12 @@
         <div class="inactive_selection" id="inactive_selection_irpf">
         </div>
       </div>
-
-      <button type="submit">Aplicar Filtros</button>
     </form>
   </div>
-  <select class="select" id="formatos_selector"></select>
+  <div class="formatos_selector_div">
+    <label>Formato: </label>
+    <select class="select" id="formatos_selector"></select>
+  </div>
 
   <div class="table-container">
     <div class="scrollable-table">

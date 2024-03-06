@@ -1,18 +1,22 @@
-body{
+body {
   font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-.list_selector {
-  display: grid;
-  grid-template-columns: auto 1fr;
+.list_selector>h5 {
+  width: min-content;
 }
 
 .active_selection,
 .inactive_selection {
   display: flex;
-  grid-auto-flow: column;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
+  margin-bottom: 10px;
+}
+
+.active_selection::before{
+  content: "seleccionado: ";
 }
 
 .active_selection>div,
@@ -21,13 +25,15 @@ body{
   grid-auto-flow: column;
   gap: 5px;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
   padding: 5px;
   width: auto;
 }
 
 .active_selection>div {
-  background-color: #55ACEE;
+  background-color: #0f7ef1;
 }
 
 .active_selection button,
@@ -41,11 +47,11 @@ body{
   top: 0;
   right: 0;
   padding: 5px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #F3F4F6;
+  border: 1px solid rgba(27, 31, 35, 0.15);
   margin-right: 20px;
-  /* Ajuste del margen derecho */
-  width: 100%;
+  border-radius: 6px;
+  width: 80%;
   overflow-x: auto;
 }
 
@@ -62,7 +68,7 @@ body{
   width: 100%;
 }
 
-.bottom_btns{
+.bottom_btns {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -74,12 +80,15 @@ body{
   max-height: calc(100% - 20px);
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid black;
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   width: 100vh;
 }
 
@@ -89,4 +98,15 @@ th {
 
 td {
   background-color: #F3F4F6;
+}
+
+.formatos_selector_div {
+  margin-top: 15px;
+  display: flex;
+}
+
+.formatos_selector_div select {
+  margin-left: 10px;
+  align-items: center;
+  align-content: center;
 }

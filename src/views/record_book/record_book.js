@@ -2,6 +2,7 @@ const { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefault
 const { saveXLSX } = require("../../record_book/createXLSX.js");
 
 const formatosSelector = document.getElementById("formatos_selector");
+const aplicarFiltrosBtn = document.getElementById("aplicar-filtros-btn");
 
 var filtro = {
   numero1: -Infinity,
@@ -31,9 +32,28 @@ document.addEventListener("DOMContentLoaded", function() {
   const filtroContainer = document.querySelector(".filtro-container");
 
   filtroContainer.classList.toggle("hidden");
+  aplicarFiltrosBtn.classList.toggle("hidden");
 
   toggleFiltersBtn.addEventListener("click", function() {
+    if (toggleFiltersBtn.innerText === "Mostrar filtros") {
+      toggleFiltersBtn.innerText = "Ocultar filtros";
+    } else {
+      toggleFiltersBtn.innerText = "Mostrar filtros";
+    }
+
     filtroContainer.classList.toggle("hidden");
+    aplicarFiltrosBtn.classList.toggle("hidden");
+  });
+
+  aplicarFiltrosBtn.addEventListener("click", function() {
+    if (toggleFiltersBtn.innerText === "Mostrar filtros") {
+      toggleFiltersBtn.innerText = "Ocultar filtros";
+    } else {
+      toggleFiltersBtn.innerText = "Mostrar filtros";
+    }
+
+    filtroContainer.classList.toggle("hidden");
+    aplicarFiltrosBtn.classList.toggle("hidden");
   });
 });
 
@@ -46,8 +66,7 @@ document.getElementById("guardar_btn").addEventListener("click", async () => {
   }
 });
 
-document.getElementById("filtro-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
+aplicarFiltrosBtn.addEventListener("click", async () => {
   filtro = await getFilterData();
   refreshTable();
 });
