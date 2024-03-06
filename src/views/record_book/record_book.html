@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>LIBRO DE REGISTROS</title>
+
+  <link rel="stylesheet" href="../common_styles.css" />
   <link rel="stylesheet" href="record_book.css" />
   <script defer src="record_book.js"></script>
   <style>
@@ -15,6 +17,7 @@
       display: none;
     }
   </style>
+
 </head>
 
 <body>
@@ -91,19 +94,20 @@
       <button type="submit">Aplicar Filtros</button>
     </form>
   </div>
-  <select id="formatos_selector"></select>
+  <select class="select" id="formatos_selector"></select>
 
   <div class="table-container">
     <div class="scrollable-table">
-      <table id="tabla_facturas" border="2">
+      <table id="tabla_facturas">
         <!-- Añade aquí el resto de filas -->
       </table>
     </div>
   </div>
 
-  <button id="atras_btn">Atrás</button>
-  <button id="guardar_btn">Guardar</button>
-
+  <div class="bottom_btns">
+    <button id="atras_btn">Atrás</button>
+    <button id="guardar_btn">Guardar</button>
+  </div>
 </body>
 
 </html>

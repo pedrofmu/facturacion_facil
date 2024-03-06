@@ -33,8 +33,6 @@ function setupIPCMainListeners(mainWindow) {
         printBackground: true
       });
 
-      console.log(content);
-
       await browser.close();
       event.sender.send('created-pdf', 'guardado'); 
     } catch (e) {

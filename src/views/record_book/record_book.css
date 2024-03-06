@@ -1,3 +1,7 @@
+body{
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
 .list_selector {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -48,22 +52,41 @@
 .table-container {
   width: 100%;
   overflow-x: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .scrollable-table {
   max-height: 80vh;
-  /* Altura máxima de la tabla */
   overflow-y: auto;
   width: 100%;
+}
+
+.bottom_btns{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .scrollable-table tbody {
   display: block;
   overflow-y: auto;
   max-height: calc(100% - 20px);
-  /* Ajusta según el tamaño del encabezado */
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
 }
 
 th, td {
   width: 100vh;
+}
+
+th {
+  background-color: #A6A6A6;
+}
+
+td {
+  background-color: #F3F4F6;
 }

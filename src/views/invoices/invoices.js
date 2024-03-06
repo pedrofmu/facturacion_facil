@@ -111,6 +111,7 @@ function changeDiscountPerProduct() {
       newInput.type = "number";
       newInput.placeholder = "descuento";
       newInput.id = "descuento";
+      newInput.className = "input";
 
       element.appendChild(newInput);
     });
@@ -153,6 +154,7 @@ function newProduct() {
     var newInput = document.createElement("input");
     newInput.type = i === 0 || i === 2 || i === 3 ? "number" : "text";
     newInput.placeholder = i === 0 ? "cantidad" : (i === 1 ? "tipo" : (i === 2 ? "precio unidad" : "iva"));
+    newInput.className = "input";
 
     // Agregar el input al li
     newProduct.appendChild(newInput);
@@ -163,6 +165,7 @@ function newProduct() {
     newInput.type = "number";
     newInput.placeholder = "descuento";
     newInput.id = "descuento";
+    newInput.className = "input";
 
     // Agregar el input al li
     newProduct.appendChild(newInput);

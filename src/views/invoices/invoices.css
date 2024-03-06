@@ -1,7 +1,16 @@
+body {
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: auto;
+  padding-left: 50px;
+  padding-right: 5vw;
+  padding-top: 15px;
+}
+
 /* Estilos para los contenedores horizontales */
 .horizontal_div {
   display: flex;
-  flex-wrap: wrap; /* Permite que los elementos se muevan a la siguiente línea si no hay espacio suficiente */
+  flex-wrap: wrap;
+  /* Permite que los elementos se muevan a la siguiente línea si no hay espacio suficiente */
   justify-content: space-between;
   margin-bottom: 10px;
 }
@@ -22,7 +31,7 @@
 
 /* Estilos para la lista de unidades */
 #unidades_container {
-  list-style-type: none;
+  list-style-type: square outside none;
   padding: 0px;
 }
 
@@ -35,24 +44,6 @@
 }
 
 /* Estilos para los botones al final */
-.horizontal_div #atras_btn,
-.horizontal_div #guardar_btn {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.horizontal_div #atras_btn {
-  background-color: #e74c3c;
-}
 
 .oculto {
   display: none;

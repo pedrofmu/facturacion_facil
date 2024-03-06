@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>INGRESOS</title>
 
-    <link rel="stylesheet" href="invoices.css" />
+<head>
+  <meta charset="UTF-8" />
+  <title>INGRESOS</title>
 
-    <script defer src="invoices.js"></script>
-  </head>
+  <link rel="stylesheet" href="../common_styles.css" />
+  <link rel="stylesheet" href="invoices.css" />
 
-  <body>
+  <script defer src="invoices.js"></script>
+</head>
+
+<body>
   <div class="horizontal_div">
     <div id="vertical_div">
-      <label >Emisor</label>
-      <select id="proveedor_selector"></select>
+      <label>Emisor</label>
+      <select class="select" id="proveedor_selector"></select>
       <button id="nuevo_provedor_btn">Nuevo emisor</button>
     </div>
-    
+
     <div id="vertical_div">
-      <label >Seleccione la fecha</label>
-      <input id="fecha_input" type="date"></input>
-    </div> 
+      <label>Seleccione la fecha</label>
+      <input id="fecha_input" class="input" type="date"></input>
+    </div>
   </div>
-  
+
   <div class="horizontal_div">
     <div id="vertical_div">
-      <label >Receptor</label>
-      <select id="cliente_selector"></select>
+      <label>Receptor</label>
+      <select class="select" id="cliente_selector"></select>
       <button id="nuevo_cliente_btn">Nuevo receptor</button>
     </div>
-    
+
     <div id="vertical_div">
-        <label>Seleccione la letra</label>
-       <select id="letra_selector"></select>
-    </div> 
+      <label>Seleccione la letra</label>
+      <select class="select" id="letra_selector"></select>
+    </div>
   </div>
-  
+
   <div class="vertical_div">
     <div class="horizontal_div">
       <button id="descuento_unidad_btn">Descuentos por unidad</button>
@@ -45,50 +47,51 @@
       </div>
     </div>
     <ol id="unidades_container">
-      
+
     </ol>
   </div>
 
   <div class="horizontal_div">
     <div class="vertical_div">
-       <label>Concepto: </label>
-       <input id="concepto" type="text">
+      <label>Concepto: </label>
+      <input id="concepto" type="text" class="input">
     </div>
   </div>
 
   <div class="horizontal_div">
     <div class="vertical_div">
-       <label id="des_lbl">Descuento al total (%)</label>
-       <input id="descuento_al_total" type="text">
+      <label id="des_lbl">Descuento al total (%)</label>
+      <input id="descuento_al_total" class="input" type="text">
     </div>
   </div>
 
   <div class="horizontal_div">
-      <div class="vertical_div">
-          <label>Forma de pago</label>
-          <input id="forma_de_pago" type="text">
-      </div>
-  </div>
-  
-  <div class="horizontal_div">
     <div class="vertical_div">
-       <label>IRPF (%)</label>
-       <input id="irpf" type="number">
+      <label>Forma de pago</label>
+      <input id="forma_de_pago" class="input" type="text">
     </div>
   </div>
-  
+
   <div class="horizontal_div">
-      <div class="vertical_div">
-          <label>Datos extra</label>
-          <input id="datos_extras" type="text">
-      </div>
+    <div class="vertical_div">
+      <label>IRPF (%)</label>
+      <input id="irpf" class="input" type="number">
+    </div>
   </div>
-  
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label>Datos extra</label>
+      <input id="datos_extras" class="input" type="text">
+    </div>
+  </div>
+
   </div>
 
   <div class="horizontal_div">
     <button id="atras_btn">Atras</button>
     <button id="guardar_btn">Guardar</button>
   </div>
-  </body>
+</body>
+
 </html>
