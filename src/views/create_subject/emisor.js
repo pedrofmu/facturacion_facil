@@ -13,3 +13,7 @@ document.getElementById("save_btn").addEventListener("click", async () => {
     alert(error);
   }
 });
+
+document.getElementById("exit_btn").addEventListener("click", async () => {
+  window.close();
+});
