@@ -23,12 +23,11 @@ body {
 .inactive_selection>div {
   display: grid;
   grid-auto-flow: column;
-  gap: 5px;
   align-items: center;
   background-color: #FFFFFF;
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
-  padding: 5px;
+  padding-left: 5px;
   width: auto;
 }
 
