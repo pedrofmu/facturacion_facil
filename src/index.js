@@ -22,7 +22,7 @@ function startRender() {
       },
     });
 
-    // and load the index.html of the app.
+    mainWindow.maximize();    
     mainWindow.loadFile(path.join(__dirname, '/views/home/home.html'));
   };
 
