@@ -87,7 +87,6 @@ function getDataForFilterList() {
   });
 }
 
-
 //Obiene la lista de las facturas como raw information
 function getFacturas(filter = {
   numero1: -Infinity,

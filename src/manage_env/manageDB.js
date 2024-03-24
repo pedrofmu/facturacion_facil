@@ -2,6 +2,7 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const { getHomeFolderPath } = require('./getPath');
 const { addPossibleDB, removePossibleDB } = require('./getSettings');
+const { createPayMethod } = require('../formas_pago/gestionar_formas_pago');
 
 const fs = require('fs').promises;
 
@@ -44,34 +45,93 @@ function createDB(nombre) {
       const db = new sqlite3.Database(dbPath);
 
       // Crear las tablas si no existen
-      db.run(`CREATE TABLE IF NOT EXISTS facturas (
-        numero TEXT,
-        receptor TEXT,
-        emisor TEXT,
-        fecha DATE,
-        unidades TEXT,
-        concepto TEXT, 
-        importeTotal REAL,
-        irpf INTEGER,
-        detalles TEXT,
-        formaDePago TEXT
-    )`);
+      const createFacturasTable = () => {
+        return new Promise((resolve, reject) => {
+          db.run(`CREATE TABLE IF NOT EXISTS facturas (
+            numero TEXT,
+            receptor TEXT,
+            emisor TEXT,
+            fecha DATE,
+            unidades TEXT,
+            concepto TEXT, 
+            importeTotal REAL,
+            irpf INTEGER,
+            detalles TEXT,
+            formaDePago TEXT
+          )`, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      };
 
-      db.run(`CREATE TABLE IF NOT EXISTS receptor (
-        nombre TEXT,
-        id TEXT,
-        direccion TEXT,
-        contacto TEXT
-    )`);
+      // Promesa para crear tabla receptor
+      const createReceptorTable = () => {
+        return new Promise((resolve, reject) => {
+          db.run(`CREATE TABLE IF NOT EXISTS receptor (
+            nombre TEXT,
+            id TEXT,
+            direccion TEXT,
+            contacto TEXT
+          )`, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      };
 
-      db.run(`CREATE TABLE IF NOT EXISTS emisor (
-        nombre TEXT,
-        id TEXT,
-        direccion TEXT,
-        contacto TEXT
-    )`);
+      // Promesa para crear tabla emisor
+      const createEmisorTable = () => {
+        return new Promise((resolve, reject) => {
+          db.run(`CREATE TABLE IF NOT EXISTS emisor (
+            nombre TEXT,
+            id TEXT,
+            direccion TEXT,
+            contacto TEXT
+          )`, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      };
+
+      // Promesa para crear tabla formasDePago
+      const createFormasDePagoTable = () => {
+        return new Promise((resolve, reject) => {
+          db.run(`CREATE TABLE IF NOT EXISTS formasDePago (
+            type TEXT,
+            extraData BOOL
+          )`, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      };
+
+      // Esperar a que se completen todas las creaciones de tablas
+      await Promise.all([
+        createFacturasTable(),
+        createReceptorTable(),
+        createEmisorTable(),
+        createFormasDePagoTable()
+      ]);
+
+      createPayMethod(nombre, "efectivo", 0);
 
       await addPossibleDB(nombre);
+
       // Cerrar la conexión a la base de datos después de asegurarse de que se hayan creado las tablas
       db.close((err) => {
         if (err) {

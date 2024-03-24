@@ -2,6 +2,7 @@
 const { saveInvoice } = require('../../create_invoices/new_invoice');
 const { getPersonas } = require('../../create_invoices/connect_db');
 const { ipcRenderer } = require('electron');
+const { getAllPayMethods } = require('../../formas_pago/gestionar_formas_pago');
 
 // Obtener elementos del DOM
 const fechaInput = document.getElementById("fecha_input");
@@ -55,6 +56,14 @@ document.getElementById("descuento_unidad_btn").addEventListener("click", () => 
 
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
+});
+
+clienteSelector.addEventListener("focus", () => {
+  loadPersons();
+});
+
+proveedorSelector.addEventListener("focus", () => {
+  loadPersons();
 });
 
 async function triggerSaveInvoice() {
@@ -217,15 +226,24 @@ async function loadPersons() {
   });
 }
 
-clienteSelector.addEventListener("focus", () => {
-  loadPersons();
-});
+async function loadPayMethods(){
+  let payMethodsOptions = Array.from(formaDePago.options).map(option => option.value);
 
-proveedorSelector.addEventListener("focus", () => {
-  loadPersons();
-});
+  // Cargar clientes
+  let payMethods = await getAllPayMethods();
+  payMethods.forEach((row) => {
+    if (!payMethodsOptions.includes(row)) {
+      var option = document.createElement("option");
+      option.value = row.type;
+      option.text = row.type;
+      formaDePago.add(option);
+      payMethodsOptions.push(row);  // Agregar la opción a la lista de opciones existentes
+    }
+  });
+}
 
 // Llamar a las funciones de carga al cargar la página
+loadPayMethods();
 loadLetters();
 loadPersons();
 newProduct();
