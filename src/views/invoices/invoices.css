@@ -16,7 +16,7 @@ body {
 }
 
 /* Estilos para los contenedores verticales */
-#vertical_div {
+.vertical_div {
   display: flex;
   flex-direction: column;
   margin-right: 10px;
@@ -43,8 +43,32 @@ body {
   margin-right: 5px;
 }
 
-/* Estilos para los botones al final */
+.pay_method_div {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
 
+.select_pay_method_div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.params_pay_method_div {
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-rows: auto;
+  grid-auto-flow: row;
+  width: auto;
+}
+
+.params_pay_method_div>* {
+  margin-top: 10px;
+  display: inline-block;
+  width: max-content;
+}
+
+/* Estilos para los botones al final */
 .oculto {
   display: none;
 }

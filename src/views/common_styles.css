@@ -26,7 +26,6 @@ button {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  vertical-align: middle;
   white-space: nowrap;
   word-wrap: break-word;
 }

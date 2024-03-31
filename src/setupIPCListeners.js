@@ -15,7 +15,7 @@ function setupIPCMainListeners(mainWindow) {
       }
     });
 
-    nuevaVentana.loadFile(join(__dirname, `/views/create_subject/${valor}.html`));
+    nuevaVentana.loadFile(join(__dirname, valor));
   });
 
   ipcMain.on('create-pdf', async (event, content, path) => {

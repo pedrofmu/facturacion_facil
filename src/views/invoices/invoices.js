@@ -2,7 +2,7 @@
 const { saveInvoice } = require('../../create_invoices/new_invoice');
 const { getPersonas } = require('../../create_invoices/connect_db');
 const { ipcRenderer } = require('electron');
-const { getAllPayMethods } = require('../../formas_pago/gestionar_formas_pago');
+const { getAllPayMethods, getHasExtraField } = require('../../formas_pago/gestionar_formas_pago');
 
 // Obtener elementos del DOM
 const fechaInput = document.getElementById("fecha_input");
@@ -13,17 +13,22 @@ const detallesInput = document.getElementById("datos_extras");
 const proveedorSelector = document.getElementById("proveedor_selector");
 const clienteSelector = document.getElementById("cliente_selector");
 const conceptoInput = document.getElementById("concepto");
+const extraPayMethod = document.getElementById("forma_de_pago_extra");
 
 var discountPerProduct = false;
 
 //Manejar el click de crear un cliente nuevo
 document.getElementById("nuevo_cliente_btn").addEventListener("click", () => {
-  ipcRenderer.send('open-new-window', "receptor");
+  ipcRenderer.send('open-new-window', "/views/create_subject/receptor.html");
 });
 
 //Maneje el click de crear un proveedor nuevo
 document.getElementById("nuevo_provedor_btn").addEventListener("click", () => {
-  ipcRenderer.send('open-new-window', "emisor");
+  ipcRenderer.send('open-new-window', "/views/create_subject/emisor.html");
+});
+
+document.getElementById("new_pay_method").addEventListener("click", () => {
+  ipcRenderer.send('open-new-window', "/views/formas_pago/formas_pago.html");
 });
 
 // Manejar clic en el botón de guardar factura
@@ -31,7 +36,7 @@ document.getElementById("guardar_btn").addEventListener("click", async () => {
   try {
     await triggerSaveInvoice();
     alert("Se ha guardado correctamente la factura");
-  }catch (error) {
+  } catch (error) {
     alert(error);
   }
 });
@@ -56,6 +61,18 @@ document.getElementById("descuento_unidad_btn").addEventListener("click", () => 
 
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
+});
+
+formaDePago.addEventListener("change", async () => {
+  try {
+    await showExtraPayMethod();
+  } catch (error) {
+    alert(error);
+  }
+});
+
+formaDePago.addEventListener("focus", () => {
+  loadPayMethods();
 });
 
 clienteSelector.addEventListener("focus", () => {
@@ -97,8 +114,17 @@ async function triggerSaveInvoice() {
         unitsList.push(unitData);
       });
 
+      const hasExtraField = await getHasExtraField(formaDePago.value);
+      let pago = "";
+
+      if (hasExtraField) {
+        pago = `${formaDePago.value}:${extraPayMethod.value}`;
+      } else {
+        pago = formaDePago.value;
+      }
+
       // Llamar a la función para crear una nueva factura
-      await saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, formaDePago.value);
+      await saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, pago);
 
       // Resolver la Promesa después de completar la operación
       resolve();
@@ -226,20 +252,33 @@ async function loadPersons() {
   });
 }
 
-async function loadPayMethods(){
+async function loadPayMethods() {
   let payMethodsOptions = Array.from(formaDePago.options).map(option => option.value);
 
   // Cargar clientes
   let payMethods = await getAllPayMethods();
   payMethods.forEach((row) => {
-    if (!payMethodsOptions.includes(row)) {
+    if (!payMethodsOptions.includes(row.type)) {
       var option = document.createElement("option");
       option.value = row.type;
       option.text = row.type;
       formaDePago.add(option);
-      payMethodsOptions.push(row);  // Agregar la opción a la lista de opciones existentes
+      payMethodsOptions.push(row);
     }
   });
+
+  await showExtraPayMethod();
+}
+
+async function showExtraPayMethod() {
+  const field = formaDePago.value;
+  const hasExtraField = await getHasExtraField(field);
+
+  if (hasExtraField) {
+    extraPayMethod.classList.remove("oculto");
+  } else {
+    extraPayMethod.classList.add("oculto");
+  }
 }
 
 // Llamar a las funciones de carga al cargar la página

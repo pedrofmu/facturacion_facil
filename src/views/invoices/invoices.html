@@ -13,26 +13,26 @@
 
 <body>
   <div class="horizontal_div">
-    <div id="vertical_div">
+    <div class="vertical_div">
       <label>Emisor</label>
       <select class="select" id="proveedor_selector"></select>
       <button id="nuevo_provedor_btn">Nuevo emisor</button>
     </div>
 
-    <div id="vertical_div">
+    <div class="vertical_div">
       <label>Seleccione la fecha</label>
       <input id="fecha_input" class="input" type="date"></input>
     </div>
   </div>
 
   <div class="horizontal_div">
-    <div id="vertical_div">
+    <div class="vertical_div">
       <label>Receptor</label>
       <select class="select" id="cliente_selector"></select>
       <button id="nuevo_cliente_btn">Nuevo receptor</button>
     </div>
 
-    <div id="vertical_div">
+    <div class="vertical_div">
       <label>Seleccione la letra</label>
       <select class="select" id="letra_selector"></select>
     </div>
@@ -65,11 +65,15 @@
     </div>
   </div>
 
-  <div class="horizontal_div">
-    <divi class="vertical_div">
-      <label>Forma de pago</label>
-      <select id="forma_de_pago" class="input" type="text"></select>
-  </div>
+  <div class="pay_method_div">
+    <div class="select_pay_method_div">
+      <label>Forma de pago: </label>
+      <select id="forma_de_pago" class="select" type="text"></select>
+    </div>
+    <div class="params_pay_method_div">
+      <input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
+      <button id="new_pay_method">nueva forma de pago</button>
+    </div>
   </div>
 
   <div class="horizontal_div">

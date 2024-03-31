@@ -62,6 +62,34 @@ async function createPayMethod(dbName, type, extraData) {
   });
 }
 
+async function insertNewPayMethod(type, extraData) {
+  const dbPath = await getDBPath();
+
+  return new Promise((resolve, reject) => {
+    const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+    });
+
+    const valuesToInsert = [type, extraData];
+    db.run(`INSERT INTO formasDePago (type, extraData) VALUES (?, ?)`, valuesToInsert, (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      db.close((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  });
+}
 
 async function getAllPayMethods() {
   const dbPath = await getDBPath();
@@ -100,4 +128,35 @@ async function getAllPayMethods() {
   });
 }
 
-module.exports = { createPayMethod, getAllPayMethods };
+async function getHasExtraField(field) {
+  try {
+    const dbPath = await getDBPath();
+
+    return new Promise((resolve, reject) => {
+      const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        db.get(`SELECT extraData FROM formasDePago WHERE type = ?`, [field], (err, row) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          if (row) {
+            resolve(row.extraData);
+          } else {
+            resolve(null); // No se encontró ninguna fila con ese typeName
+          }
+        });
+      });
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+module.exports = { createPayMethod, getAllPayMethods, getHasExtraField, insertNewPayMethod };
