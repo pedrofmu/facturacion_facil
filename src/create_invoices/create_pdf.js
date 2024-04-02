@@ -37,7 +37,7 @@ function createHTMLfromPDF(unidadesList) {
   });
 }
 
-function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseImonible, retenidoIRPF, ivaAdd, cuotaIVA, importeTotal, formaDePago, detalles) {
+function createInvoicePDF(proveedor, cliente, numero, fechaEmision, fechaVencimiento, unidadesList, baseImonible, retenidoIRPF, ivaAdd, cuotaIVA, importeTotal, formaDePago, detalles) {
   return new Promise(async (resolve, reject) => {
     try {
       const cssRendering = await readFileAsync(getCSSPath(), 'utf-8');
@@ -77,7 +77,8 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
           </div>
           <div class="datos_id_factura">
               <h5><b>factura: </b> ${numero}</h5>
-              <h5><b>fecha: </b>${fecha}</h5>
+              <h5><b>fecha emision: </b>${fechaEmision}</h5>
+              <h5><b>fecha fencimiento: </b>${fechaVencimiento}</h5>
           </div>
       </div>
       <table id="productos">
@@ -101,7 +102,7 @@ function createInvoicePDF(proveedor, cliente, numero, fecha, unidadesList, baseI
           </div>
           <div class="forma_pago">
               <h4>Forma de pago: </h4>
-              <h5>${formaDePago}</h5>
+              <h5>${formaDePago.replace(":", " ")}</h5>
           </div>
       </div>
       <div class="detalles_extra">

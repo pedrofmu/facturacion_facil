@@ -45,7 +45,7 @@ async function saveInvoice(letra, cliente, proveedor, fechaEmision, fechaVencimi
 
 
       //Crear el pdf con la factura
-      let save = await createInvoicePDF(proveedorData, clienteData, numero, fechaEmision, unidadesList, baseImponible, baseImponible * irpf / 100, ivaAdd, ivas, importeTotal, formaDePago, datosExtra);
+      let save = await createInvoicePDF(proveedorData, clienteData, numero, fechaEmision, fechaVencimiento, unidadesList, baseImponible, baseImponible * irpf / 100, ivaAdd, ivas, importeTotal, formaDePago, datosExtra);
 
       if (save === true) {
         addInvoice(numero, cliente, proveedor, fechaEmision, fechaVencimiento, JSON.stringify(unidadesList), concepto, importeTotal, irpf, datosExtra, formaDePago);
