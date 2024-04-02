@@ -2,10 +2,10 @@ const { addInvoice, getInvoiceID, getPersona } = require("./connect_db");
 const { createInvoicePDF } = require("./create_pdf");
 
 //Guardar la factura
-async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, concepto, irpf, datosExtra, formaDePago) {
+async function saveInvoice(letra, cliente, proveedor, fechaEmision, fechaVencimiento, unidadesList, concepto, irpf, datosExtra, formaDePago) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (cliente.length === 0 || proveedor.length === 0 || fecha.length === 0 || unidadesList.length === 0 || formaDePago.length === 0 || concepto.length === 0) {
+      if (cliente.length === 0 || proveedor.length === 0 || fechaEmision.length === 0 || fechaVencimiento.length === 0|| unidadesList.length === 0 || formaDePago.length === 0 || concepto.length === 0) {
         throw "Faltan valores";
       }
 
@@ -22,9 +22,9 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, conce
       unidadesList.forEach((element) => {
         const cantidad = element.cantidad;
         const precioUnidad = element.precioUnidad;
-        if (!ivas.includes(`${element.iva}%`)){
+        if (!ivas.includes(`${element.iva}%`)) {
           ivas.push(`${element.iva}%`);
-        } 
+        }
         const iva = element.iva;
         const descuento = element.descuento;
 
@@ -40,23 +40,23 @@ async function saveInvoice(letra, cliente, proveedor, fecha, unidadesList, conce
         importeTotal = baseImponible + ivaAdd;
       }
 
-      const clienteData = await getPersona("receptor", cliente); 
+      const clienteData = await getPersona("receptor", cliente);
       const proveedorData = await getPersona("emisor", proveedor);
 
 
       //Crear el pdf con la factura
-      let save = await createInvoicePDF(proveedorData, clienteData, numero, fecha, unidadesList, baseImponible, baseImponible * irpf / 100, ivaAdd, ivas, importeTotal, formaDePago, datosExtra);
+      let save = await createInvoicePDF(proveedorData, clienteData, numero, fechaEmision, unidadesList, baseImponible, baseImponible * irpf / 100, ivaAdd, ivas, importeTotal, formaDePago, datosExtra);
 
-      if (save === true){
-        addInvoice(numero, cliente, proveedor, fecha, JSON.stringify(unidadesList), concepto, importeTotal, irpf, datosExtra, formaDePago);
-        resolve(); 
-      }else{
-        reject("Selecciono la ubicacion correcta para guardar");
+      if (save === true) {
+        addInvoice(numero, cliente, proveedor, fechaEmision, fechaVencimiento, JSON.stringify(unidadesList), concepto, importeTotal, irpf, datosExtra, formaDePago);
+        resolve();
+      } else {
+        reject("Seleccione la ubicacion correcta para guardar");
       }
     } catch (error) {
-      reject(error); 
+      reject(error);
     }
   });
 }
 
-module.exports = {saveInvoice};
+module.exports = { saveInvoice };

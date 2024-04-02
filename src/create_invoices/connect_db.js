@@ -132,7 +132,7 @@ function getPersona(table, personName) {
 
 //Funcion para añadir una factura a la base de datos
 //Valores de la tabla
-async function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago) {
+async function addInvoice(numero, cliente, proveedor, fechaEmision, fechaVencimiento, unidades, concepto, importeTotal, irpf, detalles, formaDePago) {
   //Comporbar si la tabla es valida
   //Abrir la base de datos
   const folderPath = await getDBPath();
@@ -146,9 +146,9 @@ async function addInvoice(numero, cliente, proveedor, fecha, unidades, concepto,
   });
 
   //Insertar los valores
-  const valuesToInsert = [numero, cliente, proveedor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago];
+  const valuesToInsert = [numero, cliente, proveedor, fechaEmision, fechaVencimiento, unidades, concepto, importeTotal, irpf, detalles, formaDePago];
 
-  db.run(`INSERT INTO facturas (numero, receptor, emisor, fecha, unidades, concepto, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function(err) {
+  db.run(`INSERT INTO facturas (numero, receptor, emisor, fechaEmision, fechaVencimiento, unidades, concepto, importeTotal, irpf, detalles, formaDePago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, valuesToInsert, function(err) {
     if (err) {
       console.error(`Error al insertar valores: ${err.message}`);
     } else {

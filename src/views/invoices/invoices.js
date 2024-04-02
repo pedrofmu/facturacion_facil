@@ -5,7 +5,8 @@ const { ipcRenderer } = require('electron');
 const { getAllPayMethods, getHasExtraField } = require('../../formas_pago/gestionar_formas_pago');
 
 // Obtener elementos del DOM
-const fechaInput = document.getElementById("fecha_input");
+const fechaEmisionInput = document.getElementById("fecha_emision_input");
+const fechaVencimientoInput = document.getElementById("fecha_vencimiento_input");
 const letterSelector = document.getElementById("letra_selector");
 const formaDePago = document.getElementById("forma_de_pago");
 const irpfInput = document.getElementById("irpf");
@@ -123,8 +124,8 @@ async function triggerSaveInvoice() {
         pago = formaDePago.value;
       }
 
-      // Llamar a la función para crear una nueva factura
-      await saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaInput.value, unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, pago);
+     // Llamar a la función para crear una nueva factura
+      await saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaEmisionInput.value, fechaVencimientoInput.value,unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, pago);
 
       // Resolver la Promesa después de completar la operación
       resolve();
