@@ -50,6 +50,30 @@
     <button id="merge_db" type="button">Fusionar</button>
   </div>
 
+  <div>
+    <h3>Fusionar metodos de pago: </h3>
+    <div class="merge_mode">
+      <label>Modo de fusionado: </label>
+      <select id="merge_pay_modes" class="select">
+        <option value="añadir">añadir</option>
+        <option value="sobreescribir">sobreescribir</option>
+      </select>
+    </div>
+
+    <div class="select_db_merge">
+      <div>
+        <label class="labels">Copiar:</label>
+        <select class="possible_db select" id="copy_pay_from_db"></select>
+      </div>
+      <div class="copy_to_db_div">
+        <label>En:</label>
+        <select class="possible_db select" id="copy_pay_to_db"></select>
+      </div>
+    </div>
+
+    <button id="merge_pay_db" type="button">Fusionar</button>
+  </div>
+
   <div class="horizontal_div">
     <button id="atras_btn">Atras</button>
   </div>

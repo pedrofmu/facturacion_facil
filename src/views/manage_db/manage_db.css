@@ -18,7 +18,7 @@ body {
   align-items: center;
 }
 
-#merge_modes {
+#merge_modes, #merge_pay_modes {
   margin-left: 10px;
 }
 
@@ -30,7 +30,11 @@ body {
   margin-bottom: 10px;
 }
 
-#merge_db {
+#merge_db, #merge_pay_db {
   margin-top: 10px;
   margin-bottom: 25px;
+}
+
+.horizontal_div {
+  margin-top: 25px;
 }

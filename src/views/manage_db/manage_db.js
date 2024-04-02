@@ -1,6 +1,6 @@
 const { getDBPath } = require("../../manage_env/getPath");
 const { loadPossibleDB } = require("../../manage_env/getSettings");
-const { createDB, deleteDB, fusionarTablas } = require("../../manage_env/manageDB");
+const { createDB, deleteDB, fusionarTablas, fusionarMetodosPago } = require("../../manage_env/manageDB");
 
 document.getElementById("atras_btn").addEventListener("click", () => {
   window.location.href = "../home/home.html"
@@ -42,6 +42,26 @@ document.getElementById("merge_db").addEventListener("click", async () => {
       const mode = document.getElementById("merge_modes").value === "sobreescribir";
 
       await fusionarTablas(db1Path, db2Path, mode);
+
+      alert("Correctamente fusionado el espacio");
+    }
+  } catch (error) {
+    alert(error);
+  }
+});
+
+document.getElementById("merge_pay_db").addEventListener("click", async () => {
+  try {
+    if (confirm("¿Estás seguro de que quieres fusionar las tablas?") === true) {
+      const db1Name = document.getElementById("copy_pay_from_db").value;
+      const db2Name = document.getElementById("copy_pay_to_db").value;
+
+      const db1Path = await getDBPath(db1Name);
+      const db2Path = await getDBPath(db2Name);
+
+      const mode = document.getElementById("merge_pay_modes").value === "sobreescribir";
+
+      await fusionarMetodosPago(db1Path, db2Path, mode);
 
       alert("Correctamente fusionado el espacio");
     }

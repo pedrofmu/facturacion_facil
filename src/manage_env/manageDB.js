@@ -194,6 +194,41 @@ function addTableList(db, table, data) {
   });
 }
 
+function addPayMethods(db, data) {
+  return new Promise((resolve, reject) => {
+    // Obtener los nombres existentes en la tabla
+    db.all(`SELECT type FROM formasDePago`, [], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      const existingTypes = rows.map(row => row.type);
+
+      // Filtrar los datos para agregar solo los que no existen aún en la tabla
+      const newData = data.filter(entry => !existingTypes.includes(entry.type));
+
+      if (newData.length === 0) {
+        resolve("No hay nuevos nombres para agregar");
+        return;
+      }
+
+      const placeholders = newData.map(() => '(?, ?)').join(',');
+      const values = newData.reduce((acc, entry) => acc.concat(Object.values(entry)), []);
+
+      const sql = `INSERT INTO formasDePago (type, extraData) VALUES ${placeholders}`;
+
+      db.run(sql, values, function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this); // 'this' will contain information about the inserted row
+        }
+      });
+    });
+  });
+}
+
 function fusionarTablas(dbPath1, dbPath2, eliminarDatos = false) {
   return new Promise(async (resolve, reject) => {
     // Conexión a las bases de datos
@@ -239,4 +274,40 @@ function fusionarTablas(dbPath1, dbPath2, eliminarDatos = false) {
   });
 }
 
-module.exports = { deleteDB, createDB, fusionarTablas };
+function fusionarMetodosPago(dbPath1, dbPath2, eliminarDatos = false) {
+  return new Promise(async (resolve, reject) => {
+    // Conexión a las bases de datos
+    const db1 = new sqlite3.Database(dbPath1);
+    const db2 = new sqlite3.Database(dbPath2);
+
+    if (eliminarDatos) {
+      // Eliminar datos existentes en las tablas receptor y emisor de la db2
+      const deleteReceptorQuery = `DELETE FROM formasDePago`;
+
+      db2.run(deleteReceptorQuery, (err) => {
+        if (err) {
+          reject(err.message);
+        }
+      });
+    }
+
+    const db1FormaDePago = await getTableList(db1, 'formasDePago');
+
+    await addPayMethods(db2, db1FormaDePago);
+
+    db1.close((err) => {
+      if (err) {
+        reject(err);
+      }
+    });
+
+    db2.close((err) => {
+      if (err) {
+        reject(err);
+      }
+      resolve("Correctamente fusionadas las tablas");
+    });
+  });
+}
+
+module.exports = { deleteDB, createDB, fusionarTablas, fusionarMetodosPago };
