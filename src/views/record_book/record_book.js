@@ -9,8 +9,10 @@ var filtro = {
   numero2: Infinity,
   letra: [],
   cliente: [],
-  fecha1: -Infinity,
-  fecha2: Infinity,
+  fechaEmision1: -Infinity,
+  fechaEmision2: Infinity,
+  fechaVencimiento1: -Infinity,
+  fechaVencimiento2: Infinity,
   concepto: [],
   baseImponible1: -Infinity,
   baseImponible2: Infinity,
@@ -78,8 +80,8 @@ function getFilterData() {
       numero2: await obtenerValorInfinito(document.getElementById('numero2').value, false),
       letra: await obtenerValorLista("letra"),
       cliente: await obtenerValorLista("cliente"),
-      fecha1: await obtenerValorInfinito((new Date(document.getElementById('fecha1').value)).getTime(), true),
-      fecha2: await obtenerValorInfinito((new Date(document.getElementById('fecha2').value)).getTime(), false),
+      fechaEmision1: await obtenerValorInfinito((new Date(document.getElementById('fecha1').value)).getTime(), true),
+      fechaEmision2: await obtenerValorInfinito((new Date(document.getElementById('fecha2').value)).getTime(), false),
       concepto: await obtenerValorLista("concepto"),
       baseImponible1: await obtenerValorInfinito(document.getElementById('baseImponible1').value, true),
       baseImponible2: await obtenerValorInfinito(document.getElementById('baseImponible2').value, false),
@@ -282,6 +284,7 @@ async function loadDataInDefaultDB(invoicesList) {
   var thElements = [
     "Nº serie",
     "Fecha de expedición",
+    "Fecha de vencimiento",
     "Nombre",
     "Unidades",
     "Concepto",
@@ -306,8 +309,11 @@ async function loadDataInDefaultDB(invoicesList) {
     var nSerie = document.createElement("td");
     nSerie.innerHTML = element.nSerie;
 
-    var fecha = document.createElement("td");
-    fecha.innerHTML = element.fecha;
+    var fechaEmision = document.createElement("td");
+    fechaEmision.innerHTML = element.fechaEmision;
+
+    var fechaVencimiento = document.createElement("td");
+    fechaVencimiento.innerHTML = element.fechaVencimiento;
 
     var nombre = document.createElement("td");
     nombre.innerHTML = element.nombre;
@@ -334,7 +340,8 @@ async function loadDataInDefaultDB(invoicesList) {
     formaDePago.innerHTML = element.formaPago;
 
     newFacturaEntry.appendChild(nSerie);
-    newFacturaEntry.appendChild(fecha);
+    newFacturaEntry.appendChild(fechaEmision);
+    newFacturaEntry.appendChild(fechaVencimiento);
     newFacturaEntry.appendChild(nombre);
     newFacturaEntry.appendChild(unidades);
     newFacturaEntry.appendChild(concepto);
@@ -355,6 +362,7 @@ async function loadDataInStandarIRPFMode(invoicesList) {
   var thElements = [
     "Nº serie",
     "Fecha de expedición",
+    "Fecha de vencimiento",
     "Nombre",
     "NIF",
     "Base imponible",
@@ -377,8 +385,11 @@ async function loadDataInStandarIRPFMode(invoicesList) {
     var nSerie = document.createElement("td");
     nSerie.innerHTML = element.nSerie;
 
-    var fecha = document.createElement("td");
-    fecha.innerHTML = element.fecha;
+    var fechaEmision = document.createElement("td");
+    fechaEmision.innerHTML = element.fechaEmision;
+
+    var fechaVencimiento = document.createElement("td");
+    fechaVencimiento.innerHTML = element.fechaVencimiento;
 
     var nombre = document.createElement("td");
     nombre.innerHTML = element.nombre;
@@ -399,7 +410,8 @@ async function loadDataInStandarIRPFMode(invoicesList) {
     retenidoIRPF.innerHTML = Number(element.irpf).toFixed(2) + "€";
 
     newFacturaEntry.appendChild(nSerie);
-    newFacturaEntry.appendChild(fecha);
+    newFacturaEntry.appendChild(fechaEmision);
+    newFacturaEntry.appendChild(fechaVencimiento);
     newFacturaEntry.appendChild(nombre);
     newFacturaEntry.appendChild(nif);
     newFacturaEntry.appendChild(bi);
@@ -419,6 +431,7 @@ async function loadDataInStandarMode(invoicesList) {
   var thElements = [
     "Nº serie",
     "Fecha de expedición",
+    "Fecha de vencimiento",
     "Nombre",
     "NIF",
     "Base imponible",
@@ -440,8 +453,11 @@ async function loadDataInStandarMode(invoicesList) {
     var nSerie = document.createElement("td");
     nSerie.innerHTML = element.nSerie;
 
-    var fecha = document.createElement("td");
-    fecha.innerHTML = element.fecha;
+    var fechaEmision = document.createElement("td");
+    fechaEmision.innerHTML = element.fechaEmision;
+
+    var fechaVencimiento = document.createElement("td");
+    fechaVencimiento.innerHTML = element.fechaVencimiento;
 
     var nombre = document.createElement("td");
     nombre.innerHTML = element.nombre;
@@ -459,7 +475,8 @@ async function loadDataInStandarMode(invoicesList) {
     cuota.innerHTML = Number(element.cuota).toFixed(2) + "€";
 
     newFacturaEntry.appendChild(nSerie);
-    newFacturaEntry.appendChild(fecha);
+    newFacturaEntry.appendChild(fechaEmision);
+    newFacturaEntry.appendChild(fechaVencimiento);
     newFacturaEntry.appendChild(nombre);
     newFacturaEntry.appendChild(nif);
     newFacturaEntry.appendChild(bi);

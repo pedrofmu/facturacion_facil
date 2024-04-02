@@ -159,8 +159,13 @@ async function filterData(rawData, filter) {
         }
       }
 
-      var fecha = new Date(factura.fecha);
-      if (!(fecha.getTime() >= filter.fecha1 && fecha.getTime() <= filter.fecha2)) {
+      var fechaEmision = new Date(factura.fechaEmision);
+      if (!(fechaEmision.getTime() >= filter.fechaEmision1 && fechaEmision.getTime() <= filter.fechaEmision2)) {
+        continue;
+      }
+
+      var fechaVencimiento = new Date(factura.fechaVencimiento);
+      if (!(fechaVencimiento.getTime() >= filter.fechaVencimiento1 && fechaVencimiento.getTime() <= filter.fechaVencimiento2)) {
         continue;
       }
 
@@ -277,7 +282,8 @@ function getFacturasStandarInfo(rawList) {
       // Utilizamos map en lugar de forEach
       var returnInfo = await Promise.all(rawList.map(async (element) => {
         var nSerie = element.numero;
-        var fecha = element.fecha;
+        var fechaEmision = element.fechaEmision;
+        var fechaVencimiento = element.fechaVencimiento;
         var nombre = element.receptor;
         var nif = await getNIF("receptor", nombre);
 
@@ -289,7 +295,8 @@ function getFacturasStandarInfo(rawList) {
 
         var facturaElement = {
           nSerie: nSerie,
-          fecha: fecha,
+          fechaEmision: fechaEmision,
+          fechaVencimiento: fechaVencimiento, 
           nombre: nombre,
           nif: nif,
           bi: bi,
@@ -313,7 +320,8 @@ function getFacturasStandarIRPFInfo(rawList) {
       // Utilizamos map en lugar de forEach
       var returnInfo = await Promise.all(rawList.map(async (element) => {
         var nSerie = element.numero;
-        var fecha = element.fecha;
+        var fechaEmision = element.fechaEmision;
+        var fechaVencimiento = element.fechaVencimiento;
         var nombre = element.receptor;
         var nif = await getNIF("receptor", nombre);
 
@@ -327,7 +335,8 @@ function getFacturasStandarIRPFInfo(rawList) {
 
         var facturaElement = {
           nSerie: nSerie,
-          fecha: fecha,
+          fechaEmision: fechaEmision,
+          fechaVencimiento: fechaVencimiento,
           nombre: nombre,
           nif: nif,
           bi: bi,
@@ -374,7 +383,8 @@ function getFacturasInDefaultDB(rawList) {
       // Utilizamos map en lugar de forEach
       var returnInfo = await Promise.all(rawList.map(async (element) => {
         var nSerie = element.numero;
-        var fecha = element.fecha;
+        var fechaEmision = element.fechaEmision;
+        var fechaVencimiento = element.fechaVencimiento;
         var nombre = element.receptor;
 
         var unidadesInfo = await getUnidadesInfo(element.unidades);
@@ -387,7 +397,8 @@ function getFacturasInDefaultDB(rawList) {
 
         var facturaElement = {
           nSerie: nSerie,
-          fecha: fecha,
+          fechaEmision: fechaEmision,
+          fechaVencimiento: fechaVencimiento,
           nombre: nombre,
           unidades: await convertJSONUnidades(JSON.parse(element.unidades)),
           concepto: element.concepto,
