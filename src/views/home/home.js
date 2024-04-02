@@ -4,6 +4,7 @@ const toIngresosBtn = document.getElementById("to_ingresos_btn");
 const dbSelector = document.getElementById("db_selector");
 const toRecordBookBtn = document.getElementById("to_record_book_btn");
 const toManageDb = document.getElementById("to_manage_db");
+const toEditDateBtn = document.getElementById("to_edit_date_btn");
 
 dbSelector.addEventListener("change", async () =>{
   try {
@@ -37,6 +38,10 @@ toRecordBookBtn.addEventListener("click", () => {
 
 toManageDb.addEventListener("click", () => {
   window.location.href = "../manage_db/manage_db.html";
+});
+
+toEditDateBtn.addEventListener("click", () => {
+  window.location.href = "../modify_date/modify_date.html";
 });
 
 loadDbInSelector();
