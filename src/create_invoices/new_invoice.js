@@ -5,8 +5,12 @@ const { createInvoicePDF } = require("./create_pdf");
 async function saveInvoice(letra, cliente, proveedor, fechaEmision, fechaVencimiento, unidadesList, concepto, irpf, datosExtra, formaDePago) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (cliente.length === 0 || proveedor.length === 0 || fechaEmision.length === 0 || fechaVencimiento.length === 0|| unidadesList.length === 0 || formaDePago.length === 0 || concepto.length === 0) {
+      if (cliente.length === 0 || proveedor.length === 0 || fechaEmision.length === 0 || unidadesList.length === 0 || formaDePago.length === 0 || concepto.length === 0) {
         throw "Faltan valores";
+      }
+
+      if (fechaVencimiento.length === 0){
+        fechaVencimiento = "PENDIENTE";
       }
 
       const nextNumber = await getInvoiceID(letra);

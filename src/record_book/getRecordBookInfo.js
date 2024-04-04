@@ -165,8 +165,11 @@ async function filterData(rawData, filter) {
       }
 
       var fechaVencimiento = new Date(factura.fechaVencimiento);
+      console.log(factura.fechaVencimiento === "PENDIENTE");
       if (!(fechaVencimiento.getTime() >= filter.fechaVencimiento1 && fechaVencimiento.getTime() <= filter.fechaVencimiento2)) {
-        continue;
+        if (factura.fechaVencimiento !== "PENDIENTE") {
+          continue;
+        }
       }
 
       if (filter.concepto.length > 0) {
@@ -296,7 +299,7 @@ function getFacturasStandarInfo(rawList) {
         var facturaElement = {
           nSerie: nSerie,
           fechaEmision: fechaEmision,
-          fechaVencimiento: fechaVencimiento, 
+          fechaVencimiento: fechaVencimiento,
           nombre: nombre,
           nif: nif,
           bi: bi,
@@ -419,4 +422,4 @@ function getFacturasInDefaultDB(rawList) {
   });
 }
 
-module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList };
+module.exports = { getFacturasStandarInfo, getFacturasStandarIRPFInfo, getFacturasInDefaultDB, getFacturas, getDataForFilterList, getDistintData };
