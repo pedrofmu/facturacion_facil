@@ -38,6 +38,7 @@ function createHTMLfromPDF(unidadesList) {
 }
 
 function createInvoicePDF(proveedor, cliente, numero, fechaEmision, fechaVencimiento, unidadesList, baseImonible, retenidoIRPF, ivaAdd, cuotaIVA, importeTotal, formaDePago, detalles) {
+  console.log(formaDePago);
   return new Promise(async (resolve, reject) => {
     try {
       const cssRendering = await readFileAsync(getCSSPath(), 'utf-8');

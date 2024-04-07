@@ -1,5 +1,6 @@
 const { getLetter, getNumbers } = require("../../modify_date/getInvoiceIDs");
 const { modifyDate } = require("../../modify_date/modifyDate");
+const { reprintInvoice } = require("../../modify_date/reprintPDF");
 
 const letterSelector = document.getElementById("letter_selector");
 const numberSelector = document.getElementById("number_selector");
@@ -16,7 +17,13 @@ modifyDateBTN.addEventListener("click", async () => {
 
     const date = document.getElementById("date_input");
 
-    alert(await modifyDate(date.value, `${letter + number}`));
+    await modifyDate(date.value, `${letter + number}`);
+
+    if (confirm("Quieres crear un pdf nuevo?") === true) {
+      await reprintInvoice(`${letter + number}`);
+    }
+
+    alert("Fecha modificada correctamente");
   } catch (error) {
     alert(error)
   }
@@ -52,6 +59,7 @@ function loadLetters() {
 }
 
 async function loadNumbers() {
+  numberSelector.innerHTML = '';
   let numberOptions = Array.from(numberSelector.options).map(option => option.value);
 
   // Cargar clientes
