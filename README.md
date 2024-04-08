@@ -8,11 +8,8 @@ Asegúrate de tener instalado Node.js y npm. Luego, ejecuta el script de configu
 
 ## Dependencias
 
-Deberías tener instalado Edge para Windows y Google Chrome o Brave para Linux.
+Deberías tener instalado Edge para Windows y un navegador basado en chromium para Linux.
 
 ## Capturas de Pantalla
 
-Para añadir una imagen de una captura de la aplicación, sigue ![Captura de pantalla de la aplicación](./screenshot.png) y carga la imagen correspondiente.
-
-¡Gracias por contribuir al proyecto!
-
+![Captura de pantalla de la aplicación](./screenshot.png) 
