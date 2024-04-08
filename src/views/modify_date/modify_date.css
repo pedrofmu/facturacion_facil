@@ -1,0 +1,27 @@
+body {
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: auto;
+  padding-left: 50px;
+}
+
+.select_id_div{
+  display: flex;
+}
+
+#number_selector{
+  margin-left: 15px;
+}
+
+#date_input {
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
+
+.date_select_div{
+  display: flex;
+}
+
+#atras_btn{
+  margin-top: 25px;
+}
+
