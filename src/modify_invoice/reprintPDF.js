@@ -1,5 +1,5 @@
-const { getPersona } = require("../create_invoices/connect_db");
-const { createInvoicePDF } = require("../create_invoices/create_pdf");
+const { getPersona } = require("../invoices/connect_db");
+const { createInvoicePDF } = require("../invoices/create_pdf");
 const { getDBPath } = require("../manage_env/getPath");
 const sqlite3 = require("sqlite3").verbose();
 

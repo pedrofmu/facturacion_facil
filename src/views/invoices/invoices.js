@@ -1,6 +1,6 @@
 // Importar funciones necesarias
-const { saveInvoice } = require('../../create_invoices/new_invoice');
-const { getPersonas } = require('../../create_invoices/connect_db');
+const { saveInvoice } = require('../../invoices/new_invoice');
+const { getPersonas } = require('../../invoices/connect_db');
 const { ipcRenderer } = require('electron');
 const { getAllPayMethods, getHasExtraField } = require('../../formas_pago/gestionar_formas_pago');
 

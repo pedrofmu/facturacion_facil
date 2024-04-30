@@ -1,0 +1,74 @@
+body {
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: auto;
+  padding-left: 50px;
+  padding-right: 5vw;
+  padding-top: 15px;
+}
+
+/* Estilos para los contenedores horizontales */
+.horizontal_div {
+  display: flex;
+  flex-wrap: wrap;
+  /* Permite que los elementos se muevan a la siguiente línea si no hay espacio suficiente */
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* Estilos para los contenedores verticales */
+.vertical_div {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+/* Estilos para los botones de agregar y eliminar unidades */
+.horizontal_div .add_remove_btn {
+  display: flex;
+  flex-direction: row;
+  margin-right: 5px;
+}
+
+/* Estilos para la lista de unidades */
+#unidades_container {
+  list-style-type: square outside none;
+  padding: 0px;
+}
+
+.unidades {
+  margin-bottom: 5px;
+}
+
+.unidades input {
+  margin-right: 5px;
+}
+
+.pay_method_div {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.select_pay_method_div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.params_pay_method_div {
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-rows: auto;
+  grid-auto-flow: row;
+  width: auto;
+}
+
+.params_pay_method_div>* {
+  margin-top: 10px;
+  display: inline-block;
+  width: max-content;
+}
+
+/* Estilos para los botones al final */
+.oculto {
+  display: none;
+}

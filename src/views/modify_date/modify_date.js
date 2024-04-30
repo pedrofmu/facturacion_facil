@@ -1,6 +1,6 @@
-const { getLetter, getNumbers } = require("../../modify_date/getInvoiceIDs");
-const { modifyDate } = require("../../modify_date/modifyDate");
-const { reprintInvoice } = require("../../modify_date/reprintPDF");
+const { getLetter, getNumbers } = require("../../modify_invoice/getInvoiceIDs");
+const { modifyDate } = require("../../modify_invoice/modifyDate");
+const { reprintInvoice } = require("../../modify_invoice/reprintPDF");
 
 const letterSelector = document.getElementById("letter_selector");
 const numberSelector = document.getElementById("number_selector");

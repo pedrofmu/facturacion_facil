@@ -1,6 +1,7 @@
 const { loadPossibleDB, changeCurrentDB } = require("../../manage_env/getSettings");
 
-const toIngresosBtn = document.getElementById("to_ingresos_btn");
+const toCrateInvoiceBtn = document.getElementById("to_create_invoice_btn");
+const toEditInvoiceBtn = document.getElementById("to_edit_invoice_btn");
 const dbSelector = document.getElementById("db_selector");
 const toRecordBookBtn = document.getElementById("to_record_book_btn");
 const toManageDb = document.getElementById("to_manage_db");
@@ -28,8 +29,12 @@ async function loadDbInSelector() {
   });
 }
 
-toIngresosBtn.addEventListener("click", () => {
+toCrateInvoiceBtn.addEventListener("click", () => {
   window.location.href = "../invoices/invoices.html";
+});
+
+toEditInvoiceBtn.addEventListener("click", () => {
+  window.location.href = "../edit_invoice/edit_invoice.html";
 });
 
 toRecordBookBtn.addEventListener("click", () => {

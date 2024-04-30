@@ -56,6 +56,7 @@ function getLeterFromIDFacturaList() {
 function getDataForFilterList() {
   return new Promise(async (resolve, reject) => {
     const rawFacturas = await getFacturas();
+    console.log(rawFacturas);
     var ivasSet = new Set();
     rawFacturas.forEach(async (factura) => {
       const unidadesInfo = await getUnidadesInfo(factura.unidades);
@@ -73,6 +74,7 @@ function getDataForFilterList() {
     for (const irpf of rawIRPFS) {
       irpfs.push(`${irpf}%`);
     }
+
     var ivas = Array.from(ivasSet);
 
     var data = {
@@ -93,8 +95,10 @@ function getFacturas(filter = {
   numero2: Infinity,
   letra: [],
   cliente: [],
-  fecha1: -Infinity,
-  fecha2: Infinity,
+  fechaEmision1: -Infinity,
+  fechaEmision2: Infinity,
+  fechaVencimiento1: -Infinity,
+  fechaVencimiento2: Infinity,
   concepto: [],
   baseImponible1: -Infinity,
   baseImponible2: Infinity,
@@ -165,7 +169,6 @@ async function filterData(rawData, filter) {
       }
 
       var fechaVencimiento = new Date(factura.fechaVencimiento);
-      console.log(factura.fechaVencimiento === "PENDIENTE");
       if (!(fechaVencimiento.getTime() >= filter.fechaVencimiento1 && fechaVencimiento.getTime() <= filter.fechaVencimiento2)) {
         if (factura.fechaVencimiento !== "PENDIENTE") {
           continue;
