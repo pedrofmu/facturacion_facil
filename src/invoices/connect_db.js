@@ -52,22 +52,17 @@ function getPersonas(table) {
   return new Promise(async (resolve, reject) => {
     const folderPath = await getDBPath();
     if (table !== "receptor" && table !== "emisor") {
-      console.error('Tabla invalida para obtener una persona');
       reject();
     }
     //Abrir la db
     const db = new sqlite3.Database(folderPath, sqlite3.OPEN_READWRITE, (err) => {
       if (err) {
-        console.error(`Error al abrir la base de datos: ${err.message}`);
         reject(err);
-      } else {
-        console.log(`Conexión a la base de datos establecida`);
-      }
+      } 
 
       let personas = [];
       db.all(`SELECT * FROM ${table}`, [], (err, rows) => {
         if (err) {
-          console.error("Error leyendo letras: ", letter);
           reject(err);
         }
 
@@ -79,10 +74,8 @@ function getPersonas(table) {
         //Cerrar la db
         db.close((err) => {
           if (err) {
-            console.error(err.message);
             reject(err);
           }
-          console.log('Conexión cerrada');
           resolve(personas);
         });
       });

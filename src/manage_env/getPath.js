@@ -5,86 +5,92 @@ const os = require('os');
 const { loadCurrectDB } = require('./getSettings');
 
 function getHomeFolderPath() {
-  return new Promise((resolve, reject) => {
-    const homeDir = homedir();
-    const folderPath = join(homeDir, ".facturacionfacil/");
-    resolve(folderPath);
-  });
+    return new Promise((resolve, reject) => {
+        const homeDir = homedir();
+        const folderPath = join(homeDir, ".facturacionfacil/");
+        resolve(folderPath);
+    });
 }
 
 function getDBPath(name = 'current') {
-  return new Promise(async (resolve, reject) => {
-    const homeDir = homedir();
-    const folderPath = join(homeDir, ".facturacionfacil/");
-    let dbPath = '';
+    return new Promise(async (resolve, reject) => {
+        const homeDir = homedir();
+        const folderPath = join(homeDir, ".facturacionfacil/");
+        let dbPath = '';
 
-    if (name === 'current') {
-      const currentDB = await loadCurrectDB();
-      dbPath = join(folderPath, `${currentDB}.db`);
-    } else {
-      dbPath = join(folderPath, `${name}.db`);
-    }
+        if (name === 'current') {
+            const currentDB = await loadCurrectDB();
+            dbPath = join(folderPath, `${currentDB}.db`);
+        } else {
+            dbPath = join(folderPath, `${name}.db`);
+        }
 
-    resolve(dbPath);
-  });
+        resolve(dbPath);
+    });
 }
 
 function getCSSPath() {
-  const homeDir = homedir();
-  const folderPath = join(homeDir, ".facturacionfacil/");
-  const cssPath = join(folderPath, "style.css");
-  return cssPath;
+    const homeDir = homedir();
+    const folderPath = join(homeDir, ".facturacionfacil/");
+    const cssPath = join(folderPath, "style.css");
+    return cssPath;
 }
 
 function getSettingsPathAsync() {
-  return new Promise((resolve, reject) => {
-    const homeDir = homedir();
-    const folderPath = join(homeDir, ".facturacionfacil/");
-    const settingsPath = join(folderPath, ".settings.json");
-    resolve(settingsPath);
-  });
+    return new Promise((resolve, reject) => {
+        const homeDir = homedir();
+        const folderPath = join(homeDir, ".facturacionfacil/");
+        const settingsPath = join(folderPath, ".settings.json");
+        resolve(settingsPath);
+    });
 }
 
 function getImagePathAsync() {
-  return new Promise((resolve, reject) => {
-    const homeDir = homedir();
-    const folderPath = join(homeDir, ".facturacionfacil/");
-    const imagePath = join(folderPath, "logo.png");
-    resolve(imagePath);
-  });
+    return new Promise((resolve, reject) => {
+        const homeDir = homedir();
+        const folderPath = join(homeDir, ".facturacionfacil/");
+        const imagePath = join(folderPath, "logo.png");
+        resolve(imagePath);
+    });
 }
 
 function getBrowserBinaryPath() {
-  return new Promise(async (resolve, reject) => {
-    if (os.platform() === 'win32') {
-      const edgePaths = await import('edge-paths');
-      const edgePath = edgePaths.getEdgePath();
-      resolve(edgePath);
-    } else if (os.platform() == 'linux') {
-      exec('which google-chrome', (error, stdout) => {
-        if (!error && stdout.trim()) {
-          const path = stdout.trim();
-          if (path) {
-            resolve(path);
-          }
-        } else {
-          exec('which brave-browser', (error, stdout) => {
-            if (!error && stdout.trim()) {
-              resolve(stdout.trim());
-            } else {
-              exec('which chromium', (error, stdout) => {
+    return new Promise(async (resolve, reject) => {
+        if (os.platform() === 'win32') {
+            const edgePaths = await import('edge-paths');
+            const edgePath = edgePaths.getEdgePath();
+            resolve(edgePath);
+        } else if (os.platform() == 'linux') {
+            exec('which google-chrome', (error, stdout) => {
                 if (!error && stdout.trim()) {
-                  resolve(stdout.trim());
+                    const path = stdout.trim();
+                    if (path) {
+                        resolve(path);
+                    }
                 } else {
-                  reject(new Error('No se encontró el ejecutable de un navegador basado en chromium'));
+                    exec('which brave-browser', (error, stdout) => {
+                        if (!error && stdout.trim()) {
+                            resolve(stdout.trim());
+                        } else {
+                            exec('which chromium-browser', (error, stdout) => {
+                                if (!error && stdout.trim()) {
+                                    resolve(stdout.trim());
+                                } else {
+                                    exec('which chromium', (error, stdout) => {
+                                        if (!error && stdout.trim()) {
+                                            resolve(stdout.trim());
+                                        } else {
+                                            reject(new Error('No se encontró el ejecutable de un navegador basado en chromium'));
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
-              });
-            }
-          });
+            });
         }
-      });
-    }
-  });
+    });
 }
 
 module.exports = { getHomeFolderPath, getDBPath, getCSSPath, getSettingsPathAsync, getImagePathAsync, getBrowserBinaryPath };
