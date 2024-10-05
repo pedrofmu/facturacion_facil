@@ -3,50 +3,211 @@ const { getFactura } = require('../../modify_invoice/getDataOfInvoice');
 const { getPersonas } = require('../../invoices/connect_db');
 const { getAllPayMethods, getHasExtraField } = require('../../formas_pago/gestionar_formas_pago');
 
-const letra_selector = document.getElementById("letra_selector");
-const id_selector = document.getElementById("id_selector");
-const formaDePago = document.getElementById("forma_de_pago");
+const letraSelector = document.getElementById("letra_selector");
+const idSelector = document.getElementById("id_selector");
+const formaDePagoInput = document.getElementById("forma_de_pago");
 const proveedorSelector = document.getElementById("proveedor_selector");
 const clienteSelector = document.getElementById("cliente_selector");
-const extraPayMethod = document.getElementById("forma_de_pago_extra");
+const extraPayMethodInput = document.getElementById("forma_de_pago_extra");
+const irpfInput = document.getElementById("irpf");
+const datosExtraInput = document.getElementById("datos_extras");
+const fechaVenciminetoInput = document.getElementById("fecha_vencimiento_input");
+const fechaEmisionInput = document.getElementById("fecha_emision_input");
+const conceptoInput = document.getElementById("concepto");
+const unidadesContainer = document.getElementById("unidades_container");
+
+var discountPerProduct = false;
 
 document.getElementById("atras_btn").addEventListener("click", () => {
     window.location.href = "../home/home.html"
 });
 
-async function loadPersons() {
-  // Obtener las opciones actuales del selector
-  let existingOptions = Array.from(clienteSelector.options).map(option => option.value);
+letraSelector.addEventListener("change", async () => {
+    await loadFacturaNumbers();
+    loadAllParams();
+});
 
-  // Cargar clientes
-  let clientsList = await getPersonas("receptor");
-  clientsList.forEach((row) => {
-    if (!existingOptions.includes(row)) {
-      var option = document.createElement("option");
-      option.value = row;
-      option.text = row;
-      clienteSelector.add(option);
-      existingOptions.push(row);  // Agregar la opción a la lista de opciones existentes
+idSelector.addEventListener("change", () => {
+    loadAllParams();
+});
+
+// Manejar clic en el botón de añadir nueva unidad
+document.getElementById("add_unidad_btn").addEventListener("click", () => {
+    newProduct();
+});
+
+document.getElementById("remove_unidad_btn").addEventListener("click", () => {
+    var unitsContainer = document.getElementById("unidades_container");
+    var lastProduct = unitsContainer.lastElementChild;
+
+    if (lastProduct) {
+        unitsContainer.removeChild(lastProduct);
     }
-  });
+});
 
-  // Obtener las opciones actuales del selector
-  existingOptions = Array.from(proveedorSelector.options).map(option => option.value);
+document.getElementById("descuento_unidad_btn").addEventListener("click", () => {
+    changeDiscountPerProduct();
+});
 
-  // Cargar proveedores
-  let providersList = await getPersonas("emisor");
-  providersList.forEach((row) => {
-    if (!existingOptions.includes(row)) {
-      var option = document.createElement("option");
-      option.value = row;
-      option.text = row;
-      proveedorSelector.add(option);
-      existingOptions.push(row);  // Agregar la opción a la lista de opciones existentes
+formaDePagoInput.addEventListener("change", async () => {
+  try {
+    await showExtraPayMethod();
+  } catch (error) {
+    alert(error);
+  }
+});
+
+function changeDiscountPerProduct(discount = null) {
+    if (discount === null) {
+        discountPerProduct = !discountPerProduct;
+    } else {
+        discountPerProduct = discount
     }
-  });
+
+    if (discountPerProduct) {
+        var unitElements = document.querySelectorAll(".unidades");
+
+        unitElements.forEach((element) => {
+            var newInput = document.createElement("input");
+            newInput.type = "number";
+            newInput.placeholder = "descuento";
+            newInput.id = "descuento";
+            newInput.className = "input";
+
+            element.appendChild(newInput);
+        });
+
+        var descuentoTotal = document.getElementById("descuento_al_total");
+        descuentoTotal.classList.add("oculto");
+
+        var descuentoTotalLabel = document.getElementById("des_lbl");
+        descuentoTotalLabel.classList.add("oculto");
+
+        document.getElementById("descuento_unidad_btn").innerHTML = "Descuento al total";
+    } else {
+        var unitElements = document.querySelectorAll(".unidades");
+
+        unitElements.forEach((element) => {
+            var descToDelete = element.querySelector("#descuento");
+            descToDelete.remove();
+        });
+
+        var descuentoTotal = document.getElementById("descuento_al_total");
+        descuentoTotal.classList.remove("oculto");
+
+        var descuentoTotalLabel = document.getElementById("des_lbl");
+        descuentoTotalLabel.classList.remove("oculto");
+
+        document.getElementById("descuento_unidad_btn").innerHTML = "Descuento por unidad";
+    }
 }
 
-async function loadFacturaNumber() {
+function newProduct() {
+    var unitsContainer = document.getElementById("unidades_container");
+
+    var newProduct = document.createElement("li");
+    newProduct.className = "unidades";
+
+    for (var i = 0; i < 4; i++) {
+        var newInput = document.createElement("input");
+        newInput.type = i === 0 || i === 2 || i === 3 ? "number" : "text";
+        newInput.placeholder = i === 0 ? "cantidad" : (i === 1 ? "tipo" : (i === 2 ? "precio unidad" : "iva"));
+        newInput.className = "input";
+
+        // Agregar el input al li
+        newProduct.appendChild(newInput);
+    }
+
+    if (discountPerProduct) {
+        var newInput = document.createElement("input");
+        newInput.type = "number";
+        newInput.placeholder = "descuento";
+        newInput.id = "descuento";
+        newInput.className = "input";
+
+        // Agregar el input al li
+        newProduct.appendChild(newInput);
+    }
+
+    unitsContainer.appendChild(newProduct);
+
+    return newProduct;
+}
+
+function addUnidades(factura) {
+    let unidadesList = JSON.parse(factura.unidades);
+
+    changeDiscountPerProduct(true);
+
+    unidadesContainer.innerHTML = '';
+
+    // Usa un bucle for...of para iterar sobre los valores del array
+    for (const unidad of unidadesList) {
+        let productElement = newProduct().querySelectorAll("input");
+
+        //cantidad
+        productElement[0].value = unidad.cantidad;
+        //tipo
+        productElement[1].value = unidad.tipo;
+        //precio unidad
+        productElement[2].value = unidad.precioUnidad;
+        //iva
+        productElement[3].value = unidad.iva;
+        //descuento
+        productElement[4].value = unidad.descuento;
+    }
+}
+
+async function loadPersons() {
+    // Obtener las opciones actuales del selector
+    let existingOptions = Array.from(clienteSelector.options).map(option => option.value);
+
+    // Cargar clientes
+    let clientsList = await getPersonas("receptor");
+    clientsList.forEach((row) => {
+        if (!existingOptions.includes(row)) {
+            var option = document.createElement("option");
+            option.value = row;
+            option.text = row;
+            clienteSelector.add(option);
+            existingOptions.push(row);  // Agregar la opción a la lista de opciones existentes
+        }
+    });
+
+    // Obtener las opciones actuales del selector
+    existingOptions = Array.from(proveedorSelector.options).map(option => option.value);
+
+    // Cargar proveedores
+    let providersList = await getPersonas("emisor");
+    providersList.forEach((row) => {
+        if (!existingOptions.includes(row)) {
+            var option = document.createElement("option");
+            option.value = row;
+            option.text = row;
+            proveedorSelector.add(option);
+            existingOptions.push(row);  // Agregar la opción a la lista de opciones existentes
+        }
+    });
+}
+
+async function loadFacturaNumbers() {
+    return new Promise(async (resolve, reject) => {
+        let numbers = await getNumbers(letraSelector.value);
+
+        idSelector.innerHTML = '';
+
+        numbers.forEach(numberRow => {
+            var numberOption = document.createElement("option");
+            numberOption.value = numberRow;
+            numberOption.text = numberRow;
+
+            idSelector.add(numberOption);
+        });
+        resolve();
+    });
+}
+
+async function loadFacturaIDs() {
     let letters = await getLetter();
 
     for (const letterRow of letters) {
@@ -54,58 +215,75 @@ async function loadFacturaNumber() {
         letterOption.value = letterRow;
         letterOption.text = letterRow;
 
-        letra_selector.add(letterOption);
-
-        let numbers = await getNumbers(letterRow);
-
-        numbers.forEach(numberRow => {
-            var numberOption = document.createElement("option");
-            numberOption.value = numberRow;
-            numberOption.text = numberRow;
-
-            id_selector.add(numberOption);
-        });
+        letraSelector.add(letterOption);
     }
 
+    await loadFacturaNumbers();
     loadAllParams();
 }
 
-async function loadAllParams(){
-    let factura_id = letra_selector.value + id_selector.value; 
+async function loadAllParams() {
+    let factura_id = letraSelector.value + idSelector.value;
     let factura = await getFactura(factura_id);
 
-    console.log(factura);
+    proveedorSelector.value = factura.emisor;
+    clienteSelector.value = factura.receptor;
+
+    //irpf
+    irpfInput.value = factura.irpf;
+
+    //detalles
+    datosExtraInput.value = factura.detalles;
+
+    //fechas
+    fechaEmisionInput.value = factura.fechaEmision;
+    if (factura.fechaVencimiento === "PENDIENTE") {
+        fechaVenciminetoInput.value = "";
+    } else {
+        fechaVenciminetoInput.value = factura.fechaVencimiento;
+    }
+
+    //concepto
+    conceptoInput.value = factura.concepto;
+
+    //forma de pago
+    formaDePagoInput.value = factura.formaDePago.split(":")[0];
+    showExtraPayMethod();
+    if (factura.formaDePago.split(":").length > 1)
+        extraPayMethodInput.value  = factura.formaDePago.split(":")[1];
+
+    addUnidades(factura);
 }
 
 async function loadPayMethods() {
-  let payMethodsOptions = Array.from(formaDePago.options).map(option => option.value);
+    let payMethodsOptions = Array.from(formaDePagoInput.options).map(option => option.value);
 
-  // Cargar clientes
-  let payMethods = await getAllPayMethods();
-  payMethods.forEach((row) => {
-    if (!payMethodsOptions.includes(row.type)) {
-      var option = document.createElement("option");
-      option.value = row.type;
-      option.text = row.type;
-      formaDePago.add(option);
-      payMethodsOptions.push(row);
-    }
-  });
+    // Cargar clientes
+    let payMethods = await getAllPayMethods();
+    payMethods.forEach((row) => {
+        if (!payMethodsOptions.includes(row.type)) {
+            var option = document.createElement("option");
+            option.value = row.type;
+            option.text = row.type;
+            formaDePagoInput.add(option);
+            payMethodsOptions.push(row);
+        }
+    });
 
-  await showExtraPayMethod();
+    await showExtraPayMethod();
 }
 
 async function showExtraPayMethod() {
-  const field = formaDePago.value;
-  const hasExtraField = await getHasExtraField(field);
+    const field = formaDePagoInput.value;
+    const hasExtraField = await getHasExtraField(field);
 
-  if (hasExtraField) {
-    extraPayMethod.classList.remove("oculto");
-  } else {
-    extraPayMethod.classList.add("oculto");
-  }
+    if (hasExtraField) {
+        extraPayMethodInput.classList.remove("oculto");
+    } else {
+        extraPayMethodInput.classList.add("oculto");
+    }
 }
 
-loadFacturaNumber();
+loadFacturaIDs();
 loadPersons();
 loadPayMethods();
