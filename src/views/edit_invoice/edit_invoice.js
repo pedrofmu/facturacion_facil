@@ -2,6 +2,7 @@ const { getLetter, getNumbers } = require('../../modify_invoice/getInvoiceIDs');
 const { getFactura } = require('../../modify_invoice/getDataOfInvoice');
 const { getPersonas } = require('../../invoices/connect_db');
 const { getAllPayMethods, getHasExtraField } = require('../../formas_pago/gestionar_formas_pago');
+const { modifyInvoice } = require('../../modify_invoice/modifyValues');
 
 const letraSelector = document.getElementById("letra_selector");
 const idSelector = document.getElementById("id_selector");
@@ -20,6 +21,16 @@ var discountPerProduct = false;
 
 document.getElementById("atras_btn").addEventListener("click", () => {
     window.location.href = "../home/home.html"
+});
+
+//Gestionar boton de reemitir
+document.getElementById("reemitir_btn").addEventListener("click", async () => {
+  try {
+    await triggerModifyInvoice();
+    alert("Se ha guardado correctamente la factura");
+  } catch (error) {
+    alert(error);
+  }
 });
 
 letraSelector.addEventListener("change", async () => {
@@ -100,6 +111,58 @@ function changeDiscountPerProduct(discount = null) {
 
         document.getElementById("descuento_unidad_btn").innerHTML = "Descuento por unidad";
     }
+}
+
+async function triggerModifyInvoice() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      var unitElements = document.querySelectorAll(".unidades");
+      var unitsList = [];
+
+      unitElements.forEach(element => {
+        // Obtener los valores de los inputs dentro de cada li
+        var cantidad = element.querySelector('input:nth-child(1)').value;
+        var tipo = element.querySelector('input:nth-child(2)').value;
+        var precioUnidad = element.querySelector('input:nth-child(3)').value;
+        var iva = element.querySelector('input:nth-child(4)').value;
+        var descuento = 0;
+        if (discountPerProduct) {
+          descuento = element.querySelector('input:nth-child(5)').value;
+        } else {
+          descuento = document.getElementById("descuento_al_total").value;
+        }
+
+        // Crear un objeto con los datos y agregarlo a la lista
+        var unitData = {
+          cantidad: cantidad,
+          tipo: tipo,
+          precioUnidad: precioUnidad,
+          iva: iva,
+          descuento: descuento
+        };
+
+        unitsList.push(unitData);
+      });
+
+      const hasExtraField = await getHasExtraField(formaDePago.value);
+      let pago = "";
+
+      if (hasExtraField) {
+        pago = `${formaDePagoInput.value}:${extraPayMethodInput.value}`;
+      } else {
+        pago = formaDePago.value;
+      }
+
+     // Llamar a la función para crear una nueva factura
+      await modifyInvoice("A1", clienteSelector.value, proveedorSelector.value, fechaEmisionInput.value, fechaVenciminetoInput.value,unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, pago);
+
+      // Resolver la Promesa después de completar la operación
+      resolve();
+    } catch (error) {
+      // Rechazar la Promesa si hay un error
+      reject(error);
+    }
+  });
 }
 
 function newProduct() {

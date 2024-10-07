@@ -3,6 +3,7 @@ const { saveInvoice } = require('../../invoices/new_invoice');
 const { getPersonas } = require('../../invoices/connect_db');
 const { ipcRenderer } = require('electron');
 const { getAllPayMethods, getHasExtraField } = require('../../formas_pago/gestionar_formas_pago');
+const { modifyInvoice } = require('../../modify_invoice/modifyValues');
 
 // Obtener elementos del DOM
 const fechaEmisionInput = document.getElementById("fecha_emision_input");
@@ -125,7 +126,7 @@ async function triggerSaveInvoice() {
       }
 
      // Llamar a la función para crear una nueva factura
-      await saveInvoice(letterSelector.value, clienteSelector.value, proveedorSelector.value, fechaEmisionInput.value, fechaVencimientoInput.value,unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, pago);
+      await saveInvoice("A1", clienteSelector.value, proveedorSelector.value, fechaVencimientoInput.value, fechaEmisionInput.value,unitsList, conceptoInput.value, irpfInput.value, detallesInput.value, pago);
 
       // Resolver la Promesa después de completar la operación
       resolve();
