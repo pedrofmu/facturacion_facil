@@ -1,0 +1,31 @@
+<!-- alert.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta Personalizada</title>
+    <link rel="stylesheet" href="../common_styles.css" />
+    <link rel="stylesheet" href="my_alert.css" />
+</head>
+
+<body>
+    <div class="alert-content">
+        <p id="alert-message"></p>
+        <button id="close-button">Aceptar</button>
+    </div>
+    <script>
+        // Captura el mensaje pasado desde el proceso principal
+        const {ipcRenderer} = require('electron');
+        ipcRenderer.on('show-alert', (event, message) => {
+            document.getElementById('alert-message').innerText = message;
+        });
+
+        document.getElementById('close-button').addEventListener('click', () => {
+            window.close();
+        });
+    </script>
+</body>
+
+</html>

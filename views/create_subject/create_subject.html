@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Nuevo sujeto</title>
+
+    <link rel="stylesheet" href="../common_styles.css">
+    <link rel="stylesheet" href="create_subject.css" />
+
+    <script defer src="../../.dist/src/render/create_subject.js"></script>
+</head>
+
+<body>
+    <h2>Datos de identificacion fiscal:</h2>
+    <div>
+        <label>Nombre</label>
+        <input id="tax_identification_name_input" class="input" type="text"></input>
+    </div>
+    <div>
+        <label>Tipo de entidad juridica</label>
+        <select id="person_type_select" class="input">
+            <option value="F">F</option>
+            <option value="L">L</option>
+        </select>
+    </div>
+    <div>
+        <label>NIF</label>
+        <input id="id_input" class="input" type="text"></input>
+    </div>
+    <h2>Datos personales</h2>
+    <div>
+        <label>Nombre</label>
+        <input id="name_input" class="input" type="text"></input>
+    </div>
+
+    <div>
+        <div>
+            <label>Codigo postal</label>
+            <input id="post_code_input" class="input" type="text"></input>
+        </div>
+        <div>
+            <label>Ciudad</label>
+            <input id="town_input" class="input" type="text"></input>
+        </div>
+        <div>
+            <label>Provincia</label>
+            <input id="province_input" class="input" type="text"></input>
+        </div>
+    </div>
+    <div>
+        <label>Direccion completa</label>
+        <input id="address_input" class="input" type="text"></input>
+    </div>
+
+    <div>
+        <label>Contacto</label>
+        <input id="contact_input" class="input" type="text"></input>
+    </div>
+    <div class="bottom_btns">
+        <button id="exit_btn" type="button">SALIR</button>
+        <button id="save_btn" type="button">GUARDAR</button>
+    </div>
+</body>
+
+</html>

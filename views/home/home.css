@@ -1,0 +1,21 @@
+body {
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: auto;
+  max-width: 38rem;
+  padding: 2rem;
+}
+
+.db_selector_div {
+  display: flex;
+  align-items: center; 
+  align-content: center;
+  margin-bottom: 10px;
+}
+
+#db_selector_txt {
+  margin-right: 10px;
+}
+
+.btn_div {
+  margin-bottom: 10px;
+}

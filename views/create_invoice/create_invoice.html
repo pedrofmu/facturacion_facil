@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>INGRESOS</title>
+
+  <link rel="stylesheet" href="../common_styles.css" />
+  <link rel="stylesheet" href="create_invoice.css" />
+
+  <script defer src="../../.dist/src/render/create_invoice.js"></script>
+</head>
+
+<body>
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label>Emisor</label>
+      <select class="select" id="proveedor_selector"></select>
+      <button id="nuevo_provedor_btn">Nuevo emisor</button>
+    </div>
+
+    <div class="horizontal_div">
+      <div class="vertical_div">
+        <label>Fecha de emisión: </label>
+        <input id="fecha_emision_input" class="input" type="date"></input>
+      </div>
+      <div class="vertical_div">
+        <label>Fecha de vencimiento: </label>
+        <input id="fecha_vencimiento_input" class="input" type="date"></input>
+      </div>
+    </div>
+  </div>
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label>Receptor</label>
+      <select class="select" id="cliente_selector"></select>
+      <button id="nuevo_cliente_btn">Nuevo receptor</button>
+    </div>
+
+    <div class="vertical_div">
+      <label>Seleccione la letra</label>
+      <select class="select" id="letra_selector"></select>
+    </div>
+  </div>
+
+  <div class="vertical_div">
+    <div class="horizontal_div">
+      <button id="descuento_unidad_btn">Descuentos por unidad</button>
+      <div>
+        <button id="remove_unidad_btn">-</button>
+        <button id="add_unidad_btn">+</button>
+      </div>
+    </div>
+    <ol id="unidades_container">
+
+    </ol>
+  </div>
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label>Concepto: </label>
+      <input id="concepto" type="text" class="input">
+    </div>
+  </div>
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label id="des_lbl">Descuento al total (%)</label>
+      <input id="descuento_al_total" class="input" type="text">
+    </div>
+  </div>
+
+  <div class="pay_method_div">
+    <div class="select_pay_method_div">
+      <label>Forma de pago: </label>
+      <select id="forma_de_pago" class="select" type="text"></select>
+    </div>
+    <div class="params_pay_method_div">
+      <input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
+      <button id="new_pay_method">nueva forma de pago</button>
+    </div>
+  </div>
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label>IRPF (%)</label>
+      <input id="irpf" class="input" type="number">
+    </div>
+  </div>
+
+  <div class="horizontal_div">
+    <div class="vertical_div">
+      <label>Datos extra</label>
+      <input id="datos_extras" class="input" type="text">
+    </div>
+  </div>
+
+  </div>
+
+  <div class="horizontal_div">
+    <button id="atras_btn">Atras</button>
+    <button id="guardar_btn">Guardar</button>
+  </div>
+</body>
+
+</html>

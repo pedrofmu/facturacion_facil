@@ -1,0 +1,91 @@
+/* BUTTON */
+
+:root {
+  --hover-border: #0f7ef1;
+  --border: rgba(27, 31, 35, 0.15);
+  --background-color: #F3F4F6;
+}
+
+button {
+  appearance: none;
+  background-color: --background-color;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+button:hover {
+  border-color: var(--hover-border);
+  transition-duration: 0.1s;
+}
+
+/* Select */
+
+.select {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25em 0.5em;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  line-height: 20px;
+  background-color: --background-color;
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+}
+
+.select:hover {
+  border-color: var(--hover-border);
+  transition-duration: 0.1s;
+}
+
+select,
+.select:after {
+  grid-area: select;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.select::after {
+  content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: var(--select-arrow);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+}
+
+/* input */
+
+.input {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25em 0.5em;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  outline: 0;
+  transition: .2s;
+  margin-top: 20px;
+}
+
+.input:focus {
+  border-color: var(--hover-border);
+}
