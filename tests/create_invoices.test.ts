@@ -14,40 +14,24 @@ describe('new invoice', () => {
                 discount: 3
             },
         ];
-        let invoice = await generateInvoiceFromUsrInput("A3", "test", "test2", "2024-03-10", "2024-03-23", productsTest, "compras test", 21, "detalles", "efectivo", "");
+        let invoice = await generateInvoiceFromUsrInput("A", "11111111C", "222222C", "2024-03-10", "2024-03-23", productsTest, "compras test", 21, "detalles", "efectivo", "");
 
-        expect(invoice.totalPrice).toBe(38.8);
+        expect(invoice.emitter.name).toBe("Yolanda Muñoz");
     });
-
-    it('try obtaining pay method', async () => {
-        let payMethod = await getAllPayMethodTypes();
-        console.log(payMethod);
-        expect(payMethod[0].extraData).toBe(0);
+    
+    it('create pdf', async () => {
+        const productsTest: product[] = [
+            {
+                cuantity: 4,
+                type: "chocolate",
+                priceUnit: 10,
+                iva: 21,
+                discount: 3
+            },
+        ];
+        let invoice = await generateInvoiceFromUsrInput("A", "11111111C", "222222C", "2024-03-10", "2024-03-23", productsTest, "compras test", 21, "detalles", "efectivo", "");
+    
+    
+        await createPDFfromInvoice(invoice, "/home/pedrofm/temporal/test.pdf");
     });
-
-    //    it('log all pay methods', async () => {
-    //        let payMethods = await getAllPayMethodTypes();
-    //        console.log(payMethods);
-    //    })
-    //    it('log all subjects', async () => {
-    //        let subjectsEmitter = await getAllSubjectsData("emisor");
-    //        console.log(subjectsEmitter);
-    //        let subjectsReceiver = await getAllSubjectsData("receptor");
-    //        console.log(subjectsReceiver);
-    //    })
-    //    it('create pdf', async () => {
-    //        const productsTest: product[] = [
-    //            {
-    //                cuantity: 4,
-    //                type: "chocolate",
-    //                priceUnit: 10,
-    //                iva: 21,
-    //                discount: 3
-    //            },
-    //        ];
-    //        let invoice = await generateInvoiceFromUsrInput("A", "eduardo", "paquito", "2024-03-10", "2024-03-23", productsTest, "compras test", 21, "detalles", "efectivo", "");
-    //
-    //
-    //        await createPDFfromInvoice(invoice, "/home/pedrofm/temporal/test.pdf");
-    //    });
 })

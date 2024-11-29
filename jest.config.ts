@@ -4,6 +4,6 @@ export default {
   transform: {
     '^.+\\.ts?$': 'ts-jest',  
   },
-  moduleFileExtensions: ['ts', 'js'],  
+  moduleFileExtensions: ['js'],  
   transformIgnorePatterns: ['<rootDir>/node_modules/'],  
 };

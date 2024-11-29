@@ -4,8 +4,8 @@ import path from 'path';
 // El path respecto a views
 export function openNewWindow(htmlPath: string, envVar?: string): void {
     const newWindow = new BrowserWindow({
-        width: 400,
-        height: 300,
+        width: 950,
+        height: 600,
         show: false,
         autoHideMenuBar: true,
         webPreferences: {

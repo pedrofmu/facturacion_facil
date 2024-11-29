@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc --pretty",
     "start": "npm run build && electron .",
-    "test": "npx jest --verbose"
+    "test": "npm run build && npx jest --verbose --roots .dist"
   },
   "keywords": [],
   "author": "",

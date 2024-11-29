@@ -33,7 +33,7 @@ export interface ElectronAPI {
 
     createPayMethod: (payMethodName: string, hasExtraType: boolean, database?: string) => Promise<void>;
 
-    createSubjectData: (taxIdentificationName: string, personType: string, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => Promise<void>;
+    createSubjectData: (taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => Promise<void>;
 }
 
 declare global {
@@ -65,10 +65,7 @@ const api: ElectronAPI = {
 
     createPayMethod: (payMethodName: string, hasExtraType: boolean, database?: string) => ipcRenderer.invoke('createPayMethod', payMethodName, hasExtraType, database),
 
-    createSubjectData: (taxIdentificationName: string, personType: string, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => 
-
-
-    ipcRenderer.invoke('createSubjectData', taxIdentificationName, personType, id, name, address, postCode, town, province, contact, dbTable, dbName),
+    createSubjectData: (taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => ipcRenderer.invoke('createSubjectData', taxIdentificationName, personType, id, name, address, postCode, town, province, contact, dbTable, dbName),
 }
 
 contextBridge.exposeInMainWorld("electronAPI", api)

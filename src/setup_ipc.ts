@@ -81,31 +81,19 @@ export function setupIPCListeners() {
         }
     });
 
-    ipcMain.handle('createPayMethod', async (event, payMethodName: string, hasExtraData: boolean, database: string = 'current') => {
+    ipcMain.handle('createPayMethod', async (event, payMethodName: string, extraData: string, database: string = 'current') => {
         try {
-            return await createPayMethod(database, payMethodName, hasExtraData);
+            return await createPayMethod(database, payMethodName, extraData);
         } catch {
             throw new Error('Failed to create pay method');
         }
     });
 
-    ipcMain.handle('createSubjectData', async (event, taxIdentificationName: string, personTypeValue: string, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName: string = 'current') => {
+    ipcMain.handle('createSubjectData', async (event, taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName: string = 'current') => {
         try {
-            let personTypeEnum: PersonType;
-            switch (personTypeValue) {
-                case 'F':
-                    personTypeEnum = PersonType.F;
-                    break;
-                case 'L':
-                    personTypeEnum = PersonType.L;
-                    break;
-                default:
-                    throw new Error("Incorrect value in person type enum");
-            }
 
-            console.warn(personTypeEnum);
 
-            return await createSubjectData(taxIdentificationName, personTypeEnum, id, name, address, postCode, town, province, contact, dbTable, dbName);
+            return await createSubjectData(taxIdentificationName, personType, id, name, address, postCode, town, province, contact, dbName, dbTable);
         } catch (error) {
             throw new Error(`Failed to create subject data: ${error}`);
         }

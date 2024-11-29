@@ -28,7 +28,7 @@ export function createSubjectData(taxIdentificationName: string, personType: Per
 
                 if (row) {
                     // Actualizar si existe
-                    const queryUpdate = `UPDATE ${dbTable} SET contact = ?, province = ?, town = ?, postCode = ?, address = ?, name = ?, personType = ?, taxIdentificationName = ?, WHERE id = ?`;
+                    const queryUpdate = `UPDATE ${dbTable} SET contact = ?, province = ?, town = ?, postCode = ?, address = ?, name = ?, personType = ?, taxIdentificationName = ? WHERE id = ?`;
                     db.run(queryUpdate, [contact, province, town, postCode, address, name, personType, taxIdentificationName, id], (err) => {
                         db.close();
                         if (err) return reject(`Error al actualizar datos: ${err.message}`);
@@ -37,7 +37,7 @@ export function createSubjectData(taxIdentificationName: string, personType: Per
                 } else {
                     // Insertar si no existe
                     const queryInsert = `INSERT INTO ${dbTable} (taxIdentificationName, personType, id, name, address, postCode, town, province, contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-                    db.run(queryInsert, [taxIdentificationName], (err) => {
+                    db.run(queryInsert, [taxIdentificationName, personType, id, name, address, postCode, town, province, contact], (err) => {
                         db.close();
                         if (err) return reject(`Error al insertar datos: ${err.message}`);
                         resolve();
@@ -50,7 +50,7 @@ export function createSubjectData(taxIdentificationName: string, personType: Per
     });
 }
 
-export function getSubjectData(name: string, table: string, database: string = 'current'): Promise<subject> {
+export function getSubjectData(id: string, table: string, database: string = 'current'): Promise<subject> {
     return new Promise(async (resolve, reject) => {
         // Conectar a la base de datos
         if (!(table === "receptor" || table === "emisor")) {
@@ -70,7 +70,7 @@ export function getSubjectData(name: string, table: string, database: string = '
         const sql = `SELECT * FROM ${table} WHERE id LIKE ?`;
 
         // Ejecutar la consulta
-        db.get(sql, [name], (err, row: subject) => {
+        db.get(sql, [id], (err, row: subject) => {
             // Cerrar la conexión
             db.close();
 

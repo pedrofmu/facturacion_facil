@@ -2,6 +2,7 @@ const envVar = window.electronAPI.getEnvVar();
 
 console.log(`Env var: ${envVar}`);
 
+
 document.getElementById("save_btn")?.addEventListener("click", async () => {
     try {
         const taxIdentificationNameInput: HTMLInputElement = document.getElementById("tax_identification_name_input") as HTMLInputElement;
@@ -22,9 +23,19 @@ document.getElementById("save_btn")?.addEventListener("click", async () => {
 
         const contactInput: HTMLInputElement = document.getElementById("contact_input") as HTMLInputElement;
 
-        console.log(personTypeSelect.value);
+        let personTypeEnum: PersonType;
+        switch (personTypeSelect.value) {
+            case 'F':
+                personTypeEnum = PersonType.F;
+                break;
+            case 'L':
+                personTypeEnum = PersonType.L;
+                break;
+            default:
+                throw new Error("Incorrect value in person type enum");
+        }
 
-        await window.electronAPI.createSubjectData(taxIdentificationNameInput.value, personTypeSelect.value, idInput.value, nameInput.value, addressInput.value, postCodeInput.value, townInput.value, provinceInput.value, contactInput.value, `${envVar}`);
+        await window.electronAPI.createSubjectData(taxIdentificationNameInput.value, personTypeEnum, idInput.value, nameInput.value, addressInput.value, postCodeInput.value, townInput.value, provinceInput.value, contactInput.value, `${envVar}`);
         window.electronAPI.myAlert("Se ha guardado correctamente la nueva persona");
     } catch (error) {
         window.electronAPI.myAlert(`${error}`);

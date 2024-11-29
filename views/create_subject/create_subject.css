@@ -1,7 +1,15 @@
 body {
-  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 .bottom_btns {
-  margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.horizontal_div {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }

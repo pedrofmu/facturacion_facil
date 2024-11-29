@@ -14,14 +14,14 @@
 <body>
     <h2>Datos de identificacion fiscal:</h2>
     <div>
-        <label>Nombre</label>
+        <label>Nombre de identificación fiscal</label>
         <input id="tax_identification_name_input" class="input" type="text"></input>
     </div>
     <div>
-        <label>Tipo de entidad juridica</label>
+        <label>Tipo de entidad</label>
         <select id="person_type_select" class="input">
-            <option value="F">F</option>
-            <option value="L">L</option>
+            <option value="F">Persona fisica</option>
+            <option value="L">Entidad juridica</option>
         </select>
     </div>
     <div>
@@ -29,12 +29,22 @@
         <input id="id_input" class="input" type="text"></input>
     </div>
     <h2>Datos personales</h2>
-    <div>
-        <label>Nombre</label>
-        <input id="name_input" class="input" type="text"></input>
+    <div class="horizontal_div">
+        <div>
+            <label>Nombre</label>
+            <input id="name_input" class="input" type="text"></input>
+        </div>
+        <div>
+            <label>Apellido 1</label>
+            <input id="apellido1_input" class="input" type="text"></input>
+        </div>
+        <div>
+            <label>Apellido 2</label>
+            <input id="appellido2_input" class="input" type="text"></input>
+        </div>
     </div>
 
-    <div>
+    <div class="horizontal_div">
         <div>
             <label>Codigo postal</label>
             <input id="post_code_input" class="input" type="text"></input>

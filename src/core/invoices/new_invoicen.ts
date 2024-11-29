@@ -43,6 +43,10 @@ export function generateInvoiceFromUsrInput(letter: string, receiverId: string, 
         const receiverData: subject = await getSubjectData(receiverId, "receptor");
         const emitterData: subject = await getSubjectData(emitterId, "emisor");
 
+        if (!receiverData || !emitterData){
+            reject("persona no valida");
+        }
+
         const payMethod: payMethodEntry = {
             name: payMethodName,
             extraData: extraPayMethodData 

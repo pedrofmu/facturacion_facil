@@ -2,7 +2,7 @@ import sqlite3, { Database } from 'sqlite3';
 import { getDBPath } from '../manage_env/get_paths';
 
 // crea un nuevo metodo de pago
-export async function createPayMethod(dbName: string, type: string, extraData: boolean): Promise<void> {
+export async function createPayMethod(dbName: string, type: string, extraData: string): Promise<void> {
     const dbPath: string = await getDBPath(dbName);
 
     return new Promise((resolve, reject) => {

@@ -118,7 +118,7 @@ export function createDB(nombre: string): Promise<string> {
                 createFormasDePagoTable()
             ]);
 
-            createPayMethod(nombre, "efectivo", false);
+            createPayMethod(nombre, "efectivo", "");
 
             await addPossibleDB(nombre);
 
