@@ -2,7 +2,17 @@ const envVar = window.electronAPI.getEnvVar();
 
 console.log(`Env var: ${envVar}`);
 
+function getFormatedName(nameInput: HTMLInputElement, surname1Input: HTMLInputElement, surname2Input: HTMLInputElement): string {
+    if (nameInput.value === "" || surname1Input.value === "") {
+        return "error";
+    }
 
+    if (surname2Input.value === "") {
+        return `${nameInput.value},${surname1Input.value}`;
+    }
+
+    return `${nameInput.value},${surname1Input.value},${surname2Input.value}`;
+}
 document.getElementById("save_btn")?.addEventListener("click", async () => {
     try {
         const taxIdentificationNameInput: HTMLInputElement = document.getElementById("tax_identification_name_input") as HTMLInputElement;
@@ -12,6 +22,10 @@ document.getElementById("save_btn")?.addEventListener("click", async () => {
         const idInput: HTMLInputElement = document.getElementById("id_input") as HTMLInputElement;
 
         const nameInput: HTMLInputElement = document.getElementById("name_input") as HTMLInputElement;
+
+        const surname1Input: HTMLInputElement = document.getElementById("surname1_input") as HTMLInputElement;
+
+        const surname2Input: HTMLInputElement = document.getElementById("surname2_input") as HTMLInputElement;
 
         const postCodeInput: HTMLInputElement = document.getElementById("post_code_input") as HTMLInputElement;
 
@@ -35,7 +49,13 @@ document.getElementById("save_btn")?.addEventListener("click", async () => {
                 throw new Error("Incorrect value in person type enum");
         }
 
-        await window.electronAPI.createSubjectData(taxIdentificationNameInput.value, personTypeEnum, idInput.value, nameInput.value, addressInput.value, postCodeInput.value, townInput.value, provinceInput.value, contactInput.value, `${envVar}`);
+        const name = getFormatedName(nameInput, surname1Input, surname2Input);
+        if (name === "error") {
+            window.electronAPI.myAlert("Rellene todos los valores del nombre");
+            return;
+        }
+
+        await window.electronAPI.createSubjectData(taxIdentificationNameInput.value, personTypeEnum, idInput.value, name, addressInput.value, postCodeInput.value, townInput.value, provinceInput.value, contactInput.value, `${envVar}`);
         window.electronAPI.myAlert("Se ha guardado correctamente la nueva persona");
     } catch (error) {
         window.electronAPI.myAlert(`${error}`);
