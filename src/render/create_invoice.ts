@@ -232,12 +232,13 @@ async function loadPersons() {
     // Cargar clientes
     let clientsList: subject[] = await window.electronAPI.getAllSubjectsData("receptor");
     clientsList.forEach((row: subject) => {
-        if (!existingOptions.includes(`${row.name} (${row.id})`)) {
+        let name: string = `${row.name.split(",")[0]} ${row.name.split(",")[1]} ${row.name.split(",")[2] == null ? '' : row.name.split(",")[2]}`;
+        if (!existingOptions.includes(`${name} (${row.id})`)) {
             var option = document.createElement("option");
             option.value = row.id;
-            option.text = `${row.name} (${row.id})`;
+            option.text = `${name} (${row.id})`;
             receiverSelector.add(option);
-            existingOptions.push(`${row.name} (${row.id})`);
+            existingOptions.push(`${name} (${row.id})`);
         }
     });
 
@@ -247,12 +248,13 @@ async function loadPersons() {
     // Cargar proveedores
     let providersList: subject[] = await window.electronAPI.getAllSubjectsData("emisor");
     providersList.forEach((row: subject) => {
-        if (!existingOptions.includes(`${row.name} (${row.id})`)) {
+        let name: string = `${row.name.split(",")[0]} ${row.name.split(",")[1]} ${row.name.split(",")[2] == null ? '' : row.name.split(",")[2]}`;
+        if (!existingOptions.includes(`${name} (${row.id})`)) {
             var option = document.createElement("option");
             option.value = row.id;
-            option.text = `${row.name} (${row.id})`;
+            option.text = `${name} (${row.id})`;
             emitterSelector.add(option);
-            existingOptions.push(`${row.name} (${row.id})`);
+            existingOptions.push(`${name} (${row.id})`);
         }
     });
 }
