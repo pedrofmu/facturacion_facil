@@ -89,11 +89,11 @@ export function setupIPCListeners() {
         }
     });
 
-    ipcMain.handle('createSubjectData', async (event, taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName: string = 'current') => {
+    ipcMain.handle('createSubjectData', async (event, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName: string = 'current') => {
         try {
 
 
-            return await createSubjectData(taxIdentificationName, personType, id, name, address, postCode, town, province, contact, dbName, dbTable);
+            return await createSubjectData(personType, id, name, address, postCode, town, province, contact, dbName, dbTable);
         } catch (error) {
             throw new Error(`Failed to create subject data: ${error}`);
         }

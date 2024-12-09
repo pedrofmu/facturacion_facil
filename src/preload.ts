@@ -31,9 +31,9 @@ export interface ElectronAPI {
 
     getEnvVar: () => string;
 
-    createPayMethod: (payMethodName: string, hasExtraType: boolean, database?: string) => Promise<void>;
+    createPayMethod: (payMethodName: string, hasExtraType: string, database?: string) => Promise<void>;
 
-    createSubjectData: (taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => Promise<void>;
+    createSubjectData: (personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => Promise<void>;
 }
 
 declare global {
@@ -63,9 +63,9 @@ const api: ElectronAPI = {
 
     getEnvVar: () => { return envVar; },
 
-    createPayMethod: (payMethodName: string, hasExtraType: boolean, database?: string) => ipcRenderer.invoke('createPayMethod', payMethodName, hasExtraType, database),
+    createPayMethod: (payMethodName: string, hasExtraType: string, database?: string) => ipcRenderer.invoke('createPayMethod', payMethodName, hasExtraType, database),
 
-    createSubjectData: (taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => ipcRenderer.invoke('createSubjectData', taxIdentificationName, personType, id, name, address, postCode, town, province, contact, dbTable, dbName),
+    createSubjectData: (personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName?: string) => ipcRenderer.invoke('createSubjectData', personType, id, name, address, postCode, town, province, contact, dbTable, dbName),
 }
 
 contextBridge.exposeInMainWorld("electronAPI", api)

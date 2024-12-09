@@ -52,7 +52,6 @@ export function createDB(nombre: string): Promise<string> {
             const createReceptorTable = (): Promise<void> => {
                 return new Promise((resolve, reject) => {
                     db.run(`CREATE TABLE IF NOT EXISTS receptor (
-            taxIdentificationName TEXT,
             personType TEXT,
             id TEXT,
             name TEXT,
@@ -75,7 +74,6 @@ export function createDB(nombre: string): Promise<string> {
             const createEmisorTable = (): Promise<void> => {
                 return new Promise((resolve, reject) => {
                     db.run(`CREATE TABLE IF NOT EXISTS emisor (
-            taxIdentificationName TEXT,
             personType TEXT,
             id TEXT,
             name TEXT,

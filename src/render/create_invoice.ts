@@ -7,7 +7,7 @@ const emitterSelector = document.getElementById("proveedor_selector") as HTMLSel
 const receiverSelector = document.getElementById("cliente_selector") as HTMLSelectElement;
 const conceptInput = document.getElementById("concepto") as HTMLInputElement;
 const payMethodSelect = document.getElementById("forma_de_pago") as HTMLSelectElement;
-const extraPayMethod = document.getElementById("forma_de_pago_extra") as HTMLInputElement;
+const extraPayMethod = document.getElementById("extra_pay_method_entryes") as HTMLUListElement;
 
 var discountPerProduct = false;
 
@@ -112,9 +112,18 @@ async function triggerSaveInvoice(): Promise<void> {
             productsList.push(productData);
         });
 
+        let payMethodEntryes = document.querySelectorAll(".pay_method_entry"); 
+        let extraDataPayMethodParsed: string = "";
+
+        payMethodEntryes.forEach((entry) => {
+            extraDataPayMethodParsed += `,${(entry.querySelector('input:nth-child(1)') as HTMLInputElement).value}`;
+        });
+
+        console.log(extraDataPayMethodParsed);
+
         let invoice: invoice;
         try {
-            invoice = await window.electronAPI.generateInvoiceFromUsrInput(letterSelector.value, receiverSelector.value, emitterSelector.value, emisionDateInput.value, expirationDateInput.value, productsList, conceptInput.value, Number(irpfInput.value), detailInput.value, payMethodSelect.value, extraPayMethod.value);
+            invoice = await window.electronAPI.generateInvoiceFromUsrInput(letterSelector.value, receiverSelector.value, emitterSelector.value, emisionDateInput.value, expirationDateInput.value, productsList, conceptInput.value, Number(irpfInput.value), detailInput.value, payMethodSelect.value, extraDataPayMethodParsed);
         } catch {
             reject("faltan valores");
             return;
@@ -226,37 +235,37 @@ function loadLetters() {
 
 // Función asincrónica para cargar las personas en los selectores
 async function loadPersons() {
-    // Obtener las opciones actuales del selector
-    let existingOptions = Array.from(receiverSelector.options).map(option => option.text);
+    // Función para obtener el nombre formateado
+    const formatName = (name: string): string => {
+        const parts = name.split(",");
+        return `${parts[0] ?? ''} ${parts[1] ?? ''} ${parts[2] ?? ''}`.trim();
+    };
 
-    // Cargar clientes
-    let clientsList: subject[] = await window.electronAPI.getAllSubjectsData("receptor");
-    clientsList.forEach((row: subject) => {
-        let name: string = `${row.name.split(",")[0]} ${row.name.split(",")[1]} ${row.name.split(",")[2] == null ? '' : row.name.split(",")[2]}`;
-        if (!existingOptions.includes(`${name} (${row.id})`)) {
-            var option = document.createElement("option");
-            option.value = row.id;
-            option.text = `${name} (${row.id})`;
-            receiverSelector.add(option);
-            existingOptions.push(`${name} (${row.id})`);
-        }
-    });
+    // Función para cargar opciones en el selector
+    const loadOptions = async (selector: HTMLSelectElement, type: "receptor" | "emisor") => {
+        // Obtener las opciones actuales del selector
+        const existingOptions = new Set(Array.from(selector.options).map(option => option.text));
 
-    // Obtener las opciones actuales del selector
-    existingOptions = Array.from(emitterSelector.options).map(option => option.text);
+        // Cargar datos
+        const subjectsList: subject[] = await window.electronAPI.getAllSubjectsData(type);
 
-    // Cargar proveedores
-    let providersList: subject[] = await window.electronAPI.getAllSubjectsData("emisor");
-    providersList.forEach((row: subject) => {
-        let name: string = `${row.name.split(",")[0]} ${row.name.split(",")[1]} ${row.name.split(",")[2] == null ? '' : row.name.split(",")[2]}`;
-        if (!existingOptions.includes(`${name} (${row.id})`)) {
-            var option = document.createElement("option");
-            option.value = row.id;
-            option.text = `${name} (${row.id})`;
-            emitterSelector.add(option);
-            existingOptions.push(`${name} (${row.id})`);
-        }
-    });
+        // Agregar nuevas opciones
+        subjectsList.forEach((row: subject) => {
+            const name = formatName(row.name);
+            const optionText = `${name} (${row.id})`;
+            if (!existingOptions.has(optionText)) {
+                const option = document.createElement("option");
+                option.value = row.id;
+                option.text = optionText;
+                selector.add(option);
+                existingOptions.add(optionText);
+            }
+        });
+    };
+
+    // Cargar datos para ambos selectores
+    await loadOptions(receiverSelector, "receptor");
+    await loadOptions(emitterSelector, "emisor");
 }
 
 async function loadPayMethods() {
@@ -281,10 +290,25 @@ async function showExtraPayMethod() {
     const field = payMethodSelect.value;
     const payMethodType: payMethodType = await window.electronAPI.getPayMethodType(field);
 
-    if (payMethodType.extraData) {
-        extraPayMethod.classList.remove("oculto");
-    } else {
-        extraPayMethod.classList.add("oculto");
+    const allExtraData: string[] = payMethodType.extraData.split(",");
+    extraPayMethod.innerHTML = '';
+    for (let i = 0; i < allExtraData.length; i++) {
+        if (allExtraData[i] == '')
+            continue;
+        //<input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
+
+        var newEntry = document.createElement("li");
+        newEntry.className = "pay_method_entry";
+
+        var newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.placeholder = allExtraData[i];
+        newInput.className = "input";
+
+        // Agregar el input al li
+        newEntry.appendChild(newInput);
+
+        extraPayMethod.appendChild(newEntry);
     }
 }
 

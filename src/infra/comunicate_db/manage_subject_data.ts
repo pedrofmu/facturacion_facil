@@ -1,10 +1,10 @@
 import sqlite3 from 'sqlite3';
 import { getDBPath } from '../manage_env/get_paths';
 
-export function createSubjectData(taxIdentificationName: string, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbName: string, dbTable: string): Promise<void> {
+export function createSubjectData(personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbName: string, dbTable: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!taxIdentificationName || !personType || !id || !name || !address || !postCode || !town || !province || !contact ) {
+            if (!personType || !id || !name || !address || !postCode || !town || !province ) {
                 return reject("Faltan valores obligatorios");
             }
 
@@ -28,16 +28,16 @@ export function createSubjectData(taxIdentificationName: string, personType: Per
 
                 if (row) {
                     // Actualizar si existe
-                    const queryUpdate = `UPDATE ${dbTable} SET contact = ?, province = ?, town = ?, postCode = ?, address = ?, name = ?, personType = ?, taxIdentificationName = ? WHERE id = ?`;
-                    db.run(queryUpdate, [contact, province, town, postCode, address, name, personType, taxIdentificationName, id], (err) => {
+                    const queryUpdate = `UPDATE ${dbTable} SET contact = ?, province = ?, town = ?, postCode = ?, address = ?, name = ?, personType = ? WHERE id = ?`;
+                    db.run(queryUpdate, [contact, province, town, postCode, address, name, personType, id], (err) => {
                         db.close();
                         if (err) return reject(`Error al actualizar datos: ${err.message}`);
                         resolve();
                     });
                 } else {
                     // Insertar si no existe
-                    const queryInsert = `INSERT INTO ${dbTable} (taxIdentificationName, personType, id, name, address, postCode, town, province, contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-                    db.run(queryInsert, [taxIdentificationName, personType, id, name, address, postCode, town, province, contact], (err) => {
+                    const queryInsert = `INSERT INTO ${dbTable} (personType, id, name, address, postCode, town, province, contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                    db.run(queryInsert, [personType, id, name, address, postCode, town, province, contact], (err) => {
                         db.close();
                         if (err) return reject(`Error al insertar datos: ${err.message}`);
                         resolve();

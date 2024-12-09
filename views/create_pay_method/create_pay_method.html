@@ -2,28 +2,37 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>FORMA DE PAGO NUEVA</title>
+    <meta charset="UTF-8" />
+    <title>FORMA DE PAGO NUEVA</title>
 
-  <link rel="stylesheet" href="../common_styles.css" />
-  <link rel="stylesheet" href="create_pay_method.css" />
+    <link rel="stylesheet" href="../common_styles.css" />
+    <link rel="stylesheet" href="create_pay_method.css" />
 
-  <script defer src="../../.dist/src/render/create_pay_method.js"></script>
+    <script defer src="../../.dist/src/render/create_pay_method.js"></script>
 </head>
 
 <body>
-  <div>
-    <label>Tipo</label>
-    <input id="type_input" class="input" type="text"></input>
-  </div>
-  <div>
-    <label>Datos extra</label>
-    <input id="has_extra_field_input" class="input" type="checkbox"></input>
-  </div>
-  <div class="bottom_btns">
-    <button id="exit_btn" type="button">SALIR</button>
-    <button id="save_btn" type="button">GUARDAR</button>
-  </div>
+    <div>
+        <label>Tipo</label>
+        <input id="type_input" class="input" type="text"></input>
+    </div>
+
+    <div class="vertical_div">
+        <div class="horizontal_div">
+            <div>
+                <button id="remove_unidad_btn">-</button>
+                <button id="add_unidad_btn">+</button>
+            </div>
+        </div>
+        <ol id="unidades_container">
+
+        </ol>
+    </div>
+
+    <div class="bottom_btns">
+        <button id="exit_btn" type="button">SALIR</button>
+        <button id="save_btn" type="button">GUARDAR</button>
+    </div>
 </body>
 
 </html>

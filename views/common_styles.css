@@ -89,3 +89,7 @@ select::-ms-expand {
 .input:focus {
   border-color: var(--hover-border);
 }
+
+.oculto {
+  display: none;
+}

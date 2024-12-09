@@ -67,8 +67,3 @@ body {
   display: inline-block;
   width: max-content;
 }
-
-/* Estilos para los botones al final */
-.oculto {
-  display: none;
-}

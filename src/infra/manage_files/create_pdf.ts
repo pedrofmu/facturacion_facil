@@ -67,7 +67,7 @@ async function generateHtmlFromInvoice(invoice: invoice): Promise<string> {
       <div class="header">
           <div class="remitente">
               <h5><i>proveedor</i></h5>
-              <h4><b>${invoice.emitter.name}</b></h4>
+              <h4><b>${invoice.emitter.name.replace(",", " ")}</b></h4>
               <h5>${invoice.emitter.id}</h5>
               <h5>${invoice.emitter.address}</h5>
               <h5>${invoice.emitter.contact}</h5>

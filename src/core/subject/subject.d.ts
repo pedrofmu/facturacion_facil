@@ -2,13 +2,13 @@
 // L => persona juridica o entidad
 const enum PersonType {
     F = 'F',
-    L = 'L',
+    J = 'L',
 }
 
 type subject = {
     // Datos del tex identification
-    taxIdentificationName: string,
     personType: PersonType,
+    residentType
     id: string,
     // datos del individuo
     name: string,
