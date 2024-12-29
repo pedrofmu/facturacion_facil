@@ -64,7 +64,7 @@ document.getElementById("atras_btn")?.addEventListener("click", () => {
 
 payMethodSelect?.addEventListener("change", async () => {
     try {
-//        await showExtraPayMethod();
+        await showExtraPayMethod();
     } catch (error) {
         alert(error);
     }
@@ -272,7 +272,7 @@ async function loadPersons() {
 async function loadPayMethods() {
     let payMethodsOptions = Array.from(payMethodSelect.options).map(option => option.value);
 
-    const payMethodsArray = await window.electronAPI.getPayMethodsArray(); 
+    const payMethodsArray = await window.electronAPI.getPayMethodsArray();
     payMethodsArray.forEach((row: any) => {
         if (!payMethodsOptions.includes(row)) {
             var option = document.createElement("option");
@@ -283,34 +283,45 @@ async function loadPayMethods() {
         }
     });
 
-    //    await showExtraPayMethod();
+    await showExtraPayMethod();
 }
 
-//async function showExtraPayMethod() {
-//    const field = payMethodSelect.value;
-//    const payMethodType: payMethodType = await window.electronAPI.getPayMethodType(field);
-//
-//    const allExtraData: string[] = payMethodType.extraData.split(",");
-//    extraPayMethod.innerHTML = '';
-//    for (let i = 0; i < allExtraData.length; i++) {
-//        if (allExtraData[i] == '')
-//            continue;
-//        //<input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
-//
-//        var newEntry = document.createElement("li");
-//        newEntry.className = "pay_method_entry";
-//
-//        var newInput = document.createElement("input");
-//        newInput.type = "text";
-//        newInput.placeholder = allExtraData[i];
-//        newInput.className = "input";
-//
-//        // Agregar el input al li
-//        newEntry.appendChild(newInput);
-//
-//        extraPayMethod.appendChild(newEntry);
-//    }
-//}
+async function showExtraPayMethod() {
+    const field = payMethodSelect.value;
+    console.log(field);
+    let allExtraData: string[] = [];
+
+    switch (field) {
+        case 'efectivo':
+            allExtraData = [];
+            break;
+        case 'transferencia bancaria':
+            allExtraData = ["iban", "fecha limite"];
+            break;
+        default:
+            break;
+    }
+
+    extraPayMethod.innerHTML = '';
+    for (let i = 0; i < allExtraData.length; i++) {
+        if (allExtraData[i] == '')
+            continue;
+        //<input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
+
+        var newEntry = document.createElement("li");
+        newEntry.className = "pay_method_entry";
+
+        var newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.placeholder = allExtraData[i];
+        newInput.className = "input";
+
+        // Agregar el input al li
+        newEntry.appendChild(newInput);
+
+        extraPayMethod.appendChild(newEntry);
+    }
+}
 
 // Llamar a las funciones de carga al cargar la página
 loadPayMethods();
