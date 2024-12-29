@@ -2,7 +2,6 @@ import { getHomeFolderPath } from "../manage_env/get_paths";
 import path from 'path';
 import fs from 'fs/promises'
 import sqlite3, { Database } from 'sqlite3'
-import { createPayMethod } from "../comunicate_db/manage_pay_methods";
 import { addPossibleDB } from "../manage_env/adm_settings";
 
 export function createDB(nombre: string): Promise<string> {
@@ -92,31 +91,12 @@ export function createDB(nombre: string): Promise<string> {
                 });
             };
 
-            // Promesa para crear tabla formasDePago
-            const createFormasDePagoTable = (): Promise<void> => {
-                return new Promise((resolve, reject) => {
-                    db.run(`CREATE TABLE IF NOT EXISTS formasDePago (
-            type TEXT,
-            extraData BOOL
-          )`, (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                });
-            };
-
             // Esperar a que se completen todas las creaciones de tablas
             await Promise.all([
                 createFacturasTable(),
                 createReceptorTable(),
-                createEmisorTable(),
-                createFormasDePagoTable()
+                createEmisorTable()
             ]);
-
-            createPayMethod(nombre, "efectivo", "");
 
             await addPossibleDB(nombre);
 

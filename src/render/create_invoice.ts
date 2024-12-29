@@ -64,7 +64,7 @@ document.getElementById("atras_btn")?.addEventListener("click", () => {
 
 payMethodSelect?.addEventListener("change", async () => {
     try {
-        await showExtraPayMethod();
+//        await showExtraPayMethod();
     } catch (error) {
         alert(error);
     }
@@ -112,7 +112,7 @@ async function triggerSaveInvoice(): Promise<void> {
             productsList.push(productData);
         });
 
-        let payMethodEntryes = document.querySelectorAll(".pay_method_entry"); 
+        let payMethodEntryes = document.querySelectorAll(".pay_method_entry");
         let extraDataPayMethodParsed: string = "";
 
         payMethodEntryes.forEach((entry) => {
@@ -124,6 +124,7 @@ async function triggerSaveInvoice(): Promise<void> {
         let invoice: invoice;
         try {
             invoice = await window.electronAPI.generateInvoiceFromUsrInput(letterSelector.value, receiverSelector.value, emitterSelector.value, emisionDateInput.value, expirationDateInput.value, productsList, conceptInput.value, Number(irpfInput.value), detailInput.value, payMethodSelect.value, extraDataPayMethodParsed);
+
         } catch {
             reject("faltan valores");
             return;
@@ -271,46 +272,45 @@ async function loadPersons() {
 async function loadPayMethods() {
     let payMethodsOptions = Array.from(payMethodSelect.options).map(option => option.value);
 
-    // Cargar clientes
-    let payMethods: payMethodType[] = await window.electronAPI.getAllPayMethodTypes();
-    payMethods.forEach((row: any) => {
-        if (!payMethodsOptions.includes(row.type)) {
+    const payMethodsArray = await window.electronAPI.getPayMethodsArray(); 
+    payMethodsArray.forEach((row: any) => {
+        if (!payMethodsOptions.includes(row)) {
             var option = document.createElement("option");
-            option.value = row.type;
-            option.text = row.type;
+            option.value = row;
+            option.text = row;
             payMethodSelect.add(option);
             payMethodsOptions.push(row);
         }
     });
 
-    await showExtraPayMethod();
+    //    await showExtraPayMethod();
 }
 
-async function showExtraPayMethod() {
-    const field = payMethodSelect.value;
-    const payMethodType: payMethodType = await window.electronAPI.getPayMethodType(field);
-
-    const allExtraData: string[] = payMethodType.extraData.split(",");
-    extraPayMethod.innerHTML = '';
-    for (let i = 0; i < allExtraData.length; i++) {
-        if (allExtraData[i] == '')
-            continue;
-        //<input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
-
-        var newEntry = document.createElement("li");
-        newEntry.className = "pay_method_entry";
-
-        var newInput = document.createElement("input");
-        newInput.type = "text";
-        newInput.placeholder = allExtraData[i];
-        newInput.className = "input";
-
-        // Agregar el input al li
-        newEntry.appendChild(newInput);
-
-        extraPayMethod.appendChild(newEntry);
-    }
-}
+//async function showExtraPayMethod() {
+//    const field = payMethodSelect.value;
+//    const payMethodType: payMethodType = await window.electronAPI.getPayMethodType(field);
+//
+//    const allExtraData: string[] = payMethodType.extraData.split(",");
+//    extraPayMethod.innerHTML = '';
+//    for (let i = 0; i < allExtraData.length; i++) {
+//        if (allExtraData[i] == '')
+//            continue;
+//        //<input id="forma_de_pago_extra" type="text" class="input" name="forma_de_pago_extra" value="">
+//
+//        var newEntry = document.createElement("li");
+//        newEntry.className = "pay_method_entry";
+//
+//        var newInput = document.createElement("input");
+//        newInput.type = "text";
+//        newInput.placeholder = allExtraData[i];
+//        newInput.className = "input";
+//
+//        // Agregar el input al li
+//        newEntry.appendChild(newInput);
+//
+//        extraPayMethod.appendChild(newEntry);
+//    }
+//}
 
 // Llamar a las funciones de carga al cargar la página
 loadPayMethods();

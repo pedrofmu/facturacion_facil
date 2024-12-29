@@ -1,5 +1,4 @@
 import { generateInvoiceFromUsrInput } from "../src/core/invoices/new_invoicen";
-import { getAllPayMethodTypes, getPayMethodType } from "../src/infra/comunicate_db/manage_pay_methods";
 import { getAllSubjectsData } from "../src/infra/comunicate_db/manage_subject_data";
 import { createPDFfromInvoice } from "../src/infra/manage_files/create_pdf";
 

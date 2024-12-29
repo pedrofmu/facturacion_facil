@@ -5,8 +5,8 @@ import { generateInvoiceFromUsrInput } from "./core/invoices/new_invoicen";
 import { createPDFfromInvoice } from "./infra/manage_files/create_pdf";
 import { openNewWindow } from "./infra/electron_specific_functions/open_window";
 import { createSubjectData, getAllSubjectsData, getSubjectData } from "./infra/comunicate_db/manage_subject_data";
-import { createPayMethod, getAllPayMethodTypes, getPayMethodType as getPayMethodType } from "./infra/comunicate_db/manage_pay_methods";
 import { myAlert } from "./infra/electron_specific_functions/custom_alert";
+import { payMethodsArray } from "./core/payMethod/payMethodsArray";
 
 export function setupIPCListeners() {
     ipcMain.handle('openFileDialog', async (event, fileName: string, fileType: string) => {
@@ -65,30 +65,6 @@ export function setupIPCListeners() {
         }
     });
 
-    ipcMain.handle('getPayMethodType', async (event, payMethodName: string, database?: string) => {
-        try {
-            return await getPayMethodType(payMethodName, database);
-        } catch {
-            throw new Error('Failed to retrieve payment method type.');
-        }
-    });
-
-    ipcMain.handle('getAllPayMethodTypes', async (event, database?: string) => {
-        try {
-            return await getAllPayMethodTypes(database);
-        } catch {
-            throw new Error('Failed to retrieve all payment method types.');
-        }
-    });
-
-    ipcMain.handle('createPayMethod', async (event, payMethodName: string, extraData: string, database: string = 'current') => {
-        try {
-            return await createPayMethod(database, payMethodName, extraData);
-        } catch {
-            throw new Error('Failed to create pay method');
-        }
-    });
-
     ipcMain.handle('createSubjectData', async (event, personType: PersonType, id: string, name: string, address: string, postCode: string, town: string, province: string, contact: string, dbTable: string, dbName: string = 'current') => {
         try {
 
@@ -96,6 +72,14 @@ export function setupIPCListeners() {
             return await createSubjectData(personType, id, name, address, postCode, town, province, contact, dbName, dbTable);
         } catch (error) {
             throw new Error(`Failed to create subject data: ${error}`);
+        }
+    });
+    
+    ipcMain.handle('getPayMethodsArray', (event) => {
+        try {
+            return payMethodsArray;
+        } catch (error) {
+            throw new Error(`Failed to get pay method array: ${error}`);
         }
     });
 }

@@ -1,0 +1,20 @@
+<PaymentDetails>
+    <Installment>
+        <InstallmentDueDate>2007-01-12</InstallmentDueDate>
+        <InstallmentAmount>212.87</InstallmentAmount>
+        <PaymentMeans>04</PaymentMeans>
+        <AccountToBeCredited>
+            <IBAN>ESP00431111601111111111</IBAN>
+        </AccountToBeCredited>
+    </Installment>
+</PaymentDetails>
+
+
+
+metodos de pago
+    efectivo: no añadir datos extras
+
+    transferencia bancaria, añadir lo siguiente {
+        fecha limite: date
+        IBAN: string
+    }
