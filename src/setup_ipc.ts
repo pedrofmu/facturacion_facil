@@ -33,7 +33,7 @@ export function setupIPCListeners() {
         }
     });
 
-    ipcMain.handle('createPDFfromInvoice', async (event, invoice: invoice, path: string) => {
+    ipcMain.handle('createPDFfromInvoice', async (event, invoice: Invoice, path: string) => {
         try {
             return await createPDFfromInvoice(invoice, path);
         } catch {

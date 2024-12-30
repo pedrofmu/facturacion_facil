@@ -16,9 +16,9 @@ export interface ElectronAPI {
 
     myAlert: (message: string) => void;
 
-    generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => Promise<invoice>;
+    generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => Promise<Invoice>;
 
-    createPDFfromInvoice: (invoice: invoice, path: string) => Promise<void>;
+    createPDFfromInvoice: (invoice: Invoice, path: string) => Promise<void>;
 
     openNewWindow: (htmlPath: string, envVar?: string) => void;
 
@@ -47,7 +47,7 @@ const api: ElectronAPI = {
 
     generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => ipcRenderer.invoke('generateInvoiceFromUsrInput', letter, receiverName, emitterName, emisionDate, expirationDate, productsList, concept, irpf, details, payMethodName, extraPayMethodData),
 
-    createPDFfromInvoice: (invoice: invoice, path: string) => ipcRenderer.invoke('createPDFfromInvoice', invoice, path),
+    createPDFfromInvoice: (invoice: Invoice, path: string) => ipcRenderer.invoke('createPDFfromInvoice', invoice, path),
 
     openNewWindow: (htmlPath: string, envVar?: string) => ipcRenderer.invoke('openNewWindow', htmlPath, envVar),
 

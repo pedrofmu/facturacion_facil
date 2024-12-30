@@ -6,7 +6,7 @@ type product = {
     discount: number
 }
 
-type invoice = {
+type Invoice = {
     number: string,
     receiver: subject,
     emitter: subject,

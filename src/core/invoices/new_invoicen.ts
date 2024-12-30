@@ -16,7 +16,7 @@ import { getNextInvoiceID } from "../../infra/comunicate_db/invoice_id";
 import { getSubjectData } from "../../infra/comunicate_db/manage_subject_data";
 import { obtainIVAToAddAsync, obtainTaxableIncomeAsync } from "./calculate_data";
 
-export function generateInvoiceFromUsrInput(letter: string, receiverId: string, emitterId: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string): Promise<invoice> {
+export function generateInvoiceFromUsrInput(letter: string, receiverId: string, emitterId: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string): Promise<Invoice> {
     return new Promise(async (resolve, reject) => {
         if (letter === "" || receiverId === "" || emitterId === "" || emisionDate === "" || productsList.length < 1 || concept === "" || irpf === null || payMethodName === "") {
             reject("Faltan datos");
@@ -52,7 +52,7 @@ export function generateInvoiceFromUsrInput(letter: string, receiverId: string, 
             extraData: extraPayMethodData 
         };
 
-        const invoice: invoice = {
+        const invoice: Invoice = {
             number: number,
             receiver: receiverData,
             emitter: emitterData,

@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc --pretty",
     "start": "npm run build && electron .",
-    "test": "npm run build && npx jest --verbose --roots .dist"
+    "test": "npm run build && npx jest --verbose --roots .dist",
+    "stest": "npm run build && npx jest --verbose -t 'crear xml de factura'"
   },
   "keywords": [],
   "author": "",

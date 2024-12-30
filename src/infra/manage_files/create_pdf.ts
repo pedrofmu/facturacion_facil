@@ -35,7 +35,7 @@ function createHTMLforProducts(productsList: product[]): Promise<string> {
     });
 }
 
-async function generateHtmlFromInvoice(invoice: invoice): Promise<string> {
+async function generateHtmlFromInvoice(invoice: Invoice): Promise<string> {
     return new Promise(async (resolve) => {
         const cssRendering = await readFileAsync(getCSSPath(), 'utf-8');
 
@@ -122,7 +122,7 @@ async function generateHtmlFromInvoice(invoice: invoice): Promise<string> {
     });
 }
 
-export function createPDFfromInvoice(content: invoice, path: string): Promise<void> {
+export function createPDFfromInvoice(content: Invoice, path: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
         const chromiumPath: string = await getBrowserBinaryPath();
         if (chromiumPath.length < 1) {

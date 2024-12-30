@@ -121,7 +121,7 @@ async function triggerSaveInvoice(): Promise<void> {
 
         console.log(extraDataPayMethodParsed);
 
-        let invoice: invoice;
+        let invoice: Invoice;
         try {
             invoice = await window.electronAPI.generateInvoiceFromUsrInput(letterSelector.value, receiverSelector.value, emitterSelector.value, emisionDateInput.value, expirationDateInput.value, productsList, conceptInput.value, Number(irpfInput.value), detailInput.value, payMethodSelect.value, extraDataPayMethodParsed);
 
