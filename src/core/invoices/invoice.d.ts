@@ -8,8 +8,8 @@ type product = {
 
 type Invoice = {
     number: string,
-    receiver: subject,
-    emitter: subject,
+    receiver: Subject,
+    emitter: Subject,
     emisionDate: string,
     expirationDate: string,
     products: product[],

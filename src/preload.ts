@@ -22,8 +22,8 @@ export interface ElectronAPI {
 
     openNewWindow: (htmlPath: string, envVar?: string) => void;
 
-    getSubjectData: (subjectName: string, table: string, database?: string) => Promise<subject>;
-    getAllSubjectsData: (table: string, database?: string) => Promise<subject[]>;
+    getSubjectData: (subjectName: string, table: string, database?: string) => Promise<Subject>;
+    getAllSubjectsData: (table: string, database?: string) => Promise<Subject[]>;
 
     getEnvVar: () => string;
 

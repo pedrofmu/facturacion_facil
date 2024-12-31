@@ -16,16 +16,16 @@ function createHeader(invoice: Invoice): string {
 		<Modality>I</Modality>
 		<InvoiceIssuerType>EM</InvoiceIssuerType>
 		<Batch>
-			<BatchIdentifier>A2800056FBX-375-09</BatchIdentifier>
+			<BatchIdentifier>${"Buscar que va aqui"}</BatchIdentifier>
 			<InvoicesCount>1</InvoicesCount>
 			<TotalInvoicesAmount>
-				<TotalAmount>7557.48</TotalAmount>
+				<TotalAmount>${invoice.totalPrice}</TotalAmount>
 			</TotalInvoicesAmount>
 			<TotalOutstandingAmount>
-				<TotalAmount>7557.48</TotalAmount>
+				<TotalAmount>${invoice.totalPrice}</TotalAmount>
 			</TotalOutstandingAmount>
 			<TotalExecutableAmount>
-				<TotalAmount>7557.48</TotalAmount>
+				<TotalAmount>${invoice.totalPrice}</TotalAmount>
 			</TotalExecutableAmount>
 			<InvoiceCurrencyCode>EUR</InvoiceCurrencyCode>
 		</Batch>
@@ -33,42 +33,52 @@ function createHeader(invoice: Invoice): string {
 }
 
 function createParties(invoice: Invoice) {
-   return `<Parties>
+    const createPartyData = (party: Subject) => {
+        let partyString = `<TaxIdentification>
+				<PersonTypeCode>${party.personType}</PersonTypeCode>
+				<ResidenceTypeCode>${party.residentType}</ResidenceTypeCode>
+				<TaxIdentificationNumber>${party.id}</TaxIdentificationNumber>
+			</TaxIdentification>`;
+
+        if (party.personType == PersonType.F) {
+            let dividedName = party.name.split(',');
+            partyString += `<Individual>
+                                <Name>${dividedName[0]}</Name>
+                                <FirstSurname>${dividedName[1]}</FirstSurname>
+                                <SecondSurname>${dividedName[2] ? dividedName[2] : ""}</SecondSurname>
+                                <AddressInSpain>
+                                    <Address>${party.address}</Address>
+                                    <PostCode>${party.postCode}</PostCode>
+                                    <Town>${party.town}</Town>
+                                    <Province>${party.province}</Province>
+                                    <CountryCode>ESP</CountryCode>
+                                </AddressInSpain>
+                            </Individual>`;
+        } else if (party.personType == PersonType.J) {
+            partyString += `<LegalEntity>
+                                <CorporateName>${party.name}</CorporateName>
+                                <AddressInSpain>
+                                    <Address>${party.address}</Address>
+                                    <PostCode>${party.postCode}</PostCode>
+                                    <Town>${party.town}</Town>
+                                    <Province>${party.province}</Province>
+                                    <CountryCode>ESP</CountryCode>
+                                </AddressInSpain>
+                            </LegalEntity>`;
+
+        }
+
+        return partyString;
+    };
+
+    return `<Parties>
 		<SellerParty>
-			<TaxIdentification>
-				<PersonTypeCode>J</PersonTypeCode>
-				<ResidenceTypeCode>R</ResidenceTypeCode>
-				<TaxIdentificationNumber>A2800056F</TaxIdentificationNumber>
-			</TaxIdentification>
-			<LegalEntity>
-				<CorporateName>Sociedad Anonima S. A.</CorporateName>
-				<AddressInSpain>
-					<Address>c/ Alcala, 137</Address>
-					<PostCode>28001</PostCode>
-					<Town>Madrid</Town>
-					<Province>Madrid</Province>
-					<CountryCode>ESP</CountryCode>
-				</AddressInSpain>
-			</LegalEntity>
+		    ${createPartyData(invoice.emitter)}	
 		</SellerParty>
 		<BuyerParty>
-			<TaxIdentification>
-				<PersonTypeCode>J</PersonTypeCode>
-				<ResidenceTypeCode>R</ResidenceTypeCode>
-				<TaxIdentificationNumber>A4155543L</TaxIdentificationNumber>
-			</TaxIdentification>
-			<LegalEntity>
-				<CorporateName>Prima S. A.</CorporateName>
-				<AddressInSpain>
-					<Address>c/ San Vicente, 1</Address>
-					<PostCode>41008</PostCode>
-					<Town>Sevilla</Town>
-					<Province>Sevilla</Province>
-					<CountryCode>ESP</CountryCode>
-				</AddressInSpain>
-			</LegalEntity>
+			${createPartyData(invoice.receiver)}
 		</BuyerParty>
-	</Parties>`; 
+	</Parties>`;
 }
 
 function createInvoiceBody(invoice: Invoice): string {

@@ -50,7 +50,7 @@ export function createSubjectData(personType: PersonType, id: string, name: stri
     });
 }
 
-export function getSubjectData(id: string, table: string, database: string = 'current'): Promise<subject> {
+export function getSubjectData(id: string, table: string, database: string = 'current'): Promise<Subject> {
     return new Promise(async (resolve, reject) => {
         // Conectar a la base de datos
         if (!(table === "receptor" || table === "emisor")) {
@@ -70,7 +70,7 @@ export function getSubjectData(id: string, table: string, database: string = 'cu
         const sql = `SELECT * FROM ${table} WHERE id LIKE ?`;
 
         // Ejecutar la consulta
-        db.get(sql, [id], (err, row: subject) => {
+        db.get(sql, [id], (err, row: Subject) => {
             // Cerrar la conexión
             db.close();
 
@@ -84,7 +84,7 @@ export function getSubjectData(id: string, table: string, database: string = 'cu
     });
 }
 
-export function getAllSubjectsData(table: string, database: string = 'current'): Promise<subject[]> {
+export function getAllSubjectsData(table: string, database: string = 'current'): Promise<Subject[]> {
     return new Promise(async (resolve, reject) => {
         // Conectar a la base de datos
         if (!(table === "receptor" || table === "emisor")) {
@@ -102,7 +102,7 @@ export function getAllSubjectsData(table: string, database: string = 'current'):
 
         const sql = `SELECT * FROM ${table}`;
 
-        db.all(sql, [], (err, rows: subject[]) => {
+        db.all(sql, [], (err, rows: Subject[]) => {
             db.close();
 
             if (err) {

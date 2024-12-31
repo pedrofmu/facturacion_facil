@@ -248,10 +248,10 @@ async function loadPersons() {
         const existingOptions = new Set(Array.from(selector.options).map(option => option.text));
 
         // Cargar datos
-        const subjectsList: subject[] = await window.electronAPI.getAllSubjectsData(type);
+        const subjectsList: Subject[] = await window.electronAPI.getAllSubjectsData(type);
 
         // Agregar nuevas opciones
-        subjectsList.forEach((row: subject) => {
+        subjectsList.forEach((row: Subject) => {
             const name = formatName(row.name);
             const optionText = `${name} (${row.id})`;
             if (!existingOptions.has(optionText)) {

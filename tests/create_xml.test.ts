@@ -23,7 +23,7 @@ describe('new invoice', () => {
 
         await createSubjectData(PersonType.J, "A2800056F", "Sociedad Anonima S. A.", "c/ Alcala, 137", "28001", "Madrid", "Madrid", "", "current", "emisor");
 
-        await createSubjectData(PersonType.J, "A4155543L", "Prima S. A.", "c/ San Vicente, 1", "41008", "Sevilla", "Sevilla", "", "current", "receptor");
+        await createSubjectData(PersonType.F, "A4155543L", "Yolanda,Muñoz,Del Aguila", "c/ San Vicente, 1", "41008", "Sevilla", "Sevilla", "", "current", "receptor");
 
         const invoice = await generateInvoiceFromUsrInput("A", "A4155543L", "A2800056F", "2024-03-10", "2024-03-23", productsTest, "compras test", 21, "detalles", "efectivo", "");
 

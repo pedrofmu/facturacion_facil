@@ -1,0 +1,1 @@
+ajustar la api de crear subject para que no de errores de formateo

@@ -40,8 +40,8 @@ export function generateInvoiceFromUsrInput(letter: string, receiverId: string, 
             totalImport = taxableIncome + ivaToAdd;
         }
 
-        const receiverData: subject = await getSubjectData(receiverId, "receptor");
-        const emitterData: subject = await getSubjectData(emitterId, "emisor");
+        const receiverData: Subject = await getSubjectData(receiverId, "receptor");
+        const emitterData: Subject = await getSubjectData(emitterId, "emisor");
 
         if (!receiverData || !emitterData){
             reject("persona no valida");

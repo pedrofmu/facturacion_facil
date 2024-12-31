@@ -5,7 +5,7 @@ const enum PersonType {
     J = 'L',
 }
 
-type subject = {
+type Subject = {
     // Datos del tex identification
     personType: PersonType,
     residentType
