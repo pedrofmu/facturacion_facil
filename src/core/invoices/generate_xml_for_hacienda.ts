@@ -82,15 +82,31 @@ function createParties(invoice: Invoice) {
 }
 
 function createInvoiceBody(invoice: Invoice): string {
+    const createTax = (products: product[]) => {
+        let returnString: string = ``;
+        for (let i = 0; i < products.length; i++) {
+            const p = products[i];
+            returnString += `<Tax>
+					<TaxTypeCode>01</TaxTypeCode>
+					<TaxRate>16.00</TaxRate>
+					<TaxableBase>
+						<TotalAmount>4578.00</TotalAmount>
+					</TaxableBase>
+					<TaxAmount>
+						<TotalAmount>732.48</TotalAmount>
+					</TaxAmount>
+				</Tax>`; 
+        } 
+    };
     return `	<Invoices>
 		<Invoice>
 			<InvoiceHeader>
-				<InvoiceNumber>A1</InvoiceNumber>
+				<InvoiceNumber>${invoice.number}</InvoiceNumber>
 				<InvoiceDocumentType>FC</InvoiceDocumentType>
 				<InvoiceClass>OO</InvoiceClass>
 			</InvoiceHeader>
 			<InvoiceIssueData>
-				<IssueDate>2009-03-02</IssueDate>
+				<IssueDate>${invoice.emisionDate}</IssueDate>
 				<InvoiceCurrencyCode>EUR</InvoiceCurrencyCode>
 				<TaxCurrencyCode>EUR</TaxCurrencyCode>
 				<LanguageName>ESP</LanguageName>
