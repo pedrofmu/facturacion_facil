@@ -81,23 +81,54 @@ function createParties(invoice: Invoice) {
 	</Parties>`;
 }
 
+type TaxValue = {
+    taxableBase: number,
+    taxAmount: number
+};
+
+interface TaxType {
+    [key: number]: TaxValue;
+}
+
 function createInvoiceBody(invoice: Invoice): string {
     const createTax = (products: product[]) => {
         let returnString: string = ``;
+        let allTax: TaxType = [];
+
         for (let i = 0; i < products.length; i++) {
-            const p = products[i];
+            const unit = products[i];
+            const iva = unit.iva;
+
+            const bi = unit.cuantity * unit.priceUnit - (unit.cuantity * unit.priceUnit * (unit.discount / 100));
+            const ivaToAdd = bi * (iva / 100);
+
+            if (!allTax.hasOwnProperty(unit.iva)) {
+                allTax[unit.iva] = {
+                    taxableBase: bi,
+                    taxAmount: ivaToAdd
+                };
+            } else {
+                allTax[unit.iva].taxableBase += bi;
+                allTax[unit.iva].taxAmount += ivaToAdd;
+            }
+        }
+
+        for (const key in allTax) {
             returnString += `<Tax>
 					<TaxTypeCode>01</TaxTypeCode>
-					<TaxRate>16.00</TaxRate>
+					<TaxRate>${key}</TaxRate>
 					<TaxableBase>
-						<TotalAmount>4578.00</TotalAmount>
+						<TotalAmount>${allTax[key].taxableBase}</TotalAmount>
 					</TaxableBase>
 					<TaxAmount>
-						<TotalAmount>732.48</TotalAmount>
+						<TotalAmount>${allTax[key].taxAmount}</TotalAmount>
 					</TaxAmount>
-				</Tax>`; 
-        } 
+				</Tax>`;
+        }
+
+        return returnString;
     };
+
     return `	<Invoices>
 		<Invoice>
 			<InvoiceHeader>
@@ -112,26 +143,7 @@ function createInvoiceBody(invoice: Invoice): string {
 				<LanguageName>ESP</LanguageName>
 			</InvoiceIssueData>
 			<TaxesOutputs>
-				<Tax>
-					<TaxTypeCode>01</TaxTypeCode>
-					<TaxRate>16.00</TaxRate>
-					<TaxableBase>
-						<TotalAmount>4578.00</TotalAmount>
-					</TaxableBase>
-					<TaxAmount>
-						<TotalAmount>732.48</TotalAmount>
-					</TaxAmount>
-				</Tax>
-				<Tax>
-					<TaxTypeCode>01</TaxTypeCode>
-					<TaxRate>7.00</TaxRate>
-					<TaxableBase>
-						<TotalAmount>2100.00</TotalAmount>
-					</TaxableBase>
-					<TaxAmount>
-						<TotalAmount>147.00</TotalAmount>
-					</TaxAmount>
-				</Tax>
+			    ${createTax(invoice.products)}	
 			</TaxesOutputs>
 			<InvoiceTotals>
 				<TotalGrossAmount>6678.00</TotalGrossAmount>
