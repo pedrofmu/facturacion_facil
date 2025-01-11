@@ -85,7 +85,7 @@ emitterSelector?.addEventListener("focus", () => {
 async function triggerSaveInvoice(): Promise<void> {
     return new Promise(async (resolve, reject) => {
         let unitElements = document.querySelectorAll(".unidades");
-        let productsList: product[] = [];
+        let productsList: Product[] = [];
 
         unitElements.forEach((element) => {
             // Obtener los valores de los inputs dentro de cada li
@@ -101,7 +101,7 @@ async function triggerSaveInvoice(): Promise<void> {
             }
 
             // Crear un objeto con los datos y agregarlo a la lista
-            let productData: product = {
+            let productData: Product = {
                 cuantity: cuantity,
                 type: type,
                 priceUnit: priceUnit,

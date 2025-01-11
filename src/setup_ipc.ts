@@ -25,7 +25,7 @@ export function setupIPCListeners() {
         }
     });
 
-    ipcMain.handle('generateInvoiceFromUsrInput', async (event, letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => {
+    ipcMain.handle('generateInvoiceFromUsrInput', async (event, letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: Product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => {
         try {
             return await generateInvoiceFromUsrInput(letter, receiverName, emitterName, emisionDate, expirationDate, productsList, concept, irpf, details, payMethodName, extraPayMethodData);
         } catch {

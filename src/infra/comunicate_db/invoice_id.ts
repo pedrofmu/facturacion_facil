@@ -17,7 +17,7 @@ export function getNextInvoiceID(letter: string, database: string = 'current'): 
             let query: string = 'SELECT * FROM facturas WHERE numero LIKE ?';
 
             // Ejecutar la consulta
-            db.all(query, [`${letter}%`], (err, rows: rowInvoice[]) => {
+            db.all(query, [`${letter}%`], (err, rows: RowInvoice[]) => {
                 if (err) {
                     reject(err);
                     return;
@@ -26,7 +26,7 @@ export function getNextInvoiceID(letter: string, database: string = 'current'): 
                 // Calcular cuál debe ser el siguiente número
                 let maxNumAfterLetter = 0;
 
-                rows.forEach((row: rowInvoice) => {
+                rows.forEach((row: RowInvoice) => {
                     const match = row.numero.match(/\d+$/);
                     if (match) {
                         const numAfterLetter = parseInt(match[0], 10);

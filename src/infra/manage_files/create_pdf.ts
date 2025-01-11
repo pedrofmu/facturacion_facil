@@ -6,10 +6,10 @@ import { promisify } from 'util';
 
 const readFileAsync: (path: string, options?: any) => Promise<Buffer> = promisify(readFile);
 
-function createHTMLforProducts(productsList: product[]): Promise<string> {
+function createHTMLforProducts(productsList: Product[]): Promise<string> {
     return new Promise((resolve) => {
         var htmlString: string = "";
-        productsList.forEach((product: product) => {
+        productsList.forEach((product: Product) => {
             const cuantity: number = product.cuantity;
             const priceUnit: number = product.priceUnit;
             const iva: number = product.iva;

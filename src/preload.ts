@@ -16,7 +16,7 @@ export interface ElectronAPI {
 
     myAlert: (message: string) => void;
 
-    generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => Promise<Invoice>;
+    generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: Product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => Promise<Invoice>;
 
     createPDFfromInvoice: (invoice: Invoice, path: string) => Promise<void>;
 
@@ -45,7 +45,7 @@ const api: ElectronAPI = {
 
     myAlert: (message: string) => ipcRenderer.invoke('myAlert', message),
 
-    generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => ipcRenderer.invoke('generateInvoiceFromUsrInput', letter, receiverName, emitterName, emisionDate, expirationDate, productsList, concept, irpf, details, payMethodName, extraPayMethodData),
+    generateInvoiceFromUsrInput: (letter: string, receiverName: string, emitterName: string, emisionDate: string, expirationDate: string, productsList: Product[], concept: string, irpf: number, details: string, payMethodName: string, extraPayMethodData: string) => ipcRenderer.invoke('generateInvoiceFromUsrInput', letter, receiverName, emitterName, emisionDate, expirationDate, productsList, concept, irpf, details, payMethodName, extraPayMethodData),
 
     createPDFfromInvoice: (invoice: Invoice, path: string) => ipcRenderer.invoke('createPDFfromInvoice', invoice, path),
 

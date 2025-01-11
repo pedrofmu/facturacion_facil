@@ -6,7 +6,7 @@ describe('new invoice', () => {
     it('crear invoicce from usr input', async () => {
         await createSubjectData(PersonType.J, "222222C", "Yolanda Muñoz", "Calle superfantastica", "01234", "Alcoy", "Alicante", "test@test.xyz", "current", "emisor");
         await createSubjectData(PersonType.J, "A4155543L", "Prima S. A.", "c/ San Vicente, 1", "41008", "Sevilla", "Sevilla", "", "current", "receptor");
-        const productsTest: product[] = [
+        const productsTest: Product[] = [
             {
                 cuantity: 4,
                 type: "chocolate",
@@ -23,7 +23,7 @@ describe('new invoice', () => {
     it('create pdf', async () => {
         await createSubjectData(PersonType.J, "222222C", "Yolanda Muñoz", "Calle superfantastica", "01234", "Alcoy", "Alicante", "test@test.xyz", "current", "emisor");
         await createSubjectData(PersonType.J, "A4155543L", "Prima S. A.", "c/ San Vicente, 1", "41008", "Sevilla", "Sevilla", "", "current", "receptor");
-        const productsTest: product[] = [
+        const productsTest: Product[] = [
             {
                 cuantity: 4,
                 type: "chocolate",

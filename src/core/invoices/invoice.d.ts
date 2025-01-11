@@ -1,4 +1,4 @@
-type product = {
+type Product = {
     cuantity: number,
     type: string,
     priceUnit: number,
@@ -12,7 +12,7 @@ type Invoice = {
     emitter: Subject,
     emisionDate: string,
     expirationDate: string,
-    products: product[],
+    products: Product[],
     concept: string,
     totalPrice: number,
     irpf: number,
@@ -20,7 +20,7 @@ type Invoice = {
     payMethod: payMethodEntry
 }
 
-interface rowInvoice  {
+interface RowInvoice  {
     numero: string,
     receptor: string,
     emisor: string,

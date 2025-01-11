@@ -9,6 +9,8 @@
 
 */
 
+import { obtainIVAToAddSync, obtainTaxableIncomeAsync, obtainTaxableIncomeSync } from "./calculate_data";
+
 
 function createHeader(invoice: Invoice): string {
     return `<FileHeader>
@@ -91,7 +93,7 @@ interface TaxType {
 }
 
 function createInvoiceBody(invoice: Invoice): string {
-    const createTax = (products: product[]) => {
+    const createTax = (products: Product[]) => {
         let returnString: string = ``;
         let allTax: TaxType = [];
 
@@ -129,6 +131,12 @@ function createInvoiceBody(invoice: Invoice): string {
         return returnString;
     };
 
+    let rawPrice: number = obtainTaxableIncomeSync(invoice.products);
+    let IVAToAdd: number = obtainIVAToAddSync(invoice.products);
+    let retainedIRPF: number = rawPrice * invoice.irpf / 100;
+
+    console.warn(rawPrice, IVAToAdd, retainedIRPF);
+
     return `	<Invoices>
 		<Invoice>
 			<InvoiceHeader>
@@ -146,13 +154,13 @@ function createInvoiceBody(invoice: Invoice): string {
 			    ${createTax(invoice.products)}	
 			</TaxesOutputs>
 			<InvoiceTotals>
-				<TotalGrossAmount>6678.00</TotalGrossAmount>
-				<TotalGrossAmountBeforeTaxes>6678.00</TotalGrossAmountBeforeTaxes>
-				<TotalTaxOutputs>879.48</TotalTaxOutputs>
-				<TotalTaxesWithheld>0.00</TotalTaxesWithheld>
-				<InvoiceTotal>7557.48</InvoiceTotal>
-				<TotalOutstandingAmount>7557.48</TotalOutstandingAmount>
-				<TotalExecutableAmount>7557.48</TotalExecutableAmount>
+				<TotalGrossAmount>${rawPrice - retainedIRPF}</TotalGrossAmount>
+				<TotalGrossAmountBeforeTaxes>${rawPrice}</TotalGrossAmountBeforeTaxes>
+				<TotalTaxOutputs>${IVAToAdd}</TotalTaxOutputs>
+				<TotalTaxesWithheld>${retainedIRPF}</TotalTaxesWithheld>
+				<InvoiceTotal>${rawPrice - retainedIRPF + IVAToAdd}</InvoiceTotal>
+				<TotalOutstandingAmount>${rawPrice - retainedIRPF + IVAToAdd}</TotalOutstandingAmount>
+				<TotalExecutableAmount>${rawPrice - retainedIRPF + IVAToAdd}</TotalExecutableAmount>
 			</InvoiceTotals>
 			<Items>
 				<InvoiceLine>

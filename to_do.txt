@@ -1,1 +1,3 @@
 ajustar la api de crear subject para que no de errores de formateo
+
+ajustar los valores de coma flotante

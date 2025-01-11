@@ -4,7 +4,7 @@ import { createSubjectData } from "../src/infra/comunicate_db/manage_subject_dat
 
 describe('new invoice', () => {
     it('crear xml de factura', async () => {
-        const productsTest: product[] = [
+        const productsTest: Product[] = [
             {
                 cuantity: 500,
                 type: "Cuadernos",
