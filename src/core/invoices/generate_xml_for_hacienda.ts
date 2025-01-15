@@ -10,6 +10,7 @@
 */
 
 import { obtainIVAToAddSync, obtainTaxableIncomeAsync, obtainTaxableIncomeSync } from "./calculate_data";
+import xmlFormatter from 'xml-formatter';
 
 
 function createHeader(invoice: Invoice): string {
@@ -131,6 +132,73 @@ function createInvoiceBody(invoice: Invoice): string {
         return returnString;
     };
 
+    const createIssuerContractReference = (): string => {
+        // Ejemplo de formato: "C" seguido de un timestamp o un identificador generado.
+        const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
+        return `C${timestamp.substring(0, 12)}`; // CYYYYMMDDHHMM
+    };
+
+    const createIssuerTransactionReference = (): string => {
+        // Ejemplo de formato: "T" seguido de un número aleatorio o un identificador incremental.
+        const randomId = Math.floor(Math.random() * 100000).toString().padStart(5, "0");
+        return `T${randomId}`;
+    };
+
+    const generateItemLines = (products: Product[], date: string) => {
+        let returnString: string = "";
+
+        for (let i = 0; i < products.length; i++) {
+            const bi = products[i].cuantity * products[i].priceUnit - (products[i].cuantity * products[i].priceUnit * (products[i].discount / 100));
+            const ivaToAdd = bi * (products[i].iva / 100);
+
+            returnString += `				<InvoiceLine>
+					<IssuerContractReference>${createIssuerContractReference()}</IssuerContractReference>
+					<IssuerTransactionReference>${createIssuerTransactionReference()}</IssuerTransactionReference>
+					<ItemDescription>${products[i].type}</ItemDescription>
+					<Quantity>${products[i].cuantity}</Quantity>
+					<UnitOfMeasure>01</UnitOfMeasure>
+					<UnitPriceWithoutTax>${products[i].priceUnit}</UnitPriceWithoutTax>
+					<TotalCost>${bi + ivaToAdd}</TotalCost>
+					<GrossAmount>${bi + ivaToAdd}</GrossAmount>
+					<TaxesOutputs>
+						<Tax>
+							<TaxTypeCode>01</TaxTypeCode>
+							<TaxRate>${products[i].iva}</TaxRate>
+							<TaxableBase>
+								<TotalAmount>${bi}</TotalAmount>
+							</TaxableBase>
+							<TaxAmount>
+								<TotalAmount>${ivaToAdd}</TotalAmount>
+							</TaxAmount>
+						</Tax>
+					</TaxesOutputs>
+					<TransactionDate>${date}</TransactionDate>
+				</InvoiceLine>`
+        }
+
+        return returnString;
+    };
+
+    const createPaymentDetails = (invoice: Invoice) => {
+        switch (invoice.payMethod.name) {
+            case "efectivo":
+                return "";
+            case "transferencia bancaria":
+                return `            <PaymentDetails>
+                <Installment>
+                    <InstallmentDueDate>${invoice.payMethod.extraData[1]}</InstallmentDueDate>
+                    <InstallmentAmount>${invoice.totalPrice}</InstallmentAmount>
+                    <PaymentMeans>04</PaymentMeans>
+                    <AccountToBeCredited>
+                        <IBAN>${invoice.payMethod.extraData[0]}</IBAN>
+                    </AccountToBeCredited>
+                </Installment>
+            </PaymentDetails>`;
+            default:
+                throw new Error("Not implemented pay method in xml generation");
+        }
+    };
+
     let rawPrice: number = obtainTaxableIncomeSync(invoice.products);
     let IVAToAdd: number = obtainIVAToAddSync(invoice.products);
     let retainedIRPF: number = rawPrice * invoice.irpf / 100;
@@ -163,69 +231,15 @@ function createInvoiceBody(invoice: Invoice): string {
 				<TotalExecutableAmount>${rawPrice - retainedIRPF + IVAToAdd}</TotalExecutableAmount>
 			</InvoiceTotals>
 			<Items>
-				<InvoiceLine>
-					<IssuerContractReference>C070801</IssuerContractReference>
-					<IssuerTransactionReference>C0107</IssuerTransactionReference>
-					<ItemDescription>Cuadernos</ItemDescription>
-					<Quantity>500.0</Quantity>
-					<UnitOfMeasure>01</UnitOfMeasure>
-					<UnitPriceWithoutTax>9.156000</UnitPriceWithoutTax>
-					<TotalCost>4578.00</TotalCost>
-					<GrossAmount>4578.00</GrossAmount>
-					<TaxesOutputs>
-						<Tax>
-							<TaxTypeCode>01</TaxTypeCode>
-							<TaxRate>16.00</TaxRate>
-							<TaxableBase>
-								<TotalAmount>4578.00</TotalAmount>
-							</TaxableBase>
-							<TaxAmount>
-								<TotalAmount>732.48</TotalAmount>
-							</TaxAmount>
-						</Tax>
-					</TaxesOutputs>
-					<TransactionDate>2009-03-02</TransactionDate>
-				</InvoiceLine>
-				<InvoiceLine>
-					<IssuerContractReference>C070801</IssuerContractReference>
-					<IssuerTransactionReference>C0107</IssuerTransactionReference>
-					<ItemDescription>Libros</ItemDescription>
-					<Quantity>60.0</Quantity>
-					<UnitOfMeasure>01</UnitOfMeasure>
-					<UnitPriceWithoutTax>35.000000</UnitPriceWithoutTax>
-					<TotalCost>2100.00</TotalCost>
-					<GrossAmount>2100.00</GrossAmount>
-					<TaxesOutputs>
-						<Tax>
-							<TaxTypeCode>01</TaxTypeCode>
-							<TaxRate>7.00</TaxRate>
-							<TaxableBase>
-								<TotalAmount>2100.00</TotalAmount>
-							</TaxableBase>
-							<TaxAmount>
-								<TotalAmount>147.00</TotalAmount>
-							</TaxAmount>
-						</Tax>
-					</TaxesOutputs>
-					<TransactionDate>2009-03-02</TransactionDate>
-				</InvoiceLine>
-			</Items>
-            <PaymentDetails>
-                <Installment>
-                    <InstallmentDueDate>2007-01-12</InstallmentDueDate>
-                    <InstallmentAmount>212.87</InstallmentAmount>
-                    <PaymentMeans>04</PaymentMeans>
-                    <AccountToBeCredited>
-                        <IBAN>ESP00431111601111111111</IBAN>
-                    </AccountToBeCredited>
-                </Installment>
-            </PaymentDetails>
+                ${generateItemLines(invoice.products, invoice.emisionDate)}
+		    </Items>
+                ${createPaymentDetails(invoice)}
 		</Invoice>
 	</Invoices>`;
 }
 
 export function generateXMLHacienda(invoice: Invoice): string {
-    return `<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+    let xmlString: string = `<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
     <namespace:Facturae
 	xmlns:namespace2="http://uri.etsi.org/01903/v1.2.2#"
 	xmlns:namespace3="http://www.w3.org/2000/09/xmldsig#"
@@ -234,4 +248,9 @@ export function generateXMLHacienda(invoice: Invoice): string {
     ${createParties(invoice)}
     ${createInvoiceBody(invoice)}
     </namespace:Facturae>`;
+
+    return xmlFormatter(xmlString, {
+        indentation: '   ',
+        collapseContent: true,
+    });
 }

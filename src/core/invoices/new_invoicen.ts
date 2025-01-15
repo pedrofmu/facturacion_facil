@@ -47,7 +47,7 @@ export function generateInvoiceFromUsrInput(letter: string, receiverId: string, 
             reject("persona no valida");
         }
 
-        const payMethod: payMethodEntry = {
+        const payMethod: PayMethodEntry = {
             name: payMethodName,
             extraData: extraPayMethodData 
         };

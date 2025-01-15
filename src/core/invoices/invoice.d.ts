@@ -17,7 +17,7 @@ type Invoice = {
     totalPrice: number,
     irpf: number,
     details: string,
-    payMethod: payMethodEntry
+    payMethod: PayMethodEntry
 }
 
 interface RowInvoice  {
